@@ -1,7 +1,7 @@
 #import "CSWindow.h"
 #import "CSAppSwitcherViewController.h"
 
-static CGFloat const kCSAppSwitcherHeight = 85.f;
+static CGFloat const kCSAppSwitcherHeight = 95.f;
 
 @implementation CSWindow
 

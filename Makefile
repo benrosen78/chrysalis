@@ -2,6 +2,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Chrysalis
 Chrysalis_FILES = Tweak.xm $(wildcard *.x)
+Chrysalis_PRIVATE_FRAMEWORKS = SpringBoardServices
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
