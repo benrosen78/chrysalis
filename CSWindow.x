@@ -28,7 +28,7 @@ static CGFloat const kCSAppSwitcherHeight = 95.f;
 - (void)updateToPoint:(CGPoint)point {
 	if (self.hidden) {
 		// this is where it is set
-		self.frame = CGRectMake(0, point.y, [[UIScreen mainScreen] bounds].size.width, kCSAppSwitcherHeight);
+		self.center = CGPointMake(self.center.x, point.y);
 		self.hidden = NO;
 	} else {
 		// here, we forward to the view controller, so that the user can slide across the collection view
