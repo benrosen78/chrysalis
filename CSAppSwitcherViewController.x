@@ -67,4 +67,9 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	return [_appSwitcherDisplayItems count];
 }
 
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    //UITouch *touch = [[event allTouches] anyObject];
+    //CGPoint touchLocation = [touch locationInView:self];
+}
+
 @end
