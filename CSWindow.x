@@ -37,4 +37,8 @@ static CGFloat const kCSAppSwitcherHeight = 95.f;
 	}
 }
 
+- (void)removeAppSwitcher {
+	self.hidden = YES;
+}
+
 @end
