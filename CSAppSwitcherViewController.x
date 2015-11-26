@@ -31,16 +31,16 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	_appSwitcherDisplayItems = [[[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems] retain];
 
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-   	blurEffectView.frame = self.view.frame;
+	UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+	blurEffectView.frame = self.view.frame;
 
-   	UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:blurEffectView.bounds byRoundingCorners:( UIRectCornerTopLeft | UIRectCornerBottomLeft) cornerRadii:CGSizeMake(18.0, 18.0)];
+	UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:blurEffectView.bounds byRoundingCorners:( UIRectCornerTopLeft | UIRectCornerBottomLeft) cornerRadii:CGSizeMake(18.0, 18.0)];
 
-   	CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-   	maskLayer.frame = self.view.bounds;
-   	maskLayer.path  = maskPath.CGPath;
+	CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+	maskLayer.frame = self.view.bounds;
+	maskLayer.path  = maskPath.CGPath;
 
-   	blurEffectView.layer.mask = maskLayer;
+	blurEffectView.layer.mask = maskLayer;
 
 	[self.view addSubview:blurEffectView];
 
@@ -87,8 +87,10 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 - (void)updateViewToNewPoint:(CGPoint)point {
 	NSInteger index = roundf((point.x/70.0));
 
-	_backgroundColorView.frame = CGRectMake(index*70.0+4, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
-	_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
+	[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+		_backgroundColorView.frame = CGRectMake(index*70.0+4, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
+		_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
+	} completion:nil];
 }
 
 @end
