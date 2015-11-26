@@ -1,6 +1,7 @@
 #import "CSAppSwitcherViewController.h"
 #import "CSAppSwitcherCollectionViewCell.h"
 #import <SpringBoard/SpringBoard.h>
+#import <UIKit/UIImage+Private.h>
 
 @interface SBAppSwitcherModel : NSObject
 
@@ -59,13 +60,36 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	flowLayout.minimumInteritemSpacing = 0;
 	flowLayout.minimumLineSpacing = 0;
 
-	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-60, self.view.frame.size.height) collectionViewLayout:flowLayout];
+	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-45, self.view.frame.size.height) collectionViewLayout:flowLayout];
 	_collectionView.backgroundColor = [UIColor clearColor];
 	_collectionView.delegate = self;
 	_collectionView.dataSource = self;
 	_collectionView.scrollEnabled = NO;
 	[_collectionView registerClass:[CSAppSwitcherCollectionViewCell class] forCellWithReuseIdentifier:kCSAppSwitcherCollectionViewCellIdentifier];
 	[self.view addSubview:_collectionView];
+
+	CAGradientLayer *gradient = [CAGradientLayer layer];
+	gradient.startPoint = CGPointMake(0.0, 0.5);
+	gradient.endPoint = CGPointMake(1.0, 0.5);
+
+	gradient.frame = _collectionView.frame;
+	gradient.colors = @[(id)[UIColor blackColor].CGColor, (id)[UIColor clearColor].CGColor];
+	gradient.locations = @[@0.93, @1.0];
+
+	_collectionView.layer.mask = gradient;
+
+	UIView *divider = [[UIView alloc] init];
+	divider.frame = CGRectMake(_collectionView.frame.size.width, 0, 1, self.view.frame.size.height);
+	divider.backgroundColor = [UIColor blackColor];
+	divider.alpha = 0.45;
+	[self.view addSubview:divider];
+
+	UIImageView *closeAppsImageView = [[UIImageView alloc] init];
+	closeAppsImageView.image = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
+	closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
+	closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
+	closeAppsImageView.alpha = 0.45;
+	[self.view addSubview:closeAppsImageView];
 }
 
 #pragma mark Collection View Delegate
