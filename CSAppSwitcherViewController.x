@@ -1,12 +1,31 @@
 #import "CSAppSwitcherViewController.h"
 #import "CSAppSwitcherCollectionViewCell.h"
 
+@interface SBAppSwitcherModel : NSObject
+
++ (instancetype)sharedInstance;
+
+- (NSArray *)mainSwitcherDisplayItems;
+
+@end
+
+@interface SBDisplayItem : NSObject {
+	NSString *_displayIdentifier;
+}
+
+@end
+
 static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisAppSwitcherCell";
 
-@implementation CSAppSwitcherViewController
+@implementation CSAppSwitcherViewController {
+	NSArray *_appSwitcherDisplayItems;
+}
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+
+	_appSwitcherDisplayItems = [[[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems] retain];
+
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
    	blurEffectView.frame = self.view.frame;
@@ -37,12 +56,15 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 	CSAppSwitcherCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCSAppSwitcherCollectionViewCellIdentifier forIndexPath:indexPath];
-	[cell setAppIdentifier:@"com.apple.MobileSMS"];
+
+	SBDisplayItem *displayItem = _appSwitcherDisplayItems[indexPath.row];
+	NSString *appIdentifier = [displayItem valueForKey:@"_displayIdentifier"];
+	[cell setAppIdentifier:appIdentifier];
 	return cell;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-	return 10;
+	return [_appSwitcherDisplayItems count];
 }
 
 @end
