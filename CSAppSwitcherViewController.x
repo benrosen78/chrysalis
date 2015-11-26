@@ -1,5 +1,6 @@
 #import "CSAppSwitcherViewController.h"
 #import "CSAppSwitcherCollectionViewCell.h"
+#import <SpringBoard/SpringBoard.h>
 
 @interface SBAppSwitcherModel : NSObject
 
@@ -84,6 +85,12 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 
 #pragma mark View updating
 
+- (void)updateAppsInSwitcher {
+	[_appSwitcherDisplayItems release];
+	_appSwitcherDisplayItems = [[[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems] retain];
+	[_collectionView reloadData];
+}
+
 - (void)updateViewToNewPoint:(CGPoint)point {
 	NSInteger index = roundf((point.x/70.0));
 
@@ -91,6 +98,14 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 		_backgroundColorView.frame = CGRectMake(index*70.0+4, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
 		_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
 	} completion:nil];
+}
+
+- (void)openAppAtPoint:(CGPoint)point {
+	NSInteger index = roundf((point.x/70.0));
+	SBDisplayItem *displayItem = _appSwitcherDisplayItems[index];
+	NSString *appIdentifier = [displayItem valueForKey:@"_displayIdentifier"];
+
+	[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:appIdentifier suspended:NO];
 }
 
 @end

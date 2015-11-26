@@ -37,8 +37,15 @@ static CGFloat const kCSAppSwitcherHeight = 95.f;
 	}
 }
 
-- (void)removeAppSwitcher {
+- (void)removeFromPoint:(CGPoint)point {
 	self.hidden = YES;
+	CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
+	[appSwitcher openAppAtPoint:point];
+}
+
+- (void)startAppSwitcher {
+	CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
+	[appSwitcher updateAppsInSwitcher];
 }
 
 @end

@@ -4,11 +4,13 @@
 %hook SBUIController
 
 - (void)_handleSwitcherForcePressGesture:(UIGestureRecognizer *)gestureRecognizer {
-	if (gestureRecognizer.state == UIGestureRecognizerStateBegan || gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-		CGPoint activationPoint = [gestureRecognizer locationInView:[self window]];
+	CGPoint activationPoint = [gestureRecognizer locationInView:[self window]];
+	if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+		[[CSWindow sharedInstance] startAppSwitcher];
+	} else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
 		[[CSWindow sharedInstance] updateToPoint:activationPoint];
-	} else {
-		[[CSWindow sharedInstance] removeAppSwitcher];
+	} else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+		[[CSWindow sharedInstance] removeFromPoint:activationPoint];
 	}
 }
 

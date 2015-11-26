@@ -4,6 +4,8 @@
 
 - (void)updateToPoint:(CGPoint)point;
 
-- (void)removeAppSwitcher;
+- (void)removeFromPoint:(CGPoint)point;
+
+- (void)startAppSwitcher;
 
 @end
