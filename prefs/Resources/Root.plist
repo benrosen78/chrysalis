@@ -7,8 +7,12 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>ChrysalisPrefs First Page</string>
+			<key>headerCellClass</key>
+			<string>HBImageTableCell</string>
+			<key>height</key>
+			<integer>100</integer>
+			<key>icon</key>
+			<string>headerImage.png</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -16,11 +20,91 @@
 			<key>default</key>
 			<true/>
 			<key>defaults</key>
-			<string>com.tweakbattles.chrysalisprefs</string>
+			<string>com.tweakbattles.chrysalis</string>
 			<key>key</key>
-			<string>AwesomeSwitch1</string>
+			<string>DarkMode</string>
 			<key>label</key>
-			<string>Awesome Switch 1</string>
+			<string>Dark Mode</string>
+			<key>icon</key>
+			<string>darkmode.png</string>
+			<key>PostNotification</key>
+			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.tweakbattles.chrysalis</string>
+			<key>key</key>
+			<string>LeftHanded</string>
+			<key>label</key>
+			<string>Left-Handed</string>
+			<key>icon</key>
+			<string>position.png</string>
+			<key>PostNotification</key>
+			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.tweakbattles.chrysalis</string>
+			<key>key</key>
+			<string>Enabled</string>
+			<key>label</key>
+			<string>ENABLED</string>
+			<key>icon</key>
+			<string>enable.png</string>
+			<key>PostNotification</key>
+			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>CSAdvancedListController</string>
+			<key>icon</key>
+			<string>advanced.png</string>
+			<key>label</key>
+			<string>Advanced</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>CSCreatorsListController</string>
+			<key>icon</key>
+			<string>makers.png</string>
+			<key>label</key>
+			<string>Creators</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>CSSupportListController</string>
+			<key>icon</key>
+			<string>support.png</string>
+			<key>label</key>
+			<string>Support</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>headerCellClass</key>
+			<string>HBImageTableCell</string>
+			<key>height</key>
+			<integer>100</integer>
+			<key>icon</key>
+			<string>footerLogo.png</string>
 		</dict>
 	</array>
 	<key>title</key>
