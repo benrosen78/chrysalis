@@ -19,7 +19,11 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 
 @implementation CSAppSwitcherViewController {
 	NSArray *_appSwitcherDisplayItems;
+	UIView *_backgroundColorView;
+	UICollectionView *_collectionView;
 }
+
+#pragma mark Adding views
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
@@ -40,19 +44,30 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 
 	[self.view addSubview:blurEffectView];
 
+	_backgroundColorView = [[UIView alloc] init];
+	_backgroundColorView.frame = CGRectMake(4, 0.0, 62.0, 62.0);
+	_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
+	_backgroundColorView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+	_backgroundColorView.layer.masksToBounds = YES;
+	_backgroundColorView.layer.cornerRadius = 18.0;
+	[self.view addSubview:_backgroundColorView];
+
 	UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
 	flowLayout.itemSize = CGSizeMake(70.0, 70.0);
 	flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 	flowLayout.minimumInteritemSpacing = 0;
 	flowLayout.minimumLineSpacing = 0;
 
-	UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-60, self.view.frame.size.height) collectionViewLayout:flowLayout];
-	collectionView.backgroundColor = [UIColor clearColor];
-	collectionView.delegate = self;
-	collectionView.dataSource = self;
-	[collectionView registerClass:[CSAppSwitcherCollectionViewCell class] forCellWithReuseIdentifier:kCSAppSwitcherCollectionViewCellIdentifier];
-	[self.view addSubview:collectionView];
+	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-60, self.view.frame.size.height) collectionViewLayout:flowLayout];
+	_collectionView.backgroundColor = [UIColor clearColor];
+	_collectionView.delegate = self;
+	_collectionView.dataSource = self;
+	_collectionView.scrollEnabled = NO;
+	[_collectionView registerClass:[CSAppSwitcherCollectionViewCell class] forCellWithReuseIdentifier:kCSAppSwitcherCollectionViewCellIdentifier];
+	[self.view addSubview:_collectionView];
 }
+
+#pragma mark Collection View Delegate
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 	CSAppSwitcherCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCSAppSwitcherCollectionViewCellIdentifier forIndexPath:indexPath];
@@ -67,9 +82,13 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	return [_appSwitcherDisplayItems count];
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    //UITouch *touch = [[event allTouches] anyObject];
-    //CGPoint touchLocation = [touch locationInView:self];
+#pragma mark View updating
+
+- (void)updateViewToNewPoint:(CGPoint)point {
+	NSInteger index = roundf((point.x/70.0));
+
+	_backgroundColorView.frame = CGRectMake(index*70.0+4, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
+	_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
 }
 
 @end

@@ -32,6 +32,8 @@ static CGFloat const kCSAppSwitcherHeight = 95.f;
 		self.hidden = NO;
 	} else {
 		// here, we forward to the view controller, so that the user can slide across the collection view
+		CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
+		[appSwitcher updateViewToNewPoint:point];
 	}
 }
 
