@@ -1,10 +1,5 @@
 #import "CSWindow.h"
-
-@interface SBUIController
-
-- (id)window;
-
-@end
+#import <SpringBoard/SBUIController.h>
 
 %hook SBUIController
 
