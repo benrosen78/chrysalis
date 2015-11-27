@@ -8,6 +8,8 @@
 	NSString *_displayIdentifier;
 }
 
++ (instancetype)displayItemWithType:(NSString *)type displayIdentifier:(NSString *)identifier;
+
 @end
 
 @interface SBAppSwitcherModel : NSObject
@@ -23,7 +25,7 @@
 static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisAppSwitcherCell";
 
 @implementation CSAppSwitcherViewController {
-	NSArray *_appSwitcherDisplayItems;
+	NSMutableArray *_appSwitcherDisplayItems;
 	UIView *_backgroundColorView;
 	UICollectionView *_collectionView;
 	UIView *_divider;
@@ -35,7 +37,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	_appSwitcherDisplayItems = [[[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems] retain];
+	[self updateAppsInSwitcher];
 
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
 	UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
@@ -116,7 +118,14 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 
 - (void)updateAppsInSwitcher {
 	[_appSwitcherDisplayItems release];
-	_appSwitcherDisplayItems = [[[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems] retain];
+
+	SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
+	NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
+	SBDisplayItem *displayItem = [%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:currentAppIdentifier];
+
+	_appSwitcherDisplayItems = [[[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems] mutableCopy];
+	[_appSwitcherDisplayItems removeObject:displayItem];
+
 	[_collectionView reloadData];
 }
 
