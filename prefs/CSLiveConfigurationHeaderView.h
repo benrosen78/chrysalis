@@ -1,4 +1,3 @@
-#import <Preferences/Preferences.h>
 @interface CSLiveConfigurationHeaderView : UIView
 @property (nonatomic,assign) UIBlurEffect *blurEffect;
 @property (nonatomic,assign) UIVisualEffectView *blurEffectView;

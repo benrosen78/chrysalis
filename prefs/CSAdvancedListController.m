@@ -1,4 +1,5 @@
 #import "CSAdvancedListController.h"
+#import <Preferences/PSSpecifier.h>
 
 @implementation CSAdvancedListController
 

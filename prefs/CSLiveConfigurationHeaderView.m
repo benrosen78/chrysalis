@@ -23,13 +23,16 @@
       return self;
 }
 
--(void)setHomeScreenIconHidden:(BOOL)hidden {
-      NSLog(@"Should Set HomeScreen Icon Hidden? %@", hidden ? @"YES" : @"NO");
+- (void)setHomeScreenIconHidden:(BOOL)hidden {
+      HBLogDebug(@"Should Set HomeScreen Icon Hidden? %@", hidden ? @"YES" : @"NO");
 }
--(void)setIconLabelsHidden:(BOOL)hidden {
-      NSLog(@"Should Set Icon Labels Be Hidden? %@", hidden ? @"YES" : @"NO");
+
+- (void)setIconLabelsHidden:(BOOL)hidden {
+      HBLogDebug(@"Should Set Icon Labels Be Hidden? %@", hidden ? @"YES" : @"NO");
 }
--(void)setKillAllButtonHidden:(BOOL)hidden {
-      NSLog(@"Should Set Kill All Button Hidden? %@", hidden ? @"YES" : @"NO");
+
+- (void)setKillAllButtonHidden:(BOOL)hidden {
+      HBLogDebug(@"Should Set Kill All Button Hidden? %@", hidden ? @"YES" : @"NO");
 }
+
 @end

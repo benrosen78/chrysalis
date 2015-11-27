@@ -42,21 +42,47 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
 	UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
 	blurEffectView.frame = self.view.frame;
-
-	UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:blurEffectView.bounds byRoundingCorners:( UIRectCornerTopLeft | UIRectCornerBottomLeft) cornerRadii:CGSizeMake(18.0, 18.0)];
-
-	CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-	maskLayer.frame = self.view.bounds;
-	maskLayer.path  = maskPath.CGPath;
-
-	blurEffectView.layer.mask = maskLayer;
-
 	[self.view addSubview:blurEffectView];
 
+	CALayer *containerLayer = [CALayer layer];
+
+	// chevron
+
+	UIBezierPath *chevronBezierPath = [UIBezierPath bezierPath];
+	[chevronBezierPath moveToPoint: CGPointMake(1.5, 45.68)];
+	[chevronBezierPath addCurveToPoint: CGPointMake(29.5, 6.68) controlPoint1: CGPointMake(1.5, 35.98) controlPoint2: CGPointMake(29.5, 38.68)];
+	[chevronBezierPath addCurveToPoint: CGPointMake(29.5, 87.68) controlPoint1: CGPointMake(29.5, -25.32) controlPoint2: CGPointMake(29.5, 121.98)];
+	[chevronBezierPath addCurveToPoint: CGPointMake(1.5, 45.68) controlPoint1: CGPointMake(29.5, 53.38) controlPoint2: CGPointMake(1.5, 55.38)];
+	[chevronBezierPath closePath];
+	chevronBezierPath.miterLimit = 4;
+
+	[chevronBezierPath applyTransform:CGAffineTransformMakeScale(0.5, 0.5)];
+	[chevronBezierPath fill];
+
+	CAShapeLayer *chevronPathMaskLayer = [[CAShapeLayer alloc] init];
+	chevronPathMaskLayer.frame = CGRectMake(0, self.view.frame.size.height/2-25.5, 14, 34);
+	chevronPathMaskLayer.path = chevronBezierPath.CGPath;
+	[containerLayer addSublayer:chevronPathMaskLayer];
+
+	// rectangle
+
+	UIBezierPath *rectanglePath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(14, 0, self.view.frame.size.width-14, self.view.frame.size.height) byRoundingCorners:( UIRectCornerTopLeft | UIRectCornerBottomLeft) cornerRadii:CGSizeMake(18.0, 18.0)];
+	[rectanglePath fill];
+
+	CAShapeLayer *rectanglePathMaskLayer = [[CAShapeLayer alloc] init];
+	rectanglePathMaskLayer.frame = self.view.bounds;
+	rectanglePathMaskLayer.path  = rectanglePath.CGPath;
+	[containerLayer addSublayer:rectanglePathMaskLayer];
+
+	blurEffectView.layer.mask = containerLayer;
+
+	// other views
+
 	_backgroundColorView = [[UIView alloc] init];
-	_backgroundColorView.frame = CGRectMake(4, 0.0, 62.0, 62.0);
+	_backgroundColorView.frame = CGRectMake(18, 0.0, 65.0, 65.0);
 	_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
-	_backgroundColorView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+	_backgroundColorView.backgroundColor = [UIColor whiteColor];
+	_backgroundColorView.alpha = 0.4;
 	_backgroundColorView.layer.masksToBounds = YES;
 	_backgroundColorView.layer.cornerRadius = 18.0;
 	[self.view addSubview:_backgroundColorView];
@@ -67,7 +93,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	flowLayout.minimumInteritemSpacing = 0;
 	flowLayout.minimumLineSpacing = 0;
 
-	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-45, self.view.frame.size.height) collectionViewLayout:flowLayout];
+	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(14, 0, self.view.frame.size.width-(45+14), self.view.frame.size.height) collectionViewLayout:flowLayout];
 	_collectionView.backgroundColor = [UIColor clearColor];
 	_collectionView.delegate = self;
 	_collectionView.dataSource = self;
@@ -79,14 +105,14 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	gradient.startPoint = CGPointMake(0.0, 0.5);
 	gradient.endPoint = CGPointMake(1.0, 0.5);
 
-	gradient.frame = _collectionView.frame;
+	gradient.frame = self.view.frame;
 	gradient.colors = @[(id)[UIColor blackColor].CGColor, (id)[UIColor clearColor].CGColor];
 	gradient.locations = @[@0.93, @1.0];
 
 	_collectionView.layer.mask = gradient;
 
 	_divider = [[UIView alloc] init];
-	_divider.frame = CGRectMake(_collectionView.frame.size.width, 0, 1, self.view.frame.size.height);
+	_divider.frame = CGRectMake(self.view.frame.size.width-45, 0, 1, self.view.frame.size.height);
 	_divider.backgroundColor = [UIColor blackColor];
 	_divider.alpha = 0.45;
 	[self.view addSubview:_divider];
@@ -97,6 +123,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	_closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
 	_closeAppsImageView.alpha = 0.45;
 	[self.view addSubview:_closeAppsImageView];
+
 }
 
 #pragma mark Collection View Delegate
@@ -130,7 +157,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 }
 
 - (void)updateViewToNewPoint:(CGPoint)point {
-	NSInteger index = roundf((point.x/70.0));
+	NSInteger index = roundf((point.x+14)/70.0);
 
 	if (point.x > self.view.frame.size.width-45.0) {
 		if (_divider.alpha != 0.7) {
@@ -139,16 +166,17 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 				_closeAppsImageView.alpha = 0.7;
 			}];
 		}
+		return;
 	} else if (_divider.alpha != 0.45) {
 		[UIView animateWithDuration:0.3 animations:^{
 			_divider.alpha = 0.45;
 			_closeAppsImageView.alpha = 0.45;
 		}];
 	}
-	if (_appSwitcherDisplayItems.count > index) {
+	if (_appSwitcherDisplayItems.count >= index) {
 		[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-			CGRect closeAppsFrame = CGRectMake(_collectionView.frame.size.width, 0, 45, _collectionView.frame.size.height);
-			CGRect potentialFrame = CGRectMake(index*70.0+4, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
+			CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width-45, 0, 45, _collectionView.frame.size.height);
+			CGRect potentialFrame = CGRectMake(index*70.0+16.5, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
 			if (CGRectIntersectsRect(closeAppsFrame, potentialFrame)) {
 				return;
 			}
@@ -184,8 +212,8 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 		[self updateAppsInSwitcher];
 		return;
 	}
-	NSInteger index = roundf((point.x/70.0));
-	if (_appSwitcherDisplayItems.count > index) {
+	NSInteger index = roundf((point.x+14)/70.0);
+	if (_appSwitcherDisplayItems.count >= index) {
 		SBDisplayItem *displayItem = _appSwitcherDisplayItems[index];
 		NSString *appIdentifier = [displayItem valueForKey:@"_displayIdentifier"];
 
