@@ -1,7 +1,14 @@
 #import "CSAppSwitcherViewController.h"
 #import "CSAppSwitcherCollectionViewCell.h"
 #import <SpringBoard/SpringBoard.h>
+#import <SpringBoard/SBApplication.h>
 #import <UIKit/UIImage+Private.h>
+
+@interface SBDisplayItem : NSObject {
+	NSString *_displayIdentifier;
+}
+
+@end
 
 @interface SBAppSwitcherModel : NSObject
 
@@ -9,11 +16,7 @@
 
 - (NSArray *)mainSwitcherDisplayItems;
 
-@end
-
-@interface SBDisplayItem : NSObject {
-	NSString *_displayIdentifier;
-}
+- (void)remove:(SBDisplayItem *)displayItem;
 
 @end
 
@@ -122,9 +125,34 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 		_backgroundColorView.frame = CGRectMake(index*70.0+4, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
 		_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
 	} completion:nil];
+
+	BOOL scrollLeft = point.x <= 150;
+	BOOL scrollRight = point.x >= self.view.frame.size.width-150;
+	static BOOL shouldScroll = YES;
+	if (scrollLeft || scrollRight) {
+		CGFloat increment = scrollLeft ? -10 : 10;
+		CGPoint newContentOffset = CGPointMake(_collectionView.contentOffset.x+increment, 0);
+		[UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+			shouldScroll = NO;
+			[_collectionView setContentOffset:newContentOffset animated:NO];
+		} completion:^(BOOL completion) {
+			shouldScroll = YES;
+		}];
+	}
 }
 
 - (void)openAppAtPoint:(CGPoint)point {
+	if (point.x > self.view.frame.size.width-45.0) {
+		SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
+		NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
+		for (SBDisplayItem *displayItem in _appSwitcherDisplayItems) {
+			if (![[displayItem valueForKey:@"_displayIdentifier"] isEqualToString:currentAppIdentifier]) {
+				[[%c(SBAppSwitcherModel) sharedInstance] remove:displayItem];
+			}
+		}
+		[self updateAppsInSwitcher];
+		return;
+	}
 	NSInteger index = roundf((point.x/70.0));
 	SBDisplayItem *displayItem = _appSwitcherDisplayItems[index];
 	NSString *appIdentifier = [displayItem valueForKey:@"_displayIdentifier"];
