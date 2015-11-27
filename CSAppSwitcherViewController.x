@@ -25,7 +25,7 @@
 static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisAppSwitcherCell";
 
 @implementation CSAppSwitcherViewController {
-	NSMutableArray *_appSwitcherDisplayItems;
+	NSMutableArray *_appSwitcherIdentifiers;
 	UIView *_backgroundColorView;
 	UICollectionView *_collectionView;
 	UIView *_divider;
@@ -131,27 +131,37 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 	CSAppSwitcherCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCSAppSwitcherCollectionViewCellIdentifier forIndexPath:indexPath];
 
-	SBDisplayItem *displayItem = _appSwitcherDisplayItems[indexPath.row];
-	NSString *appIdentifier = [displayItem valueForKey:@"_displayIdentifier"];
-	[cell setAppIdentifier:appIdentifier];
+	NSString *identifier = _appSwitcherIdentifiers[indexPath.row];
+	[cell setAppIdentifier:identifier];
 	return cell;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-	return [_appSwitcherDisplayItems count];
+	return [_appSwitcherIdentifiers count];
 }
 
 #pragma mark View updating
 
 - (void)updateAppsInSwitcher {
-	[_appSwitcherDisplayItems release];
+	[_appSwitcherIdentifiers release];
+
+	if (!%c(SBAppSwitcherModel) || !%c(SBDisplayItem)) {
+		// this must be the example from settings
+		_appSwitcherIdentifiers = [NSMutableArray arrayWithArray:@[@"com.apple.mobilemail", @"com.apple.AppStore", @"com.apple.Music", @"com.apple.mobilenotes", @"com.apple.mobileslideshow", @"com.apple.mobilesafari", @"com.apple.Preferences"]];
+		return;
+	}
+
+	NSArray *displayItems = [[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems];
+	NSMutableArray *appIdentifiers = [[NSMutableArray alloc] init];
+	for (SBDisplayItem *displayItem in displayItems) {
+		[appIdentifiers addObject:[displayItem valueForKey:@"_displayIdentifier"]];
+	}
+	_appSwitcherIdentifiers = appIdentifiers;
 
 	SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
 	NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
-	SBDisplayItem *displayItem = [%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:currentAppIdentifier];
 
-	_appSwitcherDisplayItems = [[[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems] mutableCopy];
-	[_appSwitcherDisplayItems removeObject:displayItem];
+	[_appSwitcherIdentifiers removeObject:currentAppIdentifier];
 
 	[_collectionView reloadData];
 }
@@ -173,7 +183,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 			_closeAppsImageView.alpha = 0.45;
 		}];
 	}
-	if (_appSwitcherDisplayItems.count >= index) {
+	if (_appSwitcherIdentifiers.count > index) {
 		[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
 			CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width-45, 0, 45, _collectionView.frame.size.height);
 			CGRect potentialFrame = CGRectMake(index*70.0+16.5, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
@@ -204,19 +214,17 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	if (point.x > self.view.frame.size.width-45.0) {
 		SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
 		NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
-		for (SBDisplayItem *displayItem in _appSwitcherDisplayItems) {
-			if (![[displayItem valueForKey:@"_displayIdentifier"] isEqualToString:currentAppIdentifier]) {
-				[[%c(SBAppSwitcherModel) sharedInstance] remove:displayItem];
+		for (NSString *identifier in _appSwitcherIdentifiers) {
+			if (![identifier isEqualToString:currentAppIdentifier]) {
+				[[%c(SBAppSwitcherModel) sharedInstance] remove:[%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:identifier]];
 			}
 		}
 		[self updateAppsInSwitcher];
 		return;
 	}
 	NSInteger index = roundf((point.x+14)/70.0);
-	if (_appSwitcherDisplayItems.count >= index) {
-		SBDisplayItem *displayItem = _appSwitcherDisplayItems[index];
-		NSString *appIdentifier = [displayItem valueForKey:@"_displayIdentifier"];
-
+	if (_appSwitcherIdentifiers.count > index) {
+		NSString *appIdentifier = _appSwitcherIdentifiers[index];;
 		[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:appIdentifier suspended:NO];
 	}
 }
