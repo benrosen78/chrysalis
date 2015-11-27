@@ -26,6 +26,8 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	NSArray *_appSwitcherDisplayItems;
 	UIView *_backgroundColorView;
 	UICollectionView *_collectionView;
+	UIView *_divider;
+	UIImageView *_closeAppsImageView;
 }
 
 #pragma mark Adding views
@@ -81,18 +83,18 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 
 	_collectionView.layer.mask = gradient;
 
-	UIView *divider = [[UIView alloc] init];
-	divider.frame = CGRectMake(_collectionView.frame.size.width, 0, 1, self.view.frame.size.height);
-	divider.backgroundColor = [UIColor blackColor];
-	divider.alpha = 0.45;
-	[self.view addSubview:divider];
+	_divider = [[UIView alloc] init];
+	_divider.frame = CGRectMake(_collectionView.frame.size.width, 0, 1, self.view.frame.size.height);
+	_divider.backgroundColor = [UIColor blackColor];
+	_divider.alpha = 0.45;
+	[self.view addSubview:_divider];
 
-	UIImageView *closeAppsImageView = [[UIImageView alloc] init];
-	closeAppsImageView.image = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
-	closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
-	closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
-	closeAppsImageView.alpha = 0.45;
-	[self.view addSubview:closeAppsImageView];
+	_closeAppsImageView = [[UIImageView alloc] init];
+	_closeAppsImageView.image = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
+	_closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
+	_closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
+	_closeAppsImageView.alpha = 0.45;
+	[self.view addSubview:_closeAppsImageView];
 }
 
 #pragma mark Collection View Delegate
@@ -121,12 +123,32 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 - (void)updateViewToNewPoint:(CGPoint)point {
 	NSInteger index = roundf((point.x/70.0));
 
-	[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-		_backgroundColorView.frame = CGRectMake(index*70.0+4, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
-		_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
-	} completion:nil];
+	if (point.x > self.view.frame.size.width-45.0) {
+		if (_divider.alpha != 0.7) {
+			[UIView animateWithDuration:0.3 animations:^{
+				_divider.alpha = 0.7;
+				_closeAppsImageView.alpha = 0.7;
+			}];
+		}
+	} else if (_divider.alpha != 0.45) {
+		[UIView animateWithDuration:0.3 animations:^{
+			_divider.alpha = 0.45;
+			_closeAppsImageView.alpha = 0.45;
+		}];
+	}
+	if (_appSwitcherDisplayItems.count > index) {
+		[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+			CGRect closeAppsFrame = CGRectMake(_collectionView.frame.size.width, 0, 45, _collectionView.frame.size.height);
+			CGRect potentialFrame = CGRectMake(index*70.0+4, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
+			if (CGRectIntersectsRect(closeAppsFrame, potentialFrame)) {
+				return;
+			}
+			_backgroundColorView.frame = potentialFrame;
+			_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
+		} completion:nil];
+	}
 
-	BOOL scrollLeft = point.x <= 150;
+	/*BOOL scrollLeft = point.x <= 150;
 	BOOL scrollRight = point.x >= self.view.frame.size.width-150;
 	static BOOL shouldScroll = YES;
 	if (scrollLeft || scrollRight) {
@@ -138,7 +160,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 		} completion:^(BOOL completion) {
 			shouldScroll = YES;
 		}];
-	}
+	}*/
 }
 
 - (void)openAppAtPoint:(CGPoint)point {
@@ -154,10 +176,12 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 		return;
 	}
 	NSInteger index = roundf((point.x/70.0));
-	SBDisplayItem *displayItem = _appSwitcherDisplayItems[index];
-	NSString *appIdentifier = [displayItem valueForKey:@"_displayIdentifier"];
+	if (_appSwitcherDisplayItems.count > index) {
+		SBDisplayItem *displayItem = _appSwitcherDisplayItems[index];
+		NSString *appIdentifier = [displayItem valueForKey:@"_displayIdentifier"];
 
-	[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:appIdentifier suspended:NO];
+		[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:appIdentifier suspended:NO];
+	}
 }
 
 @end
