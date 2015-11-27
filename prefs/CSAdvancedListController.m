@@ -1,59 +1,32 @@
 #import "CSAdvancedListController.h"
-#import <Preferences/PSSpecifier.h>
 
-@implementation CSAdvancedListController
+@implementation CSAdvancedListController {
+	UIView *_liveAppSwitcherView;
+}
 
-#pragma mark - PSListController
+#pragma mark Cephei - HBListController
 
 + (NSString *)hb_specifierPlist {
 	return @"Advanced";
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return _configurationHeaderView;
-    }
-    return nil;
+#pragma mark init method
+
+- (instancetype)init {
+	if (self = [super init]) {
+		_liveAppSwitcherView = [[UIView alloc] init];
+	}
+	return self;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return 140;
-    }
-    return (CGFloat)-1;
+#pragma mark UITableView delegate
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return section == 0 ? _liveAppSwitcherView : nil;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	_configurationHeaderView = [[CSLiveConfigurationHeaderView alloc] init];
-}
-
--(void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
-	[super setPreferenceValue:value specifier:specifier];
-
-	NSDictionary *properties = specifier.properties;
-	NSString *key = properties[@"key"];
-	if ([key isEqualToString:@"includeHomescreenIcon"]) {
-		if ([value boolValue]) {
-			[_configurationHeaderView setHomeScreenIconHidden:YES];
-		} else {
-			[_configurationHeaderView setHomeScreenIconHidden:NO];
-		}
-	}
-	else if ([key isEqualToString:@"showIconLabels"]) {
-		if ([value boolValue]) {
-			[_configurationHeaderView setIconLabelsHidden:YES];
-		} else {
-			[_configurationHeaderView setIconLabelsHidden:NO];
-		}
-	}
-	else if ([key isEqualToString:@"showKillAllButton"]) {
-		if ([value boolValue]) {
-			[_configurationHeaderView setKillAllButtonHidden:YES];
-		} else {
-			[_configurationHeaderView setKillAllButtonHidden:NO];
-		}
-	}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return section == 0 ? 95 : 0;
 }
 
 @end

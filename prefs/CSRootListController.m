@@ -34,7 +34,7 @@
 	self.navigationItem.titleView = [[UIImageView alloc] initWithImage:headerLogo];
 	self.navigationItem.titleView.alpha = 0.0;
 
-	[self performSelector:@selector(animateIconAlpha) withObject:nil afterDelay:0.3];
+	[self performSelector:@selector(animateIconAlpha) withObject:nil afterDelay:0.5];
 }
 
 - (void)animateIconAlpha {
