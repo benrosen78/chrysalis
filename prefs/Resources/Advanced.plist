@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.tweakbattles.chrysalis</string>
+			<key>key</key>
+			<string>includeHomescreenIcon</string>
+			<key>label</key>
+			<string>Include Homescreen Icon</string>
+			<key>PostNotification</key>
+			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.tweakbattles.chrysalis</string>
+			<key>key</key>
+			<string>showIconLabels</string>
+			<key>label</key>
+			<string>Show Icon Labels</string>
+			<key>PostNotification</key>
+			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.tweakbattles.chrysalis</string>
+			<key>key</key>
+			<string>showKillAllButton</string>
+			<key>label</key>
+			<string>Show Kill All Button</string>
+			<key>PostNotification</key>
+			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Advanced</string>
+</dict>
+</plist>
