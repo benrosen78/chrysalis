@@ -9,7 +9,7 @@
 		[[CSWindow sharedInstance] startAppSwitcher];
 	} else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
 		[[CSWindow sharedInstance] updateToPoint:activationPoint];
-	} else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+	} else if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled || gestureRecognizer.state == UIGestureRecognizerStateFailed) {
 		[[CSWindow sharedInstance] removeFromPoint:activationPoint];
 	}
 }
