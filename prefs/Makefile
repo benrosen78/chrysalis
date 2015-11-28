@@ -1,7 +1,7 @@
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = ChrysalisPrefs
-ChrysalisPrefs_FILES = $(wildcard *.m)
+ChrysalisPrefs_FILES = $(wildcard *.m) $(wildcard *.x)
 ChrysalisPrefs_INSTALL_PATH = /Library/PreferenceBundles
 ChrysalisPrefs_FRAMEWORKS = UIKit
 ChrysalisPrefs_PRIVATE_FRAMEWORKS = Preferences

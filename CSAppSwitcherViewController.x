@@ -147,7 +147,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 
 	if (!%c(SBAppSwitcherModel) || !%c(SBDisplayItem)) {
 		// this must be the example from settings
-		_appSwitcherIdentifiers = [NSMutableArray arrayWithArray:@[@"com.apple.mobilemail", @"com.apple.AppStore", @"com.apple.Music", @"com.apple.mobilenotes", @"com.apple.mobileslideshow", @"com.apple.mobilesafari", @"com.apple.Preferences"]];
+		_appSwitcherIdentifiers = [[NSMutableArray alloc] initWithArray:@[@"com.apple.mobilemail", @"com.apple.AppStore", @"com.apple.Music", @"com.apple.mobilenotes", @"com.apple.mobileslideshow", @"com.apple.mobilesafari", @"com.apple.Preferences"]];
 		return;
 	}
 
