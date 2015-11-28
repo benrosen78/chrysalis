@@ -79,7 +79,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	// other views
 
 	_backgroundColorView = [[UIView alloc] init];
-	_backgroundColorView.frame = CGRectMake(18, 0.0, 65.0, 65.0);
+	_backgroundColorView.frame = CGRectMake(16.5, 0.0, 65.0, 65.0);
 	_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
 	_backgroundColorView.backgroundColor = [UIColor whiteColor];
 	_backgroundColorView.alpha = 0.4;
