@@ -80,11 +80,11 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>CSCreatorsListController</string>
+			<string>CSAboutListController</string>
 			<key>icon</key>
 			<string>makers.png</string>
 			<key>label</key>
-			<string>Creators</string>
+			<string>About</string>
 		</dict>
 		<dict>
 			<key>cell</key>
