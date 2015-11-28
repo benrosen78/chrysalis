@@ -35,7 +35,7 @@
 
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 			NSError *error = nil;
-			NSData *data = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://twitter.com/%@/profile_image?size=bigger", URL_ENCODE(username)]]] returningResponse:nil error:&error];
+			NSData *data = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://twitter.com/%@/profile_image?size=original", URL_ENCODE(username)]]] returningResponse:nil error:&error];
 
 			if (error) {
 				HBLogError(@"error loading twitter avatar: %@", error);
