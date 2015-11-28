@@ -32,8 +32,8 @@
 	[self.realNavigationController.navigationBar _setHidesShadow:YES];
 }
 
-- (void)viewWillDissapear:(BOOL)animated {
-	[super viewWillDissapear:animated];
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
 	[self.realNavigationController.navigationBar _setHidesShadow:NO];
 }
 
