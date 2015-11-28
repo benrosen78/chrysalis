@@ -3,6 +3,7 @@
 #include <dlfcn.h>
 #import "CSAdvancedBackgroundGradientView.h"
 #import <UIKit/UIImage+Private.h>
+#import <UIKit/UINavigationBar+Private.h>
 
 @implementation CSAdvancedListController {
 	CSAppSwitcherViewController *_liveAppSwitcherView;
@@ -14,7 +15,7 @@
 	return @"Advanced";
 }
 
-#pragma mark init method
+#pragma mark CSAdvancedListController
 
 - (instancetype)init {
 	if (self = [super init]) {
@@ -28,9 +29,12 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	[self.realNavigationController.navigationBar _setHidesShadow:YES];
+}
 
-	[self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
-	self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
+- (void)viewWillDissapear:(BOOL)animated {
+	[super viewWillDissapear:animated];
+	[self.realNavigationController.navigationBar _setHidesShadow:NO];
 }
 
 #pragma mark UITableView delegate
