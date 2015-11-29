@@ -3,7 +3,7 @@ typedef NS_ENUM(NSInteger, CSAboutCreatorType) {
 	CSAboutCreatorTypeDesigner
 };
 
-@interface CSAboutCreatorView : UIView
+@interface CSAboutCreatorView : UIView <UIGestureRecognizerDelegate>
 
 - (instancetype)initWithTwitterUsername:(NSString *)username name:(NSString *)name creatorType:(CSAboutCreatorType)creatorType;
 
