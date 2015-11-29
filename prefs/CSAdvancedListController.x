@@ -59,6 +59,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	[self.realNavigationController.navigationBar _setHidesShadow:NO];
+	[_liveAppSwitcherView removeFromParentViewController ];
 }
 
 @end
