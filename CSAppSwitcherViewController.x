@@ -112,7 +112,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	flowLayout.minimumInteritemSpacing = 0;
 	flowLayout.minimumLineSpacing = 0;
 
-	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(14, 0, self.view.frame.size.width-(45+14), self.view.frame.size.height) collectionViewLayout:flowLayout];
+	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(15, 0, self.view.frame.size.width-(45+15), self.view.frame.size.height) collectionViewLayout:flowLayout];
 	_collectionView.backgroundColor = [UIColor clearColor];
 	_collectionView.delegate = self;
 	_collectionView.dataSource = self;
@@ -173,7 +173,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 }
 
 - (void)updateViewToNewPoint:(CGPoint)point {
-	NSInteger index = roundf((point.x+14)/70.0);
+	NSInteger index = roundf((point.x+15)/70.0);
 	/*
 	if (point.x > self.view.frame.size.width-45.0) {
 		if (_divider.alpha != 0.7) {
@@ -193,7 +193,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	if (_appSwitcherIdentifiers.count > index) {
 		[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
 			CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width-45, 0, 45, _collectionView.frame.size.height);
-			CGRect potentialFrame = CGRectMake(index*70.0+16.5, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
+			CGRect potentialFrame = CGRectMake(index*70.0+17.5, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
 			if (CGRectIntersectsRect(closeAppsFrame, potentialFrame)) {
 				return;
 			}
@@ -229,7 +229,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 		[self updateAppsInSwitcher];
 		return;
 	}
-	NSInteger index = roundf((point.x+14)/70.0);
+	NSInteger index = roundf((point.x+15)/70.0);
 	if (_appSwitcherIdentifiers.count > index) {
 		NSString *appIdentifier = _appSwitcherIdentifiers[index];;
 		[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:appIdentifier suspended:NO];
