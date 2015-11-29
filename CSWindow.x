@@ -28,10 +28,8 @@ static CGFloat const kCSAppSwitcherHeight = 95.f;
 	} completion:^(BOOL completed) {
 		self.hidden = YES;
 	}];
-	if (CGRectContainsPoint(self.frame, point)) {
-		CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
-		[appSwitcher openAppAtPoint:point];
-	}
+	CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
+	[appSwitcher openAppAtPoint:point];
 }
 
 - (void)startAppSwitcher:(CGPoint)point {
