@@ -58,6 +58,33 @@
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:rightSeparator attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:chrysalisLogoImageView attribute:NSLayoutAttributeRight multiplier:1.0 constant:20]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:rightSeparator attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-18]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:rightSeparator attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:1.5]];
+
+		UILabel *thankLabel = [[UILabel alloc] init];
+		thankLabel.text = @"Thank you for purchasing this tweak. Enjoy!";
+		thankLabel.font = [UIFont systemFontOfSize:10];
+		thankLabel.translatesAutoresizingMaskIntoConstraints = NO;
+		[self.contentView addSubview:thankLabel];
+		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:thankLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
+		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:thankLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:chrysalisLogoImageView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:15]];
+
+		UILabel *specialThanksLabel = [[UILabel alloc] init];
+		specialThanksLabel.text = @"SPECIAL THANKS TO";
+		specialThanksLabel.font = [UIFont systemFontOfSize:12];
+		specialThanksLabel.translatesAutoresizingMaskIntoConstraints = NO;
+		[self.contentView addSubview:specialThanksLabel];
+		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:specialThanksLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
+		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:specialThanksLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:thankLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:22]];
+
+		UILabel *supportersLabel = [[UILabel alloc] init];
+		supportersLabel.text = @"Eric, Borsato92, cj81499, winlogon0, mootjeuh, @redzrex, Jason R., CONATH, JimDotR, Boris S, Ziph0n, Andrew, /u/DervishSkater, Corporal, Acidschnee, Josh Gibson, HHumbert, Cody, Connor, @sel2by3, Shadow Games, Pixxaddict, platypusw90, echo000, Jonathan Gautreau, Blink, ShaneSparkyYYZ, kamikasky, MaxD, @tilgut, @Beezure, Matteo Piccina, josh_boothman, Moshe Siegel, Ian L, Torben, MeatyCheetos, @rauseo12, Lei33, K S LEE, @RichResk, wizage, @sekrit_, RushNY, Maortega89, @frkbmb_, Kyle, Robert, @BrianOverly, @thetomcanuck, OhSpazz, Jessyreynosa3, Jessie mejia, Jp_delon, dantesieg";
+		supportersLabel.font = [UIFont systemFontOfSize:10];
+		supportersLabel.numberOfLines = 0;
+		supportersLabel.translatesAutoresizingMaskIntoConstraints = NO;
+		[self.contentView addSubview:supportersLabel];
+		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:supportersLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:18]];
+		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:supportersLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-18]];
+		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:supportersLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:specialThanksLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:8]];
+
 	}
 	return self;
 }
@@ -69,7 +96,7 @@
 #pragma mark size
 
 - (CGFloat)preferredHeightForWidth:(CGFloat)width {
-	return 553.f;
+	return 527.f;
 }
 
 
