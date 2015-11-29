@@ -11,6 +11,12 @@
 		_appIconImageView = [[UIImageView alloc] init];
 		_appIconImageView.frame = CGRectMake(0, 0, 55.0, 55.0);
 		_appIconImageView.center = self.contentView.center;
+		_appIconImageView.layer.shadowColor = [UIColor darkGrayColor].CGColor;
+		_appIconImageView.layer.shadowOffset = CGSizeMake(0.5, 0.5);
+		_appIconImageView.layer.shadowOpacity = 0.5;
+		_appIconImageView.layer.shadowRadius = 0.5;
+		_appIconImageView.clipsToBounds = NO;
+
 		[self.contentView addSubview:_appIconImageView];
 	}
 	return self;
