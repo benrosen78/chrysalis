@@ -12,7 +12,7 @@ CSWindow *window;
 	CGPoint activationPoint = [gestureRecognizer locationInView:[self window]];
 	switch (gestureRecognizer.state) {
 		case UIGestureRecognizerStateBegan:
-			[window startAppSwitcher];
+			[window startAppSwitcher:activationPoint];
 			break;
 		case UIGestureRecognizerStateChanged:
 			[window updateToPoint:activationPoint];

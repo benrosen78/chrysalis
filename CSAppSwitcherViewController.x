@@ -47,16 +47,17 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
 	[vibrancyEffectView setFrame:blurEffectView.frame];
 
-	UILabel *test = [[UILabel alloc] initWithFrame:CGRectMake(20,30,100,98];
-	test.text = @"Test";
+	_closeAppsImageView = [[UIImageView alloc] init];
+	_closeAppsImageView.image = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
+	_closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
+	_closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
 
 	_divider = [[UIView alloc] init];
 	_divider.frame = CGRectMake(self.view.frame.size.width-45, 0, 1, self.view.frame.size.height);
 	_divider.backgroundColor = [UIColor blackColor];
-	_divider.alpha = 0.45;
 
 	[[vibrancyEffectView contentView] addSubview:_divider];
-	[[vibrancyEffectView contentView] addSubview:test];
+	[[vibrancyEffectView contentView] addSubview:_closeAppsImageView];
 
 	[[blurEffectView contentView] addSubview:vibrancyEffectView];
 
@@ -129,13 +130,6 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 
 	_collectionView.layer.mask = gradient;
 
-	_closeAppsImageView = [[UIImageView alloc] init];
-	_closeAppsImageView.image = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
-	_closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
-	_closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
-	_closeAppsImageView.alpha = 0.45;
-	[self.view addSubview:_closeAppsImageView];
-
 }
 
 #pragma mark Collection View Delegate
@@ -180,7 +174,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 
 - (void)updateViewToNewPoint:(CGPoint)point {
 	NSInteger index = roundf((point.x+14)/70.0);
-
+	/*
 	if (point.x > self.view.frame.size.width-45.0) {
 		if (_divider.alpha != 0.7) {
 			[UIView animateWithDuration:0.3 animations:^{
@@ -194,7 +188,8 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 			_divider.alpha = 0.45;
 			_closeAppsImageView.alpha = 0.45;
 		}];
-	}
+	}*/
+
 	if (_appSwitcherIdentifiers.count > index) {
 		[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
 			CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width-45, 0, 45, _collectionView.frame.size.height);

@@ -7,37 +7,46 @@ static CGFloat const kCSAppSwitcherHeight = 95.f;
 
 - (instancetype)init {
 	if (self = [super init]) {
-		self.frame = CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, kCSAppSwitcherHeight);
+		self.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width/-2, 0, [[UIScreen mainScreen] bounds].size.width, kCSAppSwitcherHeight);
 		self.windowLevel = UIWindowLevelAlert+2;
 		self.rootViewController = [[CSAppSwitcherViewController alloc] init];
 		self.backgroundColor = [UIColor clearColor];
+		self.layer.anchorPoint = CGPointMake(0, 0.5f);
 	}
 	return self;
 }
 
 - (void)updateToPoint:(CGPoint)point {
-	if (self.hidden) {
-		// this is where it is set
-		self.center = CGPointMake(self.center.x, point.y);
-		self.hidden = NO;
-	} else {
-		// here, we forward to the view controller, so that the user can slide across the collection view
-		CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
-		[appSwitcher updateViewToNewPoint:point];
-	}
+	CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
+	[appSwitcher updateViewToNewPoint:point];
 }
 
 - (void)removeFromPoint:(CGPoint)point {
-	self.hidden = YES;
+	[UIView animateWithDuration:0.1 animations:^{
+		self.transform = CGAffineTransformMakeScale(0.15, 0.15);
+		self.alpha = 0;
+	} completion:^(BOOL completed) {
+		self.hidden = YES;
+	}];
 	if (CGRectContainsPoint(self.frame, point)) {
 		CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
 		[appSwitcher openAppAtPoint:point];
 	}
 }
 
-- (void)startAppSwitcher {
+- (void)startAppSwitcher:(CGPoint)point {
 	CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
 	[appSwitcher updateAppsInSwitcher];
+
+	self.center = CGPointMake(self.center.x, point.y);
+	self.hidden = NO;
+	self.alpha = 0;
+	self.transform = CGAffineTransformMakeScale(0.15, 0.15);
+
+	[UIView animateWithDuration:0.1 animations:^{
+		self.alpha = 1;
+		self.transform = CGAffineTransformIdentity;
+	}];
 }
 
 @end
