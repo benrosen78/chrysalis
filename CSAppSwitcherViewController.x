@@ -79,7 +79,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	[chevronBezierPath fill];
 
 	CAShapeLayer *chevronPathMaskLayer = [[CAShapeLayer alloc] init];
-	chevronPathMaskLayer.frame = CGRectMake(0, self.view.frame.size.height/2-25.5, 14, 34);
+	chevronPathMaskLayer.frame = CGRectMake(0, self.view.frame.size.height/2-25, 14, 34);
 	chevronPathMaskLayer.path = chevronBezierPath.CGPath;
 	[containerLayer addSublayer:chevronPathMaskLayer];
 
