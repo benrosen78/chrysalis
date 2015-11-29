@@ -42,6 +42,24 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
 	UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
 	blurEffectView.frame = self.view.frame;
+
+	UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
+	UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
+	[vibrancyEffectView setFrame:blurEffectView.frame];
+
+	UILabel *test = [[UILabel alloc] initWithFrame:CGRectMake(20,30,100,98];
+	test.text = @"Test";
+
+	_divider = [[UIView alloc] init];
+	_divider.frame = CGRectMake(self.view.frame.size.width-45, 0, 1, self.view.frame.size.height);
+	_divider.backgroundColor = [UIColor blackColor];
+	_divider.alpha = 0.45;
+
+	[[vibrancyEffectView contentView] addSubview:_divider];
+	[[vibrancyEffectView contentView] addSubview:test];
+
+	[[blurEffectView contentView] addSubview:vibrancyEffectView];
+
 	[self.view addSubview:blurEffectView];
 
 	CALayer *containerLayer = [CALayer layer];
@@ -110,12 +128,6 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	gradient.locations = @[@0.93, @1.0];
 
 	_collectionView.layer.mask = gradient;
-
-	_divider = [[UIView alloc] init];
-	_divider.frame = CGRectMake(self.view.frame.size.width-45, 0, 1, self.view.frame.size.height);
-	_divider.backgroundColor = [UIColor blackColor];
-	_divider.alpha = 0.45;
-	[self.view addSubview:_divider];
 
 	_closeAppsImageView = [[UIImageView alloc] init];
 	_closeAppsImageView.image = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
