@@ -202,18 +202,26 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 		} completion:nil];
 	}
 
+	CGPoint newContentOffset = CGPointMake(_collectionView.contentOffset.x+70.f, 0);
+	[UIView animateWithDuration:1.0 delay:1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+		if (point.x >= self.view.frame.size.width-150) {
+			[_collectionView setContentOffset:newContentOffset animated:NO];
+		}
+	} completion:nil];
+
 	/*BOOL scrollLeft = point.x <= 150;
 	BOOL scrollRight = point.x >= self.view.frame.size.width-150;
 	static BOOL shouldScroll = YES;
 	if (scrollLeft || scrollRight) {
 		CGFloat increment = scrollLeft ? -10 : 10;
-		CGPoint newContentOffset = CGPointMake(_collectionView.contentOffset.x+increment, 0);
-		[UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-			shouldScroll = NO;
-			[_collectionView setContentOffset:newContentOffset animated:NO];
-		} completion:^(BOOL completion) {
-			shouldScroll = YES;
-		}];
+
+
+[UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+	shouldScroll = NO;
+	[_collectionView setContentOffset:newContentOffset animated:NO];
+} completion:^(BOOL completion) {
+	shouldScroll = YES;
+}];
 	}*/
 }
 
