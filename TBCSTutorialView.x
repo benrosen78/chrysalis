@@ -1,6 +1,7 @@
 #import "TBCSTutorialView.h"
 #import <SpringBoard/SBIconController.h>
 #import <SpringBoard/SBIconListView.h>
+#import <CoreText/CoreText.h>
 
 @implementation TBCSTutorialView {
     UILabel *_headerLabel;
@@ -15,6 +16,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
+        [self loadInFonts];
         [self handleAddingTutorialView];
 
 		// Add a light tint to create some seperation for the text
@@ -22,7 +24,7 @@
 
 		_headerLabel = [[UILabel alloc] init];
         _headerLabel.numberOfLines = 1;
-        _headerLabel.font = [UIFont systemFontOfSize:36];
+        _headerLabel.font = [UIFont fontWithName:@"NexaLight" size:36];
         _headerLabel.text = @"CHRYSALIS";
         _headerLabel.textColor = [UIColor whiteColor];
         _headerLabel.textAlignment = NSTextAlignmentCenter;
@@ -32,7 +34,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_headerLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
         _pronunciationLabel = [[UILabel alloc] init];
-        _pronunciationLabel.font = [UIFont systemFontOfSize:18];
+        _pronunciationLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
         _pronunciationLabel.text = @"kriss·uh·lis";
         _pronunciationLabel.textColor = [UIColor whiteColor];
         _pronunciationLabel.textAlignment = NSTextAlignmentCenter;
@@ -42,7 +44,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_pronunciationLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
         _shortDescriptionLabel = [[UILabel alloc] init];
-        _shortDescriptionLabel.font = [UIFont systemFontOfSize:18];
+        _shortDescriptionLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
         _shortDescriptionLabel.text = @"a minimalist appswitcher for your iPhone";
         _shortDescriptionLabel.textColor = [UIColor whiteColor];
         _shortDescriptionLabel.textAlignment = NSTextAlignmentCenter;
@@ -53,7 +55,7 @@
 
         _tutorialLabel1 = [[UILabel alloc] init];
         _tutorialLabel1.numberOfLines = 3;
-        _tutorialLabel1.font = [UIFont systemFontOfSize:18];
+        _tutorialLabel1.font = [UIFont fontWithName:@"billy" size:36];
         _tutorialLabel1.text = @"  -  force touch/hold \n     on the left/right side\n     of the screen to reveal the app icons.";
         _tutorialLabel1.textColor = [UIColor whiteColor];
         _tutorialLabel1.textAlignment = NSTextAlignmentLeft;
@@ -64,7 +66,7 @@
 
         _tutorialLabel2 = [[UILabel alloc] init];
         _tutorialLabel2.numberOfLines = 3;
-        _tutorialLabel2.font = [UIFont systemFontOfSize:18];
+        _tutorialLabel2.font = [UIFont fontWithName:@"billy" size:36];
         _tutorialLabel2.text = @"  -  continuing to slide on the \n     appswitcher zone without\n     releasing to select an app";
         _tutorialLabel2.textColor = [UIColor whiteColor];
         _tutorialLabel2.textAlignment = NSTextAlignmentLeft;
@@ -75,7 +77,7 @@
 
         _tutorialLabel3 = [[UILabel alloc] init];
         _tutorialLabel3.numberOfLines = 2;
-        _tutorialLabel3.font = [UIFont systemFontOfSize:18];
+        _tutorialLabel3.font = [UIFont fontWithName:@"billy" size:36];
         _tutorialLabel3.text = @"  -  slide to the x button to \n     close all apps";
         _tutorialLabel3.textColor = [UIColor whiteColor];
         _tutorialLabel3.textAlignment = NSTextAlignmentLeft;
@@ -123,6 +125,26 @@
         [rootController.contentView setPageControlHidden:NO];
         [rootController.contentView.dockView setBackgroundAlpha:1.0f];
     } completion:nil];
+}
+
+#pragma mark fonts
+
+- (void)loadInFonts {
+    NSString *billyFontPath = @"/Library/PreferenceBundles/ChrysalisPrefs.bundle/fonts/Billy.ttf";
+    NSURL *billyUrl = [NSURL fileURLWithPath:billyFontPath];
+    CGDataProviderRef billyFontDataProvider = CGDataProviderCreateWithURL((__bridge CFURLRef)billyUrl);
+    CGFontRef billyFont = CGFontCreateWithDataProvider(billyFontDataProvider);
+    CGDataProviderRelease(billyFontDataProvider);
+    CTFontManagerRegisterGraphicsFont(billyFont, nil);
+    CGFontRelease(billyFont);
+
+    NSString *nexaFontPath = @"/Library/PreferenceBundles/ChrysalisPrefs.bundle/fonts/Nexa.otf";
+    NSURL *nexaUrl = [NSURL fileURLWithPath:nexaFontPath];
+    CGDataProviderRef nexaFontDataProvider = CGDataProviderCreateWithURL((__bridge CFURLRef)nexaUrl);
+    CGFontRef nexaFont = CGFontCreateWithDataProvider(nexaFontDataProvider);
+    CGDataProviderRelease(nexaFontDataProvider);
+    CTFontManagerRegisterGraphicsFont(nexaFont, nil);
+    CGFontRelease(nexaFont);
 }
 
 @end

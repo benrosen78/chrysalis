@@ -37,7 +37,7 @@ CSWindow *window;
 %end
 
 %hook SBLockScreenViewController
-- (void)finishUIUnlockFromSource:(int)arg1{
+- (void)finishUIUnlockFromSource:(int)arg1 {
 	%orig;
 
 	//if (![[CSPreferencesManager sharedInstance] hadFirstRun]) {
