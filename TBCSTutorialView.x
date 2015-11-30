@@ -2,15 +2,9 @@
 #import <SpringBoard/SBIconController.h>
 #import <SpringBoard/SBIconListView.h>
 #import <CoreText/CoreText.h>
+#import "CSAppSwitcherViewController.h"
 
-@implementation TBCSTutorialView {
-    UILabel *_headerLabel;
-    UILabel *_pronunciationLabel;
-    UILabel *_shortDescriptionLabel;
-    UILabel *_tutorialLabel1;
-    UILabel *_tutorialLabel2;
-    UILabel *_tutorialLabel3;
-}
+@implementation TBCSTutorialView
 
 #pragma mark TBCSTutorialView
 
@@ -22,69 +16,69 @@
 		// Add a light tint to create some seperation for the text
 		self.backgroundColor = [UIColor colorWithRed:2.0f/255.0f green:2.0f/255.0f blue:2.0f/255.0f alpha:0.3];
 
-		_headerLabel = [[UILabel alloc] init];
-        _headerLabel.numberOfLines = 1;
-        _headerLabel.font = [UIFont fontWithName:@"NexaLight" size:36];
-        _headerLabel.text = @"CHRYSALIS";
-        _headerLabel.textColor = [UIColor whiteColor];
-        _headerLabel.textAlignment = NSTextAlignmentCenter;
-        _headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addSubview:_headerLabel];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_headerLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1 constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_headerLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+		UILabel *headerLabel = [[UILabel alloc] init];
+        headerLabel.numberOfLines = 1;
+        headerLabel.font = [UIFont fontWithName:@"NexaLight" size:36];
+        headerLabel.text = @"CHRYSALIS";
+        headerLabel.textColor = [UIColor whiteColor];
+        headerLabel.textAlignment = NSTextAlignmentCenter;
+        headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:headerLabel];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:headerLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1 constant:0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:headerLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
-        _pronunciationLabel = [[UILabel alloc] init];
-        _pronunciationLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
-        _pronunciationLabel.text = @"kriss·uh·lis";
-        _pronunciationLabel.textColor = [UIColor whiteColor];
-        _pronunciationLabel.textAlignment = NSTextAlignmentCenter;
-        _pronunciationLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addSubview:_pronunciationLabel];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_pronunciationLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_headerLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:2]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_pronunciationLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        UILabel *pronunciationLabel = [[UILabel alloc] init];
+        pronunciationLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
+        pronunciationLabel.text = @"kriss·uh·lis";
+        pronunciationLabel.textColor = [UIColor whiteColor];
+        pronunciationLabel.textAlignment = NSTextAlignmentCenter;
+        pronunciationLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:pronunciationLabel];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:pronunciationLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:headerLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:2]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:pronunciationLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
-        _shortDescriptionLabel = [[UILabel alloc] init];
-        _shortDescriptionLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
-        _shortDescriptionLabel.text = @"a minimalist appswitcher for your iPhone";
-        _shortDescriptionLabel.textColor = [UIColor whiteColor];
-        _shortDescriptionLabel.textAlignment = NSTextAlignmentCenter;
-        _shortDescriptionLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addSubview:_shortDescriptionLabel];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_shortDescriptionLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_pronunciationLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:2]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_shortDescriptionLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        UILabel *shortDescriptionLabel = [[UILabel alloc] init];
+        shortDescriptionLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
+        shortDescriptionLabel.text = @"a minimalist appswitcher for your iPhone";
+        shortDescriptionLabel.textColor = [UIColor whiteColor];
+        shortDescriptionLabel.textAlignment = NSTextAlignmentCenter;
+        shortDescriptionLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:shortDescriptionLabel];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:shortDescriptionLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:pronunciationLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:2]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:shortDescriptionLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
-        _tutorialLabel1 = [[UILabel alloc] init];
-        _tutorialLabel1.numberOfLines = 3;
-        _tutorialLabel1.font = [UIFont fontWithName:@"billy" size:36];
-        _tutorialLabel1.text = @"  -  force touch/hold \n     on the left/right side\n     of the screen to reveal the app icons.";
-        _tutorialLabel1.textColor = [UIColor whiteColor];
-        _tutorialLabel1.textAlignment = NSTextAlignmentLeft;
-        _tutorialLabel1.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addSubview:_tutorialLabel1];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_tutorialLabel1 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_shortDescriptionLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:25]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_tutorialLabel1 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
+        UILabel *tutorialLabel1 = [[UILabel alloc] init];
+        tutorialLabel1.numberOfLines = 3;
+        tutorialLabel1.font = [UIFont fontWithName:@"billy" size:36];
+        tutorialLabel1.text = @"  -  force touch/hold \n     on the left/right side\n     of the screen to reveal the app icons.";
+        tutorialLabel1.textColor = [UIColor whiteColor];
+        tutorialLabel1.textAlignment = NSTextAlignmentLeft;
+        tutorialLabel1.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:tutorialLabel1];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel1 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:shortDescriptionLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:25]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel1 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
 
-        _tutorialLabel2 = [[UILabel alloc] init];
-        _tutorialLabel2.numberOfLines = 3;
-        _tutorialLabel2.font = [UIFont fontWithName:@"billy" size:36];
-        _tutorialLabel2.text = @"  -  continuing to slide on the \n     appswitcher zone without\n     releasing to select an app";
-        _tutorialLabel2.textColor = [UIColor whiteColor];
-        _tutorialLabel2.textAlignment = NSTextAlignmentLeft;
-        _tutorialLabel2.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addSubview:_tutorialLabel2];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_tutorialLabel2 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_tutorialLabel1 attribute:NSLayoutAttributeBottom multiplier:1 constant:15]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_tutorialLabel2 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
+        UILabel *tutorialLabel2 = [[UILabel alloc] init];
+        tutorialLabel2.numberOfLines = 3;
+        tutorialLabel2.font = [UIFont fontWithName:@"billy" size:36];
+        tutorialLabel2.text = @"  -  continuing to slide on the \n     appswitcher zone without\n     releasing to select an app";
+        tutorialLabel2.textColor = [UIColor whiteColor];
+        tutorialLabel2.textAlignment = NSTextAlignmentLeft;
+        tutorialLabel2.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:tutorialLabel2];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel2 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:tutorialLabel1 attribute:NSLayoutAttributeBottom multiplier:1 constant:15]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel2 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
 
-        _tutorialLabel3 = [[UILabel alloc] init];
-        _tutorialLabel3.numberOfLines = 2;
-        _tutorialLabel3.font = [UIFont fontWithName:@"billy" size:36];
-        _tutorialLabel3.text = @"  -  slide to the x button to \n     close all apps";
-        _tutorialLabel3.textColor = [UIColor whiteColor];
-        _tutorialLabel3.textAlignment = NSTextAlignmentLeft;
-        _tutorialLabel3.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addSubview:_tutorialLabel3];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_tutorialLabel3 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_tutorialLabel2 attribute:NSLayoutAttributeBottom multiplier:1 constant:15]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_tutorialLabel3 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
+        UILabel *tutorialLabel3 = [[UILabel alloc] init];
+        tutorialLabel3.numberOfLines = 2;
+        tutorialLabel3.font = [UIFont fontWithName:@"billy" size:36];
+        tutorialLabel3.text = @"  -  slide to the x button to \n     close all apps";
+        tutorialLabel3.textColor = [UIColor whiteColor];
+        tutorialLabel3.textAlignment = NSTextAlignmentLeft;
+        tutorialLabel3.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:tutorialLabel3];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel3 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:tutorialLabel2 attribute:NSLayoutAttributeBottom multiplier:1 constant:15]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel3 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
 	}
 
 	return self;
