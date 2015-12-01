@@ -62,4 +62,13 @@
 	[_liveAppSwitcherView removeFromParentViewController];
 }
 
+#pragma mark - Memory management
+
+- (void)dealloc {
+	[_backgroundGradientView release];
+	[_liveAppSwitcherView release];
+
+	[super dealloc];
+}
+
 @end

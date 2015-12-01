@@ -9,7 +9,7 @@
 - (instancetype)initWithTwitterUsername:(NSString *)username name:(NSString *)name creatorType:(TBCSAboutCreatorType)creatorType {
 	if (self = [super init]) {
 		self.userInteractionEnabled = YES;
-		_twitterUsername = username;
+		_twitterUsername = [username copy];
 
 		UIImageView *avatarImageView = [[UIImageView alloc] init];
 		avatarImageView.alpha = 0.0;
@@ -112,6 +112,14 @@
 		[self openTwitterForUser];
 		break;
 	}
+}
+
+#pragma mark - Memory management
+
+- (void)dealloc {
+	[_twitterUsername release];
+
+	[super dealloc];
 }
 
 @end
