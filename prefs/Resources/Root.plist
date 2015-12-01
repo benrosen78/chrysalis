@@ -38,22 +38,6 @@
 			<key>defaults</key>
 			<string>com.tweakbattles.chrysalis</string>
 			<key>key</key>
-			<string>DarkMode</string>
-			<key>label</key>
-			<string>Dark Mode</string>
-			<key>icon</key>
-			<string>darkmode.png</string>
-			<key>PostNotification</key>
-			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.tweakbattles.chrysalis</string>
-			<key>key</key>
 			<string>LeftHanded</string>
 			<key>label</key>
 			<string>Left-Handed</string>
