@@ -40,13 +40,13 @@ TBCSWindow *window;
 - (void)finishUIUnlockFromSource:(int)arg1 {
 	%orig;
 
-	//if (![[TBCSPreferencesManager sharedInstance] hadFirstRun]) {
-	//	[[TBCSPreferencesManager sharedInstance] setHadFirstRun:YES];
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
-		UIWindow *window = [[%c(SBUIController) sharedInstance] valueForKey:@"_window"];
-		TBCSTutorialView *tutorialView = [[TBCSTutorialView alloc] initWithFrame:window.frame];
-		[window addSubview:tutorialView];
-	});
-	//}
+	if (![[TBCSPreferencesManager sharedInstance] hadFirstRun]) {
+		[[TBCSPreferencesManager sharedInstance] setHadFirstRun:YES];
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
+			UIWindow *window = [[%c(SBUIController) sharedInstance] valueForKey:@"_window"];
+			TBCSTutorialView *tutorialView = [[TBCSTutorialView alloc] initWithFrame:window.frame];
+			[window addSubview:tutorialView];
+		});
+	}
 }
 %end
