@@ -219,6 +219,22 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 - (void)openAppAtPoint:(CGPoint)point {
 	if (point.x > self.view.frame.size.width-45.0) {
+		for (UICollectionViewCell *cell in _collectionView.visibleCells) {
+			UIImageView *imageView = [cell valueForKey:@"_appIconImageView"];
+			[UIView animateWithDuration:0.2 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+				imageView.transform = CGAffineTransformMakeScale(0.15, 0.15);
+				imageView.alpha = 0.0;
+			} completion:^(BOOL completion) {
+				imageView.transform = CGAffineTransformIdentity;
+				imageView.alpha = 1.0;
+			}];
+		}
+		[UIView animateWithDuration:0.2 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+			_backgroundColorView.transform = CGAffineTransformMakeScale(0.15, 0.15);
+			_backgroundColorView.alpha = 0.0;
+		} completion:^(BOOL completion) {
+			_backgroundColorView.transform = CGAffineTransformIdentity;
+		}];
 		SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
 		NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
 		for (NSString *identifier in _appSwitcherIdentifiers) {
@@ -226,12 +242,12 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 				[[%c(SBAppSwitcherModel) sharedInstance] remove:[%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:identifier]];
 			}
 		}
-		[self performSelector:@selector(updateAppsInSwitcher) withObject:nil afterDelay:2];
+		[self performSelector:@selector(updateAppsInSwitcher) withObject:nil afterDelay:2.5];
 		return;
 	}
 	NSInteger index = roundf((point.x+15)/70.0);
 	if (_appSwitcherIdentifiers.count > index) {
-		NSString *appIdentifier = _appSwitcherIdentifiers[index];;
+		NSString *appIdentifier = _appSwitcherIdentifiers[index];
 		[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:appIdentifier suspended:NO];
 	}
 }

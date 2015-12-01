@@ -22,14 +22,14 @@ static CGFloat const kTBCSAppSwitcherHeight = 95.f;
 }
 
 - (void)removeFromPoint:(CGPoint)point {
-	[UIView animateWithDuration:0.1 animations:^{
+	TBCSAppSwitcherViewController *appSwitcher = (TBCSAppSwitcherViewController *)self.rootViewController;
+	[appSwitcher openAppAtPoint:point];
+	[UIView animateWithDuration:0.1 delay:0.2 options:UIViewAnimationOptionCurveEaseIn animations:^{
 		self.transform = CGAffineTransformMakeScale(0.15, 0.15);
 		self.alpha = 0;
 	} completion:^(BOOL completed) {
 		self.hidden = YES;
 	}];
-	TBCSAppSwitcherViewController *appSwitcher = (TBCSAppSwitcherViewController *)self.rootViewController;
-	[appSwitcher openAppAtPoint:point];
 }
 
 - (void)startAppSwitcher:(CGPoint)point {
