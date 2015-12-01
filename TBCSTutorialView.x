@@ -43,7 +43,7 @@
         UILabel *shortDescriptionLabel = [[[UILabel alloc] init] autorelease];
         shortDescriptionLabel.numberOfLines = 0;
         shortDescriptionLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
-        shortDescriptionLabel.text = @"a minimalist appswitcher for your iPhone";
+        shortDescriptionLabel.text = @"a minimalist app switcher for your iPhone";
         shortDescriptionLabel.textColor = [UIColor whiteColor];
         shortDescriptionLabel.textAlignment = NSTextAlignmentCenter;
         shortDescriptionLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -65,7 +65,7 @@
         UILabel *tutorialLabel2 = [[[UILabel alloc] init] autorelease];
         tutorialLabel2.numberOfLines = 0;
         tutorialLabel2.font = [UIFont fontWithName:@"billy" size:36];
-        tutorialLabel2.text = @"  -  continuing to slide on the \n     appswitcher zone without\n     releasing to select an app";
+        tutorialLabel2.text = @"  -  continuing to slide on the \n     app switcher zone without\n     releasing to select an app";
         tutorialLabel2.textColor = [UIColor whiteColor];
         tutorialLabel2.textAlignment = NSTextAlignmentLeft;
         tutorialLabel2.translatesAutoresizingMaskIntoConstraints = NO;
