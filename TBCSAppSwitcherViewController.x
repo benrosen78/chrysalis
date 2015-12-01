@@ -32,6 +32,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	UIView *_divider;
 	UIImageView *_closeAppsImageView;
 	UIVisualEffectView *_blurEffectView;
+	UILabel *_noAppsLabel;
 }
 
 #pragma mark Adding views
@@ -83,8 +84,8 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	_backgroundColorView = [[UIView alloc] init];
 	_backgroundColorView.frame = CGRectMake(17.5, 0.0, 65.0, 65.0);
 	_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
+	_backgroundColorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
 	_backgroundColorView.backgroundColor = [UIColor whiteColor];
-	_backgroundColorView.alpha = 0.4;
 	_backgroundColorView.layer.masksToBounds = YES;
 	_backgroundColorView.layer.cornerRadius = 18.0;
 	[self.view addSubview:_backgroundColorView];
@@ -104,6 +105,14 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	[self.view addSubview:_collectionView];
 
 	UIColor *selectedColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
+	_noAppsLabel = [[UILabel alloc] initWithFrame:_collectionView.frame];
+	_noAppsLabel.text = @"no apps open";
+	_noAppsLabel.textColor = selectedColor;
+	_noAppsLabel.textAlignment = NSTextAlignmentCenter;
+	_noAppsLabel.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0.6 : 0.0;
+	_noAppsLabel.font = [UIFont systemFontOfSize:30.0];
+	[self.view addSubview:_noAppsLabel];
+
 	_closeAppsImageView = [[UIImageView alloc] init];
 	_closeAppsImageView.image = [[UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]] _flatImageWithColor:selectedColor];
 	_closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
@@ -172,6 +181,9 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	_appSwitcherIdentifiers = [appIdentifiers copy];
 
 	[_collectionView reloadData];
+
+	_noAppsLabel.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0.6 : 0.0;
+	_backgroundColorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
 }
 
 - (void)updateViewToNewPoint:(CGPoint)point {
@@ -214,7 +226,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 				[[%c(SBAppSwitcherModel) sharedInstance] remove:[%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:identifier]];
 			}
 		}
-		[self updateAppsInSwitcher];
+		[self performSelector:@selector(updateAppsInSwitcher) withObject:nil afterDelay:2];
 		return;
 	}
 	NSInteger index = roundf((point.x+15)/70.0);
