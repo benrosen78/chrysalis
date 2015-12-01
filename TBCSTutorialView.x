@@ -21,7 +21,6 @@
 		self.backgroundColor = [UIColor colorWithRed:2.0f/255.0f green:2.0f/255.0f blue:2.0f/255.0f alpha:0.3];
 
 		UILabel *headerLabel = [[[UILabel alloc] init] autorelease];
-        headerLabel.numberOfLines = 1;
         headerLabel.font = [UIFont fontWithName:@"NexaLight" size:36];
         headerLabel.text = @"CHRYSALIS";
         headerLabel.textColor = [UIColor whiteColor];
@@ -42,6 +41,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:pronunciationLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
         UILabel *shortDescriptionLabel = [[[UILabel alloc] init] autorelease];
+        shortDescriptionLabel.numberOfLines = 0;
         shortDescriptionLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
         shortDescriptionLabel.text = @"a minimalist appswitcher for your iPhone";
         shortDescriptionLabel.textColor = [UIColor whiteColor];
@@ -52,7 +52,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:shortDescriptionLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
         UILabel *tutorialLabel1 = [[[UILabel alloc] init] autorelease];
-        tutorialLabel1.numberOfLines = 3;
+        tutorialLabel1.numberOfLines = 0;
         tutorialLabel1.font = [UIFont fontWithName:@"billy" size:36];
         tutorialLabel1.text = @"  -  force touch/hold \n     on the left/right side\n     of the screen to reveal the app icons.";
         tutorialLabel1.textColor = [UIColor whiteColor];
@@ -63,7 +63,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel1 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
 
         UILabel *tutorialLabel2 = [[[UILabel alloc] init] autorelease];
-        tutorialLabel2.numberOfLines = 3;
+        tutorialLabel2.numberOfLines = 0;
         tutorialLabel2.font = [UIFont fontWithName:@"billy" size:36];
         tutorialLabel2.text = @"  -  continuing to slide on the \n     appswitcher zone without\n     releasing to select an app";
         tutorialLabel2.textColor = [UIColor whiteColor];
@@ -74,7 +74,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel2 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
 
         UILabel *tutorialLabel3 = [[[UILabel alloc] init] autorelease];
-        tutorialLabel3.numberOfLines = 2;
+        tutorialLabel3.numberOfLines = 0;
         tutorialLabel3.font = [UIFont fontWithName:@"billy" size:36];
         tutorialLabel3.text = @"  -  slide to the × button to \n     close all apps";
         tutorialLabel3.textColor = [UIColor whiteColor];
