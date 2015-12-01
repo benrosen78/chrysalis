@@ -1,6 +1,10 @@
 #import "TBCSTutorialView.h"
+#import <SpringBoard/SBDockIconListView.h>
+#import <SpringBoard/SBDockView.h>
 #import <SpringBoard/SBIconController.h>
-#import <SpringBoard/SBIconListView.h>
+#import <SpringBoard/SBRootFolderView.h>
+#import <SpringBoard/SBRootFolderController.h>
+#import <SpringBoard/SBRootIconListView.h>
 #import <CoreText/CoreText.h>
 #import "TBCSAppSwitcherViewController.h"
 
@@ -132,8 +136,8 @@
 	[self removeFromSuperview];
 	[self release];
 
-    SBIconListView *rootIcons = [[%c(SBIconController) sharedInstance] currentRootIconList];
-    SBIconListView *dockIcons = [[%c(SBIconController) sharedInstance] dockListView];
+    SBRootIconListView *rootIcons = [[%c(SBIconController) sharedInstance] currentRootIconList];
+    SBDockIconListView *dockIcons = [[%c(SBIconController) sharedInstance] dockListView];
     SBRootFolderController *rootController = [[%c(SBIconController) sharedInstance] _rootFolderController];
 
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
