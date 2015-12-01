@@ -44,28 +44,6 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 	_blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
 	_blurEffectView.frame = self.view.frame;
-
-	UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
-	UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
-	[vibrancyEffectView setFrame:_blurEffectView.frame];
-
-	UIImage *xImage = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
-	_closeAppsImageView = [[UIImageView alloc] init];
-	_closeAppsImageView.image = [xImage _flatImageWithColor:[TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor]];
-	_closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
-	_closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
-	_closeAppsImageView.alpha = 0.45;
-
-	_divider = [[UIView alloc] init];
-	_divider.frame = CGRectMake(self.view.frame.size.width-45, 0, 1, self.view.frame.size.height);
-	_divider.alpha = 0.45;
-	_divider.backgroundColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
-
-	[[vibrancyEffectView contentView] addSubview:_divider];
-	[[vibrancyEffectView contentView] addSubview:_closeAppsImageView];
-
-	[[_blurEffectView contentView] addSubview:vibrancyEffectView];
-
 	[self.view addSubview:_blurEffectView];
 
 	CALayer *containerLayer = [CALayer layer];
@@ -124,6 +102,20 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	_collectionView.scrollEnabled = NO;
 	[_collectionView registerClass:[TBCSAppSwitcherCollectionViewCell class] forCellWithReuseIdentifier:kTBCSAppSwitcherCollectionViewCellIdentifier];
 	[self.view addSubview:_collectionView];
+
+	UIColor *selectedColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
+	_closeAppsImageView = [[UIImageView alloc] init];
+	_closeAppsImageView.image = [[UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]] _flatImageWithColor:selectedColor];
+	_closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
+	_closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
+	_closeAppsImageView.alpha = 0.45;
+	[self.view addSubview:_closeAppsImageView];
+
+	_divider = [[UIView alloc] init];
+	_divider.frame = CGRectMake(self.view.frame.size.width-45, 0, 1, self.view.frame.size.height);
+	_divider.alpha = 0.45;
+	_divider.backgroundColor = [UIColor whiteColor];
+	[self.view addSubview:_divider];
 
 	CAGradientLayer *gradient = [CAGradientLayer layer];
 	gradient.startPoint = CGPointMake(0.0, 0.5);
@@ -211,28 +203,6 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 			_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
 		} completion:nil];
 	}
-
-	CGPoint newContentOffset = CGPointMake(_collectionView.contentOffset.x+70.f, 0);
-	[UIView animateWithDuration:1.0 delay:1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-		if (point.x >= self.view.frame.size.width-150) {
-			[_collectionView setContentOffset:newContentOffset animated:NO];
-		}
-	} completion:nil];
-
-	/*BOOL scrollLeft = point.x <= 150;
-	BOOL scrollRight = point.x >= self.view.frame.size.width-150;
-	static BOOL shouldScroll = YES;
-	if (scrollLeft || scrollRight) {
-		CGFloat increment = scrollLeft ? -10 : 10;
-
-
-[UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-	shouldScroll = NO;
-	[_collectionView setContentOffset:newContentOffset animated:NO];
-} completion:^(BOOL completion) {
-	shouldScroll = YES;
-}];
-	}*/
 }
 
 - (void)openAppAtPoint:(CGPoint)point {
@@ -257,14 +227,22 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 #pragma mark Preferences
 
 - (void)managePreferences {
-	[[TBCSPreferencesManager sharedInstance] listenForPreferenceChangeWithCallback:^{
+	[[TBCSPreferencesManager sharedInstance] listenForPreferenceChangeWithCallback:^(NSString *key, NSString *value){
 		[UIView animateWithDuration:1 animations:^{
 			_blurEffectView.effect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 
-			_divider.backgroundColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
-			_closeAppsImageView.image = [_closeAppsImageView.image _flatImageWithColor:[TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor]];
+			_divider.alpha = 0.0;
+			_closeAppsImageView.alpha = 0.0;
 		}];
-	}];
+		UIColor *selectedColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
+		_divider.backgroundColor = selectedColor;
+		_closeAppsImageView.image = [_closeAppsImageView.image _flatImageWithColor:selectedColor];
+		[UIView animateWithDuration:0.5 animations:^{
+			_divider.alpha = 0.45;
+			_closeAppsImageView.alpha = 0.45;
+		}];
+
+	} forKey:kTBCSPreferencesManagerDarkModeKey];
 }
 
 #pragma mark - Memory management

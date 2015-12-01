@@ -42,8 +42,8 @@
 	return _darkMode ? UIBlurEffectStyleDark : UIBlurEffectStyleLight;
 }
 
-- (void)listenForPreferenceChangeWithCallback:(HBPreferencesChangeCallback)callback {
-	[_preferences registerPreferenceChangeBlock:callback];
+- (void)listenForPreferenceChangeWithCallback:(HBPreferencesValueChangeCallback)callback forKey:(NSString *)key {
+	[_preferences registerPreferenceChangeBlock:callback forKey:key];
 }
 
 #pragma mark - Memory management
