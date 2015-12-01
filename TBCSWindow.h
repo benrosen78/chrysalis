@@ -1,4 +1,4 @@
-@interface CSWindow : UIWindow
+@interface TBCSWindow : UIWindow
 
 - (void)startAppSwitcher:(CGPoint)point;
 

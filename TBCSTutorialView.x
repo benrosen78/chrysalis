@@ -2,7 +2,7 @@
 #import <SpringBoard/SBIconController.h>
 #import <SpringBoard/SBIconListView.h>
 #import <CoreText/CoreText.h>
-#import "CSAppSwitcherViewController.h"
+#import "TBCSAppSwitcherViewController.h"
 
 @implementation TBCSTutorialView
 
@@ -88,7 +88,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeTop multiplier:1 constant:95]];
 
-        CSAppSwitcherViewController *liveAppSwitcherView = [[%c(CSAppSwitcherViewController) alloc] init];
+        TBCSAppSwitcherViewController *liveAppSwitcherView = [[%c(TBCSAppSwitcherViewController) alloc] init];
         liveAppSwitcherView.view.userInteractionEnabled = NO;
         liveAppSwitcherView.view.frame = CGRectMake(0, 0, self.frame.size.width, 95);
         [constraintedViewForAppSwitcher addSubview:liveAppSwitcherView.view];

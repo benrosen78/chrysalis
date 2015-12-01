@@ -1,11 +1,11 @@
-#import "CSWindow.h"
+#import "TBCSWindow.h"
 #import "TBCSTutorialView.h"
 #import <SpringBoard/SBUIController.h>
 #import <SpringBoard/SBIconController.h>
 #import <SpringBoard/SBIconListView.h>
-#import "CSPreferencesManager.h"
+#import "TBCSPreferencesManager.h"
 
-CSWindow *window;
+TBCSWindow *window;
 
 %hook SBUIController
 
@@ -31,7 +31,7 @@ CSWindow *window;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)arg1 {
 	%orig;
-	window = [[CSWindow alloc] init];
+	window = [[TBCSWindow alloc] init];
 }
 
 %end
@@ -40,8 +40,8 @@ CSWindow *window;
 - (void)finishUIUnlockFromSource:(int)arg1 {
 	%orig;
 
-	//if (![[CSPreferencesManager sharedInstance] hadFirstRun]) {
-	//	[[CSPreferencesManager sharedInstance] setHadFirstRun:YES];
+	//if (![[TBCSPreferencesManager sharedInstance] hadFirstRun]) {
+	//	[[TBCSPreferencesManager sharedInstance] setHadFirstRun:YES];
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
 		UIWindow *window = [[%c(SBUIController) sharedInstance] valueForKey:@"_window"];
 		TBCSTutorialView *tutorialView = [[TBCSTutorialView alloc] initWithFrame:window.frame];

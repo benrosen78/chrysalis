@@ -1,0 +1,3 @@
+@interface TBCSAdvancedBackgroundGradientView : UIView
+
+@end

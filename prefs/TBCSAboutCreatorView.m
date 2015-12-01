@@ -1,12 +1,12 @@
-#import "CSAboutCreatorView.h"
+#import "TBCSAboutCreatorView.h"
 
 #define URL_ENCODE(string) [(NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)(string), NULL, CFSTR(":/=,!$& '()*+;[]@#?"), kCFStringEncodingUTF8) autorelease]
 
-@implementation CSAboutCreatorView {
+@implementation TBCSAboutCreatorView {
 	NSString *_twitterUsername;
 }
 
-- (instancetype)initWithTwitterUsername:(NSString *)username name:(NSString *)name creatorType:(CSAboutCreatorType)creatorType {
+- (instancetype)initWithTwitterUsername:(NSString *)username name:(NSString *)name creatorType:(TBCSAboutCreatorType)creatorType {
 	if (self = [super init]) {
 		self.userInteractionEnabled = YES;
 		_twitterUsername = username;
@@ -31,7 +31,7 @@
 		[self addConstraint:[NSLayoutConstraint constraintWithItem:nameLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
 
 		UILabel *creatorTypeLabel = [[UILabel alloc] init];
-		creatorTypeLabel.text = creatorType == CSAboutCreatorTypeDeveloper ? @"Developer" : @"Designer";
+		creatorTypeLabel.text = creatorType == TBCSAboutCreatorTypeDeveloper ? @"Developer" : @"Designer";
 		creatorTypeLabel.font = [UIFont systemFontOfSize:10.0];
 		creatorTypeLabel.translatesAutoresizingMaskIntoConstraints = NO;
 		[self addSubview:creatorTypeLabel];

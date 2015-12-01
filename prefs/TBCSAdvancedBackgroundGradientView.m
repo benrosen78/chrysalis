@@ -1,6 +1,6 @@
-#import "CSAdvancedBackgroundGradientView.h"
+#import "TBCSAdvancedBackgroundGradientView.h"
 
-@implementation CSAdvancedBackgroundGradientView
+@implementation TBCSAdvancedBackgroundGradientView
 
 + (Class)layerClass {
 	return CAGradientLayer.class;

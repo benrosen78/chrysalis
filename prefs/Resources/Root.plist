@@ -66,7 +66,7 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>CSAdvancedListController</string>
+			<string>TBCSAdvancedListController</string>
 			<key>icon</key>
 			<string>advanced.png</string>
 			<key>label</key>
@@ -80,7 +80,7 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>CSAboutListController</string>
+			<string>TBCSAboutListController</string>
 			<key>icon</key>
 			<string>makers.png</string>
 			<key>label</key>
@@ -90,7 +90,7 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>CSSupportListController</string>
+			<string>TBCSSupportListController</string>
 			<key>icon</key>
 			<string>support.png</string>
 			<key>label</key>

@@ -1,4 +1,4 @@
-@interface CSPreferencesManager : NSObject
+@interface TBCSPreferencesManager : NSObject
 
 @property BOOL hadFirstRun;
 

@@ -1,15 +1,15 @@
-#import "CSWindow.h"
-#import "CSAppSwitcherViewController.h"
+#import "TBCSWindow.h"
+#import "TBCSAppSwitcherViewController.h"
 
-static CGFloat const kCSAppSwitcherHeight = 95.f;
+static CGFloat const kTBCSAppSwitcherHeight = 95.f;
 
-@implementation CSWindow
+@implementation TBCSWindow
 
 - (instancetype)init {
 	if (self = [super init]) {
-		self.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width/-2, 0, [[UIScreen mainScreen] bounds].size.width, kCSAppSwitcherHeight);
+		self.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width/-2, 0, [[UIScreen mainScreen] bounds].size.width, kTBCSAppSwitcherHeight);
 		self.windowLevel = UIWindowLevelAlert+2;
-		self.rootViewController = [[CSAppSwitcherViewController alloc] init];
+		self.rootViewController = [[TBCSAppSwitcherViewController alloc] init];
 		self.backgroundColor = [UIColor clearColor];
 		self.layer.anchorPoint = CGPointMake(0, 0.5f);
 	}
@@ -17,7 +17,7 @@ static CGFloat const kCSAppSwitcherHeight = 95.f;
 }
 
 - (void)updateToPoint:(CGPoint)point {
-	CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
+	TBCSAppSwitcherViewController *appSwitcher = (TBCSAppSwitcherViewController *)self.rootViewController;
 	[appSwitcher updateViewToNewPoint:point];
 }
 
@@ -28,12 +28,12 @@ static CGFloat const kCSAppSwitcherHeight = 95.f;
 	} completion:^(BOOL completed) {
 		self.hidden = YES;
 	}];
-	CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
+	TBCSAppSwitcherViewController *appSwitcher = (TBCSAppSwitcherViewController *)self.rootViewController;
 	[appSwitcher openAppAtPoint:point];
 }
 
 - (void)startAppSwitcher:(CGPoint)point {
-	CSAppSwitcherViewController *appSwitcher = (CSAppSwitcherViewController *)self.rootViewController;
+	TBCSAppSwitcherViewController *appSwitcher = (TBCSAppSwitcherViewController *)self.rootViewController;
 	[appSwitcher updateAppsInSwitcher];
 
 	self.center = CGPointMake(self.center.x, point.y);

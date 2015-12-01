@@ -1,13 +1,13 @@
-#import "CSAdvancedListController.h"
-#import "../CSAppSwitcherViewController.h"
+#import "TBCSAdvancedListController.h"
+#import "../TBCSAppSwitcherViewController.h"
 #include <dlfcn.h>
-#import "CSAdvancedBackgroundGradientView.h"
+#import "TBCSAdvancedBackgroundGradientView.h"
 #import <UIKit/UIImage+Private.h>
 #import <UIKit/UINavigationBar+Private.h>
 
-@implementation CSAdvancedListController {
-	CSAdvancedBackgroundGradientView *_backgroundGradientView;
-	CSAppSwitcherViewController *_liveAppSwitcherView;
+@implementation TBCSAdvancedListController {
+	TBCSAdvancedBackgroundGradientView *_backgroundGradientView;
+	TBCSAppSwitcherViewController *_liveAppSwitcherView;
 }
 
 #pragma mark Cephei - HBListController
@@ -16,7 +16,7 @@
 	return @"Advanced";
 }
 
-#pragma mark CSAdvancedListController
+#pragma mark TBCSAdvancedListController
 
 - (instancetype)init {
 	if (self = [super init]) {
@@ -30,11 +30,11 @@
 
 	UIView *viewToAddGradientTo = [[UIView alloc] initWithFrame:CGRectMake(0, 34, [[UIScreen mainScreen] bounds].size.width, 95)];
 
-	_liveAppSwitcherView = [[%c(CSAppSwitcherViewController) alloc] init];
+	_liveAppSwitcherView = [[%c(TBCSAppSwitcherViewController) alloc] init];
 	_liveAppSwitcherView.view.userInteractionEnabled = NO;
 	_liveAppSwitcherView.view.frame = viewToAddGradientTo.bounds;
 
-	_backgroundGradientView = [[CSAdvancedBackgroundGradientView alloc] init];
+	_backgroundGradientView = [[TBCSAdvancedBackgroundGradientView alloc] init];
 	_backgroundGradientView.frame = CGRectMake(0, 0, self.view.frame.size.width, 183);
 
 	[_backgroundGradientView addSubview:viewToAddGradientTo];

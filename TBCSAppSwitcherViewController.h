@@ -1,4 +1,4 @@
-@interface CSAppSwitcherViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface TBCSAppSwitcherViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 
 - (void)updateViewToNewPoint:(CGPoint)point;
 

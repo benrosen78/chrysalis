@@ -1,7 +1,7 @@
-#import "CSAppSwitcherCollectionViewCell.h"
+#import "TBCSAppSwitcherCollectionViewCell.h"
 #import <UIKit/UIImage+Private.h>
 
-@implementation CSAppSwitcherCollectionViewCell {
+@implementation TBCSAppSwitcherCollectionViewCell {
 	NSString *_appIdentifier;
 	UIImageView *_appIconImageView;
 }

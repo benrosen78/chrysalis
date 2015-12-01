@@ -1,5 +1,5 @@
-#import "CSAppSwitcherViewController.h"
-#import "CSAppSwitcherCollectionViewCell.h"
+#import "TBCSAppSwitcherViewController.h"
+#import "TBCSAppSwitcherCollectionViewCell.h"
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBApplication.h>
 #import <UIKit/UIImage+Private.h>
@@ -22,9 +22,9 @@
 
 @end
 
-static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisAppSwitcherCell";
+static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisAppSwitcherCell";
 
-@implementation CSAppSwitcherViewController {
+@implementation TBCSAppSwitcherViewController {
 	NSMutableArray *_appSwitcherIdentifiers;
 	UIView *_backgroundColorView;
 	UICollectionView *_collectionView;
@@ -117,7 +117,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 	_collectionView.delegate = self;
 	_collectionView.dataSource = self;
 	_collectionView.scrollEnabled = NO;
-	[_collectionView registerClass:[CSAppSwitcherCollectionViewCell class] forCellWithReuseIdentifier:kCSAppSwitcherCollectionViewCellIdentifier];
+	[_collectionView registerClass:[TBCSAppSwitcherCollectionViewCell class] forCellWithReuseIdentifier:kTBCSAppSwitcherCollectionViewCellIdentifier];
 	[self.view addSubview:_collectionView];
 
 	CAGradientLayer *gradient = [CAGradientLayer layer];
@@ -135,7 +135,7 @@ static NSString *const kCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisA
 #pragma mark Collection View Delegate
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-	CSAppSwitcherCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCSAppSwitcherCollectionViewCellIdentifier forIndexPath:indexPath];
+	TBCSAppSwitcherCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTBCSAppSwitcherCollectionViewCellIdentifier forIndexPath:indexPath];
 
 	NSString *identifier = _appSwitcherIdentifiers[indexPath.row];
 	[cell setAppIdentifier:identifier];

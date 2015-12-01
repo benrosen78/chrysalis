@@ -1,7 +1,7 @@
-#include "CSRootListController.h"
+#include "TBCSRootListController.h"
 #import <UIKit/UIImage+Private.h>
 
-@implementation CSRootListController
+@implementation TBCSRootListController
 
 + (NSString *)hb_specifierPlist {
 	return @"Root";

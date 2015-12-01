@@ -1,3 +1,0 @@
-@interface CSAdvancedBackgroundGradientView : UIView
-
-@end

@@ -1,4 +1,4 @@
-@interface CSAppSwitcherCollectionViewCell : UICollectionViewCell
+@interface TBCSAppSwitcherCollectionViewCell : UICollectionViewCell
 
 - (NSString *)appIdentifier;
 
