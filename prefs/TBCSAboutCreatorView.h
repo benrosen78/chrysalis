@@ -5,6 +5,6 @@ typedef NS_ENUM(NSInteger, TBCSAboutCreatorType) {
 
 @interface TBCSAboutCreatorView : UIButton
 
-+ (instancetype)buttonWithTwitterUsername:(NSString *)username name:(NSString *)name creatorType:(TBCSAboutCreatorType)creatorType;
+- (instancetype)initWithTwitterUsername:(NSString *)username name:(NSString *)name creatorType:(TBCSAboutCreatorType)creatorType;
 
 @end

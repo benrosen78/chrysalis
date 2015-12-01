@@ -6,12 +6,12 @@
 	NSString *_twitterUsername;
 }
 
-+ (instancetype)buttonWithTwitterUsername:(NSString *)username name:(NSString *)name creatorType:(TBCSAboutCreatorType)creatorType {
-	if (self = [super buttonWithType:UIButtonTypeSystem]) {
+- (instancetype)initWithTwitterUsername:(NSString *)username name:(NSString *)name creatorType:(TBCSAboutCreatorType)creatorType {
+	if ((self = [[self.class buttonWithType:UIButtonTypeSystem] retain])) {
 		_twitterUsername = [username copy];
 
 		// this kinda breaks model-view-controller
-		[self addTarget:self action:@selector(openTwitterAccount) forControlEvents:UIControlEventsTouchUpInside];
+		[self addTarget:self action:@selector(openTwitterAccount) forControlEvents:UIControlEventTouchUpInside];
 
 		UIImageView *avatarImageView = [[[UIImageView alloc] init] autorelease];
 		avatarImageView.alpha = 0.0;
