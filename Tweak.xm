@@ -1,27 +1,33 @@
 #import "TBCSWindow.h"
 #import "TBCSTutorialView.h"
-#import <SpringBoard/SBUIController.h>
 #import <SpringBoard/SBIconController.h>
 #import <SpringBoard/SBIconListView.h>
+#import <SpringBoard/SBMainDisplaySystemGestureManager.h>
+#import <SpringBoard/SBScreenEdgePanGestureRecognizer.h>
+#import <SpringBoard/SBUIController.h>
 #import "TBCSPreferencesManager.h"
-
-@interface SBScreenEdgePanGestureRecognizer : UIGestureRecognizer
-
-
-
-@end
-
-@interface SBSystemGestureManager : NSObject
-
-+ (instancetype)mainDisplayManager;
-
-- (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer withType:(long long)type;
-
-@end
 
 TBCSWindow *window;
 
 %hook SBUIController
+
+- (void)_addRemoveSwitcherGesture {
+	%orig;
+
+	UIGestureRecognizer *switcherForcePressRecognizer = [self valueForKey:@"_switcherForcePressRecognizer"];
+
+	// if the gesture recognizer doesn’t exist, the device doesn’t have 3d touch
+	if (!switcherForcePressRecognizer) {
+		SBScreenEdgePanGestureRecognizer *gestureRecognizer = [[%c(SBScreenEdgePanGestureRecognizer) alloc] initWithTarget:self action:@selector(_handleSwitcherForcePressGesture:) type:SBSystemGestureTypeSwitcherForcePress];
+		gestureRecognizer.delegate = self;
+		gestureRecognizer.edges = UIRectEdgeLeft;
+		gestureRecognizer.maximumNumberOfTouches = 1;
+		[self setValue:gestureRecognizer forKey:@"_switcherForcePressRecognizer"];
+
+		SBMainDisplaySystemGestureManager *gestureManager = [%c(SBSystemGestureManager) mainDisplayManager];
+		[gestureManager addGestureRecognizer:gestureRecognizer withType:SBSystemGestureTypeSwitcherForcePress];
+	}
+}
 
 - (void)_handleSwitcherForcePressGesture:(UIGestureRecognizer *)gestureRecognizer {
 	CGPoint activationPoint = [gestureRecognizer locationInView:[self window]];
@@ -38,6 +44,20 @@ TBCSWindow *window;
 			[window removeFromPoint:activationPoint];
 			break;
 	}
+}
+
+%end
+
+%hook SBMainDisplaySystemGestureManager
+
+- (BOOL)_shouldEnableSystemGestureWithType:(SBSystemGestureType)type {
+	// override so the edge pan gesture is enabled even if 3d touch isn’t
+	// available
+	if (type == SBSystemGestureTypeSwitcherForcePress) {
+		return YES;
+	}
+
+	return %orig;
 }
 
 %end
