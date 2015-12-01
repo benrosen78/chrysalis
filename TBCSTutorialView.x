@@ -151,7 +151,7 @@
 #pragma mark fonts
 
 - (void)loadInFonts {
-    dispatch_once_t onceToken;
+    static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSArray *fonts = @[ @"Billy.ttf", @"Nexa.otf" ];
         NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"];
