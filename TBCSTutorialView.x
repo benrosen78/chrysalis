@@ -72,7 +72,7 @@
         UILabel *tutorialLabel3 = [[UILabel alloc] init];
         tutorialLabel3.numberOfLines = 2;
         tutorialLabel3.font = [UIFont fontWithName:@"billy" size:36];
-        tutorialLabel3.text = @"  -  slide to the x button to \n     close all apps";
+        tutorialLabel3.text = @"  -  slide to the × button to \n     close all apps";
         tutorialLabel3.textColor = [UIColor whiteColor];
         tutorialLabel3.textAlignment = NSTextAlignmentLeft;
         tutorialLabel3.translatesAutoresizingMaskIntoConstraints = NO;
