@@ -151,21 +151,21 @@
 #pragma mark fonts
 
 - (void)loadInFonts {
-    NSString *billyFontPath = @"/Library/PreferenceBundles/ChrysalisPrefs.bundle/fonts/Billy.ttf";
-    NSURL *billyUrl = [NSURL fileURLWithPath:billyFontPath];
-    CGDataProviderRef billyFontDataProvider = CGDataProviderCreateWithURL((__bridge CFURLRef)billyUrl);
-    CGFontRef billyFont = CGFontCreateWithDataProvider(billyFontDataProvider);
-    CGDataProviderRelease(billyFontDataProvider);
-    CTFontManagerRegisterGraphicsFont(billyFont, nil);
-    CGFontRelease(billyFont);
+    dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSArray *fonts = @[ @"Billy.ttf", @"Nexa.otf" ];
+        NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"];
 
-    NSString *nexaFontPath = @"/Library/PreferenceBundles/ChrysalisPrefs.bundle/fonts/Nexa.otf";
-    NSURL *nexaUrl = [NSURL fileURLWithPath:nexaFontPath];
-    CGDataProviderRef nexaFontDataProvider = CGDataProviderCreateWithURL((__bridge CFURLRef)nexaUrl);
-    CGFontRef nexaFont = CGFontCreateWithDataProvider(nexaFontDataProvider);
-    CGDataProviderRelease(nexaFontDataProvider);
-    CTFontManagerRegisterGraphicsFont(nexaFont, nil);
-    CGFontRelease(nexaFont);
+        for (NSString *font in fonts) {
+            NSURL *url = [bundle URLForResource:font.stringByDeletingPathExtension withExtension:font.pathExtension subdirectory:@"fonts"];
+
+            CGDataProviderRef dataProvider = CGDataProviderCreateWithURL((__bridge CFURLRef)url);
+            CGFontRef font = CGFontCreateWithDataProvider(dataProvider);
+            CGDataProviderRelease(dataProvider);
+            CTFontManagerRegisterGraphicsFont(font, nil);
+            CGFontRelease(font);
+        }
+    });
 }
 
 @end
