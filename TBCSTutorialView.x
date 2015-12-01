@@ -28,13 +28,13 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:headerLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
         UILabel *pronunciationLabel = [[UILabel alloc] init];
-        pronunciationLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
+        pronunciationLabel.font = [UIFont fontWithName:@"NexaLight" size:15];
         pronunciationLabel.text = @"kriss·uh·lis";
         pronunciationLabel.textColor = [UIColor whiteColor];
         pronunciationLabel.textAlignment = NSTextAlignmentCenter;
         pronunciationLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:pronunciationLabel];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:pronunciationLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:headerLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:2]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:pronunciationLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:headerLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:pronunciationLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
         UILabel *shortDescriptionLabel = [[UILabel alloc] init];
@@ -79,8 +79,31 @@
         [self addSubview:tutorialLabel3];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel3 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:tutorialLabel2 attribute:NSLayoutAttributeBottom multiplier:1 constant:15]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel3 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
-	}
 
+        UIView *constraintedViewForAppSwitcher = [[UIView alloc] init];
+        constraintedViewForAppSwitcher.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:constraintedViewForAppSwitcher];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:tutorialLabel3 attribute:NSLayoutAttributeBottom multiplier:1 constant:35]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeTop multiplier:1 constant:95]];
+
+        CSAppSwitcherViewController *liveAppSwitcherView = [[%c(CSAppSwitcherViewController) alloc] init];
+        liveAppSwitcherView.view.userInteractionEnabled = NO;
+        liveAppSwitcherView.view.frame = CGRectMake(0, 0, self.frame.size.width, 95);
+        [constraintedViewForAppSwitcher addSubview:liveAppSwitcherView.view];
+
+        UILabel *appSwitcherZoneLabel = [[UILabel alloc] init];
+        appSwitcherZoneLabel.font = [UIFont fontWithName:@"billy" size:35];
+        appSwitcherZoneLabel.text = @"! --- switcher zone --- !";
+        appSwitcherZoneLabel.textAlignment = NSTextAlignmentCenter;
+        appSwitcherZoneLabel.textColor = [UIColor whiteColor];
+        appSwitcherZoneLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:appSwitcherZoneLabel];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:appSwitcherZoneLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeBottom multiplier:1 constant:15]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:appSwitcherZoneLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1 constant:36]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:appSwitcherZoneLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:-46]];
+	}
 	return self;
 }
 
