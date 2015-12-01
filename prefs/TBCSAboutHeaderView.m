@@ -32,7 +32,7 @@
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:veerklemptCreatorView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:168]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:veerklemptCreatorView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:1.43 constant:0]];
 
-		UIImage *chrysalisLogo = [[UIImage imageNamed:@"headerLogo" inBundle:[NSBundle bundleWithForClass:self.class]] _flatImageWithColor:[UIColor colorWithRed:0.812 green:0.812 blue:0.835 alpha:1.00]];
+		UIImage *chrysalisLogo = [[UIImage imageNamed:@"headerLogo" inBundle:[NSBundle bundleForClass:self.class]] _flatImageWithColor:[UIColor colorWithRed:0.812 green:0.812 blue:0.835 alpha:1.00]];
 		UIImageView *chrysalisLogoImageView = [[[UIImageView alloc] init] autorelease];
 		chrysalisLogoImageView.image = chrysalisLogo;
 		chrysalisLogoImageView.backgroundColor = self.superview.superview.backgroundColor;
