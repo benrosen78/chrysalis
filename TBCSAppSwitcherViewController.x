@@ -3,6 +3,7 @@
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBApplication.h>
 #import <UIKit/UIImage+Private.h>
+#import "TBCSPreferencesManager.h"
 
 @interface SBDisplayItem : NSObject {
 	NSString *_displayIdentifier;
@@ -30,6 +31,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	UICollectionView *_collectionView;
 	UIView *_divider;
 	UIImageView *_closeAppsImageView;
+	UIVisualEffectView *_blurEffectView;
 }
 
 #pragma mark Adding views
@@ -39,13 +41,13 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	[self updateAppsInSwitcher];
 
-	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-	UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-	blurEffectView.frame = self.view.frame;
+	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
+	_blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+	_blurEffectView.frame = self.view.frame;
 
 	UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
 	UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
-	[vibrancyEffectView setFrame:blurEffectView.frame];
+	[vibrancyEffectView setFrame:_blurEffectView.frame];
 
 	_closeAppsImageView = [[UIImageView alloc] init];
 	_closeAppsImageView.image = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
@@ -59,9 +61,9 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	[[vibrancyEffectView contentView] addSubview:_divider];
 	[[vibrancyEffectView contentView] addSubview:_closeAppsImageView];
 
-	[[blurEffectView contentView] addSubview:vibrancyEffectView];
+	[[_blurEffectView contentView] addSubview:vibrancyEffectView];
 
-	[self.view addSubview:blurEffectView];
+	[self.view addSubview:_blurEffectView];
 
 	CALayer *containerLayer = [CALayer layer];
 
@@ -93,7 +95,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	rectanglePathMaskLayer.path  = rectanglePath.CGPath;
 	[containerLayer addSublayer:rectanglePathMaskLayer];
 
-	blurEffectView.layer.mask = containerLayer;
+	_blurEffectView.layer.mask = containerLayer;
 
 	// other views
 
@@ -129,6 +131,8 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	gradient.locations = @[@0.93, @1.0];
 
 	_collectionView.layer.mask = gradient;
+
+	[self managePreferences];
 
 }
 
@@ -242,6 +246,16 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		NSString *appIdentifier = _appSwitcherIdentifiers[index];;
 		[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:appIdentifier suspended:NO];
 	}
+}
+
+#pragma mark Preferences
+
+- (void)managePreferences {
+	[[TBCSPreferencesManager sharedInstance] listenForPreferenceChangeWithCallback:^(NSString *key, NSString *value) {
+		[UIView animateWithDuration:1 animations:^{
+			_blurEffectView.effect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
+		}];
+	} forKey:kTBCSPreferencesManagerDarkModeKey];
 }
 
 @end

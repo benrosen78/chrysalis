@@ -1,11 +1,10 @@
 #import "TBCSPreferencesManager.h"
 #import <Cephei/HBPreferences.h>
 
-static NSString *const kTBCSPreferencesManagerHadFirstRunKey = @"HadFirstRun";
-
 @implementation TBCSPreferencesManager {
 	HBPreferences *_preferences;
 	BOOL _hadFirstRun;
+	BOOL _darkMode;
 }
 
 + (instancetype)sharedInstance {
@@ -23,6 +22,7 @@ static NSString *const kTBCSPreferencesManagerHadFirstRunKey = @"HadFirstRun";
 		_preferences = [[HBPreferences alloc] initWithIdentifier:@"com.tweakbattles.chrysalis"];
 
 		[_preferences registerBool:&_hadFirstRun default:NO forKey:kTBCSPreferencesManagerHadFirstRunKey];
+		[_preferences registerBool:&_darkMode default:NO forKey:kTBCSPreferencesManagerDarkModeKey];
 	}
 	return self;
 }
@@ -36,6 +36,14 @@ static NSString *const kTBCSPreferencesManagerHadFirstRunKey = @"HadFirstRun";
 
 	[_preferences setBool:YES forKey:kTBCSPreferencesManagerHadFirstRunKey];
 	[_preferences synchronize];
+}
+
+- (UIBlurEffectStyle)blurEffectStyle {
+	return _darkMode ? UIBlurEffectStyleDark : UIBlurEffectStyleLight;
+}
+
+- (void)listenForPreferenceChangeWithCallback:(HBPreferencesValueChangeCallback)callback forKey:(NSString *)key {
+	[_preferences registerPreferenceChangeBlock:callback forKey:key];
 }
 
 @end

@@ -5,6 +5,20 @@
 #import <SpringBoard/SBIconListView.h>
 #import "TBCSPreferencesManager.h"
 
+@interface SBScreenEdgePanGestureRecognizer : UIGestureRecognizer
+
+
+
+@end
+
+@interface SBSystemGestureManager : NSObject
+
++ (instancetype)mainDisplayManager;
+
+- (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer withType:(long long)type;
+
+@end
+
 TBCSWindow *window;
 
 %hook SBUIController

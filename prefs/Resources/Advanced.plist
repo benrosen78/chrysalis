@@ -8,7 +8,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.tweakbattles.chrysalis</string>
 			<key>key</key>
