@@ -1,5 +1,6 @@
 #import "TBCSPreferencesManager.h"
 #import <Cephei/HBPreferences.h>
+#include <notify.h>
 
 @implementation TBCSPreferencesManager {
 	HBPreferences *_preferences;
@@ -35,6 +36,7 @@
 	_hadFirstRun = YES;
 
 	[_preferences setBool:YES forKey:kTBCSPreferencesManagerHadFirstRunKey];
+	notify_post("com.tweakbattles.chrysalis/ReloadPrefs"); // urg, i'm sorry
 }
 
 - (UIBlurEffectStyle)blurEffectStyle {
