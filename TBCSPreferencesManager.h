@@ -7,10 +7,12 @@ static NSString *const kTBCSPreferencesManagerDarkModeKey = @"DarkMode";
 
 @property BOOL hadFirstRun;
 
+@property BOOL darkMode;
+
 @property (readonly) UIBlurEffectStyle blurEffectStyle;
 
 + (instancetype)sharedInstance;
 
-- (void)listenForPreferenceChangeWithCallback:(HBPreferencesValueChangeCallback)callback forKey:(NSString *)key;
+- (void)listenForPreferenceChangeWithCallback:(HBPreferencesChangeCallback)callback;
 
 @end

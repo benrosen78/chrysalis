@@ -5,7 +5,6 @@
 @implementation TBCSPreferencesManager {
 	HBPreferences *_preferences;
 	BOOL _hadFirstRun;
-	BOOL _darkMode;
 }
 
 + (instancetype)sharedInstance {
@@ -43,8 +42,8 @@
 	return _darkMode ? UIBlurEffectStyleDark : UIBlurEffectStyleLight;
 }
 
-- (void)listenForPreferenceChangeWithCallback:(HBPreferencesValueChangeCallback)callback forKey:(NSString *)key {
-	[_preferences registerPreferenceChangeBlock:callback forKey:key];
+- (void)listenForPreferenceChangeWithCallback:(HBPreferencesChangeCallback)callback {
+	[_preferences registerPreferenceChangeBlock:callback];
 }
 
 #pragma mark - Memory management
