@@ -9,7 +9,7 @@ static CGFloat const kTBCSAppSwitcherHeight = 95.f;
 	if (self = [super init]) {
 		self.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width/-2, 0, [[UIScreen mainScreen] bounds].size.width, kTBCSAppSwitcherHeight);
 		self.windowLevel = UIWindowLevelAlert+2;
-		self.rootViewController = [[TBCSAppSwitcherViewController alloc] init];
+		self.rootViewController = [[[TBCSAppSwitcherViewController alloc] init] autorelease];
 		self.backgroundColor = [UIColor clearColor];
 		self.layer.anchorPoint = CGPointMake(0, 0.5f);
 	}
