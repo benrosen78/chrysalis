@@ -35,7 +35,6 @@
 	_hadFirstRun = YES;
 
 	[_preferences setBool:YES forKey:kTBCSPreferencesManagerHadFirstRunKey];
-	[_preferences synchronize];
 }
 
 - (UIBlurEffectStyle)blurEffectStyle {
