@@ -36,6 +36,7 @@ TBCSWindow *window;
 		case UIGestureRecognizerStateCancelled:
 		case UIGestureRecognizerStateFailed:
 			[window removeFromPoint:activationPoint];
+			break;
 	}
 }
 
