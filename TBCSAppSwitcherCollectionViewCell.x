@@ -31,4 +31,12 @@
 	return _appIdentifier;
 }
 
+#pragma mark - Memory management
+
+- (void)dealloc {
+	[_appIconImageView release];
+
+	[super dealloc];
+}
+
 @end

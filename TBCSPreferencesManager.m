@@ -46,4 +46,12 @@
 	[_preferences registerPreferenceChangeBlock:callback forKey:key];
 }
 
+#pragma mark - Memory management
+
+- (void)dealloc {
+	[_preferences release];
+
+	[super dealloc];
+}
+
 @end

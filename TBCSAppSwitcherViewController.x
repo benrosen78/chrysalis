@@ -1,9 +1,9 @@
 #import "TBCSAppSwitcherViewController.h"
 #import "TBCSAppSwitcherCollectionViewCell.h"
+#import "TBCSPreferencesManager.h"
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBApplication.h>
 #import <UIKit/UIImage+Private.h>
-#import "TBCSPreferencesManager.h"
 
 @interface SBDisplayItem : NSObject {
 	NSString *_displayIdentifier;
@@ -256,6 +256,19 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 			_blurEffectView.effect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 		}];
 	} forKey:kTBCSPreferencesManagerDarkModeKey];
+}
+
+#pragma mark - Memory management
+
+- (void)dealloc {
+	[_appSwitcherIdentifiers release];
+	[_backgroundColorView release];
+	[_collectionView release];
+	[_divider release];
+	[_closeAppsImageView release];
+	[_blurEffectView release];
+
+	[super dealloc];
 }
 
 @end
