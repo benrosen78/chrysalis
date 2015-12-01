@@ -43,7 +43,7 @@
         UILabel *shortDescriptionLabel = [[[UILabel alloc] init] autorelease];
         shortDescriptionLabel.numberOfLines = 0;
         shortDescriptionLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
-        shortDescriptionLabel.text = @"a minimalist app switcher for your iPhone";
+        shortDescriptionLabel.text = [NSString stringWithFormat:@"a minimalist app switcher for your %@", [UIDevice currentDevice].localizedModel];
         shortDescriptionLabel.textColor = [UIColor whiteColor];
         shortDescriptionLabel.textAlignment = NSTextAlignmentCenter;
         shortDescriptionLabel.translatesAutoresizingMaskIntoConstraints = NO;
