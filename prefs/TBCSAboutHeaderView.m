@@ -32,8 +32,8 @@
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:veerklemptCreatorView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:168]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:veerklemptCreatorView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:1.43 constant:0]];
 
-		UIImage *chrysalisLogo = [[UIImage imageNamed:@"headerLogo" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]] _flatImageWithColor:[UIColor colorWithRed:0.812 green:0.812 blue:0.835 alpha:1.00]];
-		UIImageView *chrysalisLogoImageView = [[UIImageView alloc] init];
+		UIImage *chrysalisLogo = [[UIImage imageNamed:@"headerLogo" inBundle:[NSBundle bundleWithForClass:self.class]] _flatImageWithColor:[UIColor colorWithRed:0.812 green:0.812 blue:0.835 alpha:1.00]];
+		UIImageView *chrysalisLogoImageView = [[[UIImageView alloc] init] autorelease];
 		chrysalisLogoImageView.image = chrysalisLogo;
 		chrysalisLogoImageView.backgroundColor = self.superview.superview.backgroundColor;
 		chrysalisLogoImageView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -41,7 +41,7 @@
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:chrysalisLogoImageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:chrysalisLogoImageView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:303]];
 
-		UIView *leftSeparator = [[UIView alloc] init];
+		UIView *leftSeparator = [[[UIView alloc] init] autorelease];
 		leftSeparator.backgroundColor = [UIColor colorWithRed:0.812 green:0.812 blue:0.835 alpha:1.00];
 		leftSeparator.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.contentView addSubview:leftSeparator];
@@ -50,7 +50,7 @@
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:leftSeparator attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:chrysalisLogoImageView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-20]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:leftSeparator attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:1.5]];
 
-		UIView *rightSeparator = [[UIView alloc] init];
+		UIView *rightSeparator = [[[UIView alloc] init] autorelease];
 		rightSeparator.backgroundColor = [UIColor colorWithRed:0.812 green:0.812 blue:0.835 alpha:1.00];
 		rightSeparator.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.contentView addSubview:rightSeparator];
@@ -59,7 +59,7 @@
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:rightSeparator attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-18]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:rightSeparator attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:1.5]];
 
-		UILabel *thankLabel = [[UILabel alloc] init];
+		UILabel *thankLabel = [[[UILabel alloc] init] autorelease];
 		thankLabel.text = @"Thank you for purchasing this tweak. Enjoy!";
 		thankLabel.font = [UIFont systemFontOfSize:10];
 		thankLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -67,7 +67,7 @@
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:thankLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:thankLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:chrysalisLogoImageView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:15]];
 
-		UILabel *specialThanksLabel = [[UILabel alloc] init];
+		UILabel *specialThanksLabel = [[[UILabel alloc] init] autorelease];
 		specialThanksLabel.text = @"SPECIAL THANKS TO";
 		specialThanksLabel.font = [UIFont systemFontOfSize:12];
 		specialThanksLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -75,7 +75,7 @@
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:specialThanksLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:specialThanksLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:thankLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:22]];
 
-		UILabel *supportersLabel = [[UILabel alloc] init];
+		UILabel *supportersLabel = [[[UILabel alloc] init] autorelease];
 		supportersLabel.text = @"Eric, Borsato92, cj81499, winlogon0, mootjeuh, @redzrex, Jason R., CONATH, JimDotR, Boris S, Ziph0n, Andrew, /u/DervishSkater, Corporal, Acidschnee, Josh Gibson, HHumbert, Cody, Connor, @sel2by3, Shadow Games, Pixxaddict, platypusw90, echo000, Jonathan Gautreau, Blink, ShaneSparkyYYZ, kamikasky, MaxD, @tilgut, @Beezure, Matteo Piccina, josh_boothman, Moshe Siegel, Ian L, Torben, MeatyCheetos, @rauseo12, Lei33, K S LEE, @RichResk, wizage, @sekrit_, RushNY, Maortega89, @frkbmb_, Kyle, Robert, @BrianOverly, @thetomcanuck, OhSpazz, Jessyreynosa3, Jessie mejia, Jp_delon, dantesieg";
 		supportersLabel.font = [UIFont systemFontOfSize:10];
 		supportersLabel.numberOfLines = 0;

@@ -30,8 +30,8 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	UIImage *headerLogo = [[UIImage imageNamed:@"headerLogo" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]] _flatImageWithColor:[UIColor whiteColor]];
-	self.navigationItem.titleView = [[UIImageView alloc] initWithImage:headerLogo];
+	UIImage *headerLogo = [[UIImage imageNamed:@"headerLogo" inBundle:[NSBundle bundleForClass:self.class]] _flatImageWithColor:[UIColor whiteColor]];
+	self.navigationItem.titleView = [[[UIImageView alloc] initWithImage:headerLogo] autorelease];
 	self.navigationItem.titleView.alpha = 0.0;
 
 	[self performSelector:@selector(animateIconAlpha) withObject:nil afterDelay:0.5];

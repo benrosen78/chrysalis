@@ -20,7 +20,7 @@
 		// Add a light tint to create some seperation for the text
 		self.backgroundColor = [UIColor colorWithRed:2.0f/255.0f green:2.0f/255.0f blue:2.0f/255.0f alpha:0.3];
 
-		UILabel *headerLabel = [[UILabel alloc] init];
+		UILabel *headerLabel = [[[UILabel alloc] init] autorelease];
         headerLabel.numberOfLines = 1;
         headerLabel.font = [UIFont fontWithName:@"NexaLight" size:36];
         headerLabel.text = @"CHRYSALIS";
@@ -31,7 +31,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:headerLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1 constant:0]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:headerLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
-        UILabel *pronunciationLabel = [[UILabel alloc] init];
+        UILabel *pronunciationLabel = [[[UILabel alloc] init] autorelease];
         pronunciationLabel.font = [UIFont fontWithName:@"NexaLight" size:15];
         pronunciationLabel.text = @"kriss·uh·lis";
         pronunciationLabel.textColor = [UIColor whiteColor];
@@ -41,7 +41,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:pronunciationLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:headerLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:pronunciationLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
-        UILabel *shortDescriptionLabel = [[UILabel alloc] init];
+        UILabel *shortDescriptionLabel = [[[UILabel alloc] init] autorelease];
         shortDescriptionLabel.font = [UIFont fontWithName:@"NexaLight" size:18];
         shortDescriptionLabel.text = @"a minimalist appswitcher for your iPhone";
         shortDescriptionLabel.textColor = [UIColor whiteColor];
@@ -51,7 +51,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:shortDescriptionLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:pronunciationLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:2]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:shortDescriptionLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
 
-        UILabel *tutorialLabel1 = [[UILabel alloc] init];
+        UILabel *tutorialLabel1 = [[[UILabel alloc] init] autorelease];
         tutorialLabel1.numberOfLines = 3;
         tutorialLabel1.font = [UIFont fontWithName:@"billy" size:36];
         tutorialLabel1.text = @"  -  force touch/hold \n     on the left/right side\n     of the screen to reveal the app icons.";
@@ -62,7 +62,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel1 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:shortDescriptionLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:25]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel1 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
 
-        UILabel *tutorialLabel2 = [[UILabel alloc] init];
+        UILabel *tutorialLabel2 = [[[UILabel alloc] init] autorelease];
         tutorialLabel2.numberOfLines = 3;
         tutorialLabel2.font = [UIFont fontWithName:@"billy" size:36];
         tutorialLabel2.text = @"  -  continuing to slide on the \n     appswitcher zone without\n     releasing to select an app";
@@ -73,7 +73,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel2 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:tutorialLabel1 attribute:NSLayoutAttributeBottom multiplier:1 constant:15]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel2 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
 
-        UILabel *tutorialLabel3 = [[UILabel alloc] init];
+        UILabel *tutorialLabel3 = [[[UILabel alloc] init] autorelease];
         tutorialLabel3.numberOfLines = 2;
         tutorialLabel3.font = [UIFont fontWithName:@"billy" size:36];
         tutorialLabel3.text = @"  -  slide to the × button to \n     close all apps";
@@ -84,7 +84,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel3 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:tutorialLabel2 attribute:NSLayoutAttributeBottom multiplier:1 constant:15]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:tutorialLabel3 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:0.2 constant:0]];
 
-        UIView *constraintedViewForAppSwitcher = [[UIView alloc] init];
+        UIView *constraintedViewForAppSwitcher = [[[UIView alloc] init] autorelease];
         constraintedViewForAppSwitcher.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:constraintedViewForAppSwitcher];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:tutorialLabel3 attribute:NSLayoutAttributeBottom multiplier:1 constant:35]];
@@ -92,12 +92,12 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeTop multiplier:1 constant:95]];
 
-        TBCSAppSwitcherViewController *liveAppSwitcherView = [[%c(TBCSAppSwitcherViewController) alloc] init];
+        TBCSAppSwitcherViewController *liveAppSwitcherView = [[[%c(TBCSAppSwitcherViewController) alloc] init] autorelease];
         liveAppSwitcherView.view.userInteractionEnabled = NO;
         liveAppSwitcherView.view.frame = CGRectMake(0, 0, self.frame.size.width, 95);
         [constraintedViewForAppSwitcher addSubview:liveAppSwitcherView.view];
 
-        UILabel *appSwitcherZoneLabel = [[UILabel alloc] init];
+        UILabel *appSwitcherZoneLabel = [[[UILabel alloc] init] autorelease];
         appSwitcherZoneLabel.font = [UIFont fontWithName:@"billy" size:35];
         appSwitcherZoneLabel.text = @"! --- switcher zone --- !";
         appSwitcherZoneLabel.textAlignment = NSTextAlignmentCenter;

@@ -13,7 +13,7 @@
 		// this kinda breaks model-view-controller
 		[self addTarget:self action:@selector(openTwitterAccount) forControlEvents:UIControlEventsTouchUpInside];
 
-		UIImageView *avatarImageView = [[UIImageView alloc] init];
+		UIImageView *avatarImageView = [[[UIImageView alloc] init] autorelease];
 		avatarImageView.alpha = 0.0;
 		avatarImageView.layer.masksToBounds = YES;
 		avatarImageView.layer.cornerRadius = 46.5;
@@ -24,15 +24,15 @@
 		[self addConstraint:[NSLayoutConstraint constraintWithItem:avatarImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:93]];
 		[self addConstraint:[NSLayoutConstraint constraintWithItem:avatarImageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
 
-		UILabel *nameLabel = [[UILabel alloc] init];
-		nameLabel.text = name;
+		UILabel *nameLabel = [[[UILabel alloc] init] autorelease];
+		nameLabel.text = [name copy];
 		nameLabel.font = [UIFont systemFontOfSize:12.5];
 		nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
 		[self addSubview:nameLabel];
 		[self addConstraint:[NSLayoutConstraint constraintWithItem:nameLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:avatarImageView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:4]];
 		[self addConstraint:[NSLayoutConstraint constraintWithItem:nameLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
 
-		UILabel *creatorTypeLabel = [[UILabel alloc] init];
+		UILabel *creatorTypeLabel = [[[UILabel alloc] init] autorelease];
 		creatorTypeLabel.text = creatorType == TBCSAboutCreatorTypeDeveloper ? @"Developer" : @"Designer";
 		creatorTypeLabel.font = [UIFont systemFontOfSize:10.0];
 		creatorTypeLabel.translatesAutoresizingMaskIntoConstraints = NO;

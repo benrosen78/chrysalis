@@ -80,7 +80,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	[chevronBezierPath applyTransform:CGAffineTransformMakeScale(0.5, 0.5)];
 	[chevronBezierPath fill];
 
-	CAShapeLayer *chevronPathMaskLayer = [[CAShapeLayer alloc] init];
+	CAShapeLayer *chevronPathMaskLayer = [[[CAShapeLayer alloc] init] autorelease];
 	chevronPathMaskLayer.frame = CGRectMake(0, self.view.frame.size.height/2-25, 14, 34);
 	chevronPathMaskLayer.path = chevronBezierPath.CGPath;
 	[containerLayer addSublayer:chevronPathMaskLayer];
@@ -162,7 +162,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	}
 
 	NSArray *displayItems = [[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems];
-	NSMutableArray *appIdentifiers = [[NSMutableArray alloc] init];
+	NSMutableArray *appIdentifiers = [NSMutableArray array];
 	for (SBDisplayItem *displayItem in displayItems) {
 		[appIdentifiers addObject:[displayItem valueForKey:@"_displayIdentifier"]];
 	}

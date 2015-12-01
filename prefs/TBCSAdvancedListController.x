@@ -28,7 +28,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	UIView *viewToAddGradientTo = [[UIView alloc] initWithFrame:CGRectMake(0, 34, [[UIScreen mainScreen] bounds].size.width, 95)];
+	UIView *viewToAddGradientTo = [[[UIView alloc] initWithFrame:CGRectMake(0, 34, [[UIScreen mainScreen] bounds].size.width, 95)] autorelease];
 
 	_liveAppSwitcherView = [[%c(TBCSAppSwitcherViewController) alloc] init];
 	_liveAppSwitcherView.view.userInteractionEnabled = NO;
