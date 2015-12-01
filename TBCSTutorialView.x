@@ -93,6 +93,7 @@
         [self addConstraint:[NSLayoutConstraint constraintWithItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:constraintedViewForAppSwitcher attribute:NSLayoutAttributeTop multiplier:1 constant:95]];
 
         TBCSAppSwitcherViewController *liveAppSwitcherView = [[[%c(TBCSAppSwitcherViewController) alloc] init] autorelease];
+        liveAppSwitcherView.useDemoApps = YES;
         liveAppSwitcherView.view.userInteractionEnabled = NO;
         liveAppSwitcherView.view.frame = CGRectMake(0, 0, self.frame.size.width, 95);
         [constraintedViewForAppSwitcher addSubview:liveAppSwitcherView.view];

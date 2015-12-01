@@ -150,7 +150,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 - (void)updateAppsInSwitcher {
 	[_appSwitcherIdentifiers release];
 
-	if (!%c(SBAppSwitcherModel) || !%c(SBDisplayItem)) {
+	if (!%c(SBAppSwitcherModel) || !%c(SBDisplayItem) || _useDemoApps) {
 		// this must be the example from settings
 		_appSwitcherIdentifiers = [[NSMutableArray alloc] initWithArray:@[@"com.apple.mobilemail", @"com.apple.AppStore", @"com.apple.Music", @"com.apple.mobilenotes", @"com.apple.mobileslideshow", @"com.apple.mobilesafari", @"com.apple.Preferences"]];
 		return;
