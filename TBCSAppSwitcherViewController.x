@@ -166,12 +166,15 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	for (SBDisplayItem *displayItem in displayItems) {
 		[appIdentifiers addObject:[displayItem valueForKey:@"_displayIdentifier"]];
 	}
-	_appSwitcherIdentifiers = appIdentifiers;
 
 	SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
 	NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
 
-	[_appSwitcherIdentifiers removeObject:currentAppIdentifier];
+	if (currentAppIdentifier) {
+		[appIdentifiers removeObject:currentAppIdentifier];
+	}
+
+	_appSwitcherIdentifiers = [appIdentifiers copy];
 
 	[_collectionView reloadData];
 }
