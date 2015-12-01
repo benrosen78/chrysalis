@@ -8,25 +8,25 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier specifier:(PSSpecifier *)specifier {
 	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier specifier:specifier]) {
-		TBCSAboutCreatorView *benCreatorView = [[TBCSAboutCreatorView alloc] initWithTwitterUsername:@"benr9500" name:@"Ben Rosen" creatorType:TBCSAboutCreatorTypeDeveloper];
+		TBCSAboutCreatorView *benCreatorView = [TBCSAboutCreatorView buttonWithTwitterUsername:@"benr9500" name:@"Ben Rosen" creatorType:TBCSAboutCreatorTypeDeveloper];
 		benCreatorView.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.contentView addSubview:benCreatorView];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:benCreatorView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:21]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:benCreatorView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:0.57 constant:0]];
 
-		TBCSAboutCreatorView *carlosCreatorView = [[TBCSAboutCreatorView alloc] initWithTwitterUsername:@"cpdigdarkroom" name:@"CP Digital Darkroom" creatorType:TBCSAboutCreatorTypeDeveloper];
+		TBCSAboutCreatorView *carlosCreatorView = [TBCSAboutCreatorView buttonWithTwitterUsername:@"cpdigdarkroom" name:@"CP Digital Darkroom" creatorType:TBCSAboutCreatorTypeDeveloper];
 		carlosCreatorView.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.contentView addSubview:carlosCreatorView];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:carlosCreatorView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:21]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:carlosCreatorView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:1.43 constant:0]];
 
-		TBCSAboutCreatorView *kirbCreatorView = [[TBCSAboutCreatorView alloc] initWithTwitterUsername:@"hbkirb" name:@"Adam Demasi (kirb)" creatorType:TBCSAboutCreatorTypeDeveloper];
+		TBCSAboutCreatorView *kirbCreatorView = [TBCSAboutCreatorView buttonWithTwitterUsername:@"hbkirb" name:@"Adam Demasi (kirb)" creatorType:TBCSAboutCreatorTypeDeveloper];
 		kirbCreatorView.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.contentView addSubview:kirbCreatorView];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:kirbCreatorView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:168]];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:kirbCreatorView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:0.57 constant:0]];
 
-		TBCSAboutCreatorView *veerklemptCreatorView = [[TBCSAboutCreatorView alloc] initWithTwitterUsername:@"veerklempt" name:@"Veerklempt" creatorType:TBCSAboutCreatorTypeDesigner];
+		TBCSAboutCreatorView *veerklemptCreatorView = [TBCSAboutCreatorView buttonWithTwitterUsername:@"veerklempt" name:@"Veerklempt" creatorType:TBCSAboutCreatorTypeDesigner];
 		veerklemptCreatorView.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.contentView addSubview:veerklemptCreatorView];
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:veerklemptCreatorView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:168]];

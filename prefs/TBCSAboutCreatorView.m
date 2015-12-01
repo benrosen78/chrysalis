@@ -6,10 +6,12 @@
 	NSString *_twitterUsername;
 }
 
-- (instancetype)initWithTwitterUsername:(NSString *)username name:(NSString *)name creatorType:(TBCSAboutCreatorType)creatorType {
-	if (self = [super init]) {
-		self.userInteractionEnabled = YES;
++ (instancetype)buttonWithTwitterUsername:(NSString *)username name:(NSString *)name creatorType:(TBCSAboutCreatorType)creatorType {
+	if (self = [super buttonWithType:UIButtonTypeSystem]) {
 		_twitterUsername = [username copy];
+
+		// this kinda breaks model-view-controller
+		[self addTarget:self action:@selector(openTwitterAccount) forControlEvents:UIControlEventsTouchUpInside];
 
 		UIImageView *avatarImageView = [[UIImageView alloc] init];
 		avatarImageView.alpha = 0.0;
@@ -55,23 +57,11 @@
 				}];
 			});
 		});
-
-		UITapGestureRecognizer *openTwitterGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openTwitterAccount:)];
-		openTwitterGestureRecognizer.delegate = self;
-		[self addGestureRecognizer:openTwitterGestureRecognizer];
-
-
 	}
 	return self;
 }
 
-#pragma mark gesture recognizer delegate
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return YES;
-}
-
-#pragma mark gesture recognizer
+#pragma mark - Callbacks
 
 - (void)openTwitterForUser {
 	NSString *encodedUser = URL_ENCODE(_twitterUsername);
@@ -92,26 +82,6 @@
 	}
 
 	[[UIApplication sharedApplication] openURL:url];
-}
-
-- (void)openTwitterAccount:(UIGestureRecognizer *)gestureRecognizer {
-	switch (gestureRecognizer.state) {
-		case UIGestureRecognizerStateChanged:
-		case UIGestureRecognizerStateBegan: {
-			[UIView animateWithDuration:0.2 animations:^{
-				self.alpha = 0.7;
-			}];
-			break;
-		}
-		default: {
-			[UIView animateWithDuration:0.2 animations:^{
-				self.alpha = 1.0;
-			}];
-		}
-		case UIGestureRecognizerStateEnded:
-		[self openTwitterForUser];
-		break;
-	}
 }
 
 #pragma mark - Memory management
