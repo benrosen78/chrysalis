@@ -11,11 +11,9 @@ Chrysalis is a 3d-touch based app switcher. It's also completely gesture based. 
 
 # Screenshots
 
-|  Regular 	| Dark Mode 	|
-|----------	|-----------	|
-|![](https://raw.githubusercontent.com/benrosen78/chrysalis/master/Screenshots/regular.png)
-|![](https://raw.githubusercontent.com/benrosen78/chrysalis/master/Screenshots/darkmode.png)
-|
+|  Regular                                                                                   	| Dark Mode                                                                                   	|
+|--------------------------------------------------------------------------------------------	|---------------------------------------------------------------------------------------------	|
+| ![](https://raw.githubusercontent.com/benrosen78/chrysalis/master/Screenshots/regular.png) 	| ![](https://raw.githubusercontent.com/benrosen78/chrysalis/master/Screenshots/darkmode.png) 	|
 
 # Thanks
 
