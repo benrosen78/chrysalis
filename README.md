@@ -1,7 +1,7 @@
 # Chrysalis
 Ben, CPDigitalDarkroom, kirb, and veerklempt.
 
-This is our project for Tweak Battles #3. This tweak has been submitted and will be out on BigBoss next week.
+This is our project for Tweak Battles #3. Chrysalis has been submitted and will be out on BigBoss next week. This package depends on [Cephei](https://github.com/hbang/libcephei).
 
 We've put a ton of work into this tweak and we hope you love it!
 
