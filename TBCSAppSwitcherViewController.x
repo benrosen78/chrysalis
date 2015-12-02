@@ -234,6 +234,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 			_backgroundColorView.alpha = 0.0;
 		} completion:^(BOOL completion) {
 			_backgroundColorView.transform = CGAffineTransformIdentity;
+			[self updateAppsInSwitcher];
 		}];
 		SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
 		NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
@@ -242,7 +243,6 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 				[[%c(SBAppSwitcherModel) sharedInstance] remove:[%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:identifier]];
 			}
 		}
-		[self performSelector:@selector(updateAppsInSwitcher) withObject:nil afterDelay:2.5];
 		return;
 	}
 	NSInteger index = roundf((point.x+15)/70.0);
