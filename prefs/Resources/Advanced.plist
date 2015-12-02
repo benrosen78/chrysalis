@@ -20,6 +20,7 @@
 			<key>PostNotification</key>
 			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
 		</dict>
+		<!--
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
@@ -52,7 +53,7 @@
 			<key>PostNotification</key>
 			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
 		</dict>
-
+		-->
 	</array>
 	<key>title</key>
 	<string>Advanced</string>
