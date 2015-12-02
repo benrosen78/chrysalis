@@ -6,7 +6,9 @@ This is our tweak battles project. This tweak has been submitted and will be out
 
 # License
 Open sourced under the [Apache 2.0 License](https://github.com/benrosen78/chrysalis/blob/master/LICENSE).
+
 	Copyright (C) 2015 Ben Rosen, Carlos Perez, Adam Demasi, Anh Nguyen
+
 	Chrysalis—A 3d touch-based app switcher
 
 	Licensed under the Apache License, Version 2.0 (the "License");
