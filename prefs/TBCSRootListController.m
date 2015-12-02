@@ -12,19 +12,19 @@
 }
 
 + (NSString *)hb_shareURL {
-	return @"http://tweakbattles.com";
+	return @"http://tweakbattles.com/";
 }
 
 + (UIColor *)hb_tintColor {
+	return [UIColor colorWithRed:0.169f green:0.796f blue:0.518f alpha:1.00f];
+}
+
++ (UIColor *)hb_navigationBarTintColor {
 	return [UIColor colorWithRed:0.424f green:0.424f blue:0.431f alpha:1.00f];
 }
 
 + (BOOL)hb_invertedNavigationBar {
 	return YES;
-}
-
-+ (UIColor *)hb_overrideTintColor {
-	return [UIColor colorWithRed:0.169f green:0.796f blue:0.518f alpha:1.00f];
 }
 
 - (void)viewDidLoad {
