@@ -204,7 +204,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		}];
 	}
 
-	if (_appSwitcherIdentifiers.count >= index) {
+	if (_appSwitcherIdentifiers.count > index) {
 		[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
 			CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width-45, 0, 45, _collectionView.frame.size.height);
 			CGRect potentialFrame = CGRectMake(index*70.0+17.5, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
@@ -246,7 +246,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		return;
 	}
 	NSInteger index = roundf((point.x+15)/70.0);
-	if (_appSwitcherIdentifiers.count >= index) {
+	if (_appSwitcherIdentifiers.count > index) {
 		NSString *appIdentifier = _appSwitcherIdentifiers[index];
 		[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:appIdentifier suspended:NO];
 	}
