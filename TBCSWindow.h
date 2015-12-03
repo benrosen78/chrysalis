@@ -1,4 +1,8 @@
+@class TBCSAppSwitcherViewController;
+
 @interface TBCSWindow : UIWindow
+
++ (instancetype)sharedInstance;
 
 - (void)startAppSwitcher:(CGPoint)point;
 

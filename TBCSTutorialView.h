@@ -1,5 +1,5 @@
 @interface TBCSTutorialView : UIView
 
-- (void)handleRemovingTutorialView;
+- (void)removeTutorial;
 
 @end

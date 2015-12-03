@@ -27,7 +27,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 @implementation TBCSAppSwitcherViewController {
 	NSMutableArray *_appSwitcherIdentifiers;
-	UIView *_backgroundColorView;
+	UIView *_slidingIndicatorView;
 	UICollectionView *_collectionView;
 	UIView *_divider;
 	UIImageView *_closeAppsImageView;
@@ -37,10 +37,8 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 #pragma mark Adding views
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-
-	[self updateAppsInSwitcher];
+- (void)viewDidLoad {
+	[super viewDidLoad];
 
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 	_blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
@@ -81,14 +79,14 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	// other views
 
-	_backgroundColorView = [[UIView alloc] init];
-	_backgroundColorView.frame = CGRectMake(17.5, 0.0, 65.0, 65.0);
-	_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
-	_backgroundColorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
-	_backgroundColorView.backgroundColor = [UIColor whiteColor];
-	_backgroundColorView.layer.masksToBounds = YES;
-	_backgroundColorView.layer.cornerRadius = 18.0;
-	[self.view addSubview:_backgroundColorView];
+	_slidingIndicatorView = [[UIView alloc] init];
+	_slidingIndicatorView.frame = CGRectMake(17.5, 0.0, 65.0, 65.0);
+	_slidingIndicatorView.center = CGPointMake(_slidingIndicatorView.center.x, self.view.center.y);
+	_slidingIndicatorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
+	_slidingIndicatorView.backgroundColor = [UIColor whiteColor];
+	_slidingIndicatorView.layer.masksToBounds = YES;
+	_slidingIndicatorView.layer.cornerRadius = 18.0;
+	[self.view addSubview:_slidingIndicatorView];
 
 	UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
 	flowLayout.itemSize = CGSizeMake(70.0, 70.0);
@@ -135,9 +133,16 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	gradient.locations = @[@0.93, @1.0];
 
 	_collectionView.layer.mask = gradient;
+}
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+
+	[self updateAppsInSwitcher];
 	[self managePreferences];
 
+	_noAppsLabel.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0.6 : 0.0;
+	_slidingIndicatorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
 }
 
 #pragma mark Collection View Delegate
@@ -181,9 +186,6 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	_appSwitcherIdentifiers = [appIdentifiers copy];
 
 	[_collectionView reloadData];
-
-	_noAppsLabel.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0.6 : 0.0;
-	_backgroundColorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
 }
 
 - (void)updateViewToNewPoint:(CGPoint)point {
@@ -207,12 +209,12 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	if (_appSwitcherIdentifiers.count > index) {
 		[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
 			CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width-45, 0, 45, _collectionView.frame.size.height);
-			CGRect potentialFrame = CGRectMake(index*70.0+17.5, 0, _backgroundColorView.frame.size.width, _backgroundColorView.frame.size.height);
+			CGRect potentialFrame = CGRectMake(index*70.0+17.5, 0, _slidingIndicatorView.frame.size.width, _slidingIndicatorView.frame.size.height);
 			if (CGRectIntersectsRect(closeAppsFrame, potentialFrame)) {
 				return;
 			}
-			_backgroundColorView.frame = potentialFrame;
-			_backgroundColorView.center = CGPointMake(_backgroundColorView.center.x, self.view.center.y);
+			_slidingIndicatorView.frame = potentialFrame;
+			_slidingIndicatorView.center = CGPointMake(_slidingIndicatorView.center.x, self.view.center.y);
 		} completion:nil];
 	}
 }
@@ -230,10 +232,10 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 			}];
 		}
 		[UIView animateWithDuration:0.2 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-			_backgroundColorView.transform = CGAffineTransformMakeScale(0.15, 0.15);
-			_backgroundColorView.alpha = 0.0;
+			_slidingIndicatorView.transform = CGAffineTransformMakeScale(0.15, 0.15);
+			_slidingIndicatorView.alpha = 0.0;
 		} completion:^(BOOL completion) {
-			_backgroundColorView.transform = CGAffineTransformIdentity;
+			_slidingIndicatorView.transform = CGAffineTransformIdentity;
 			[self updateAppsInSwitcher];
 		}];
 		SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
@@ -277,7 +279,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 - (void)dealloc {
 	[_appSwitcherIdentifiers release];
-	[_backgroundColorView release];
+	[_slidingIndicatorView release];
 	[_collectionView release];
 	[_divider release];
 	[_closeAppsImageView release];

@@ -5,6 +5,16 @@ static CGFloat const kTBCSAppSwitcherHeight = 95.f;
 
 @implementation TBCSWindow
 
++ (instancetype)sharedInstance {
+	static TBCSWindow *sharedInstance;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedInstance = [[self alloc] init];
+	});
+
+	return sharedInstance;
+}
+
 - (instancetype)init {
 	if (self = [super init]) {
 		self.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width/-2, 0, [[UIScreen mainScreen] bounds].size.width, kTBCSAppSwitcherHeight);

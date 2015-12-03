@@ -7,8 +7,6 @@
 #import <SpringBoard/SBUIController.h>
 #import "TBCSPreferencesManager.h"
 
-TBCSWindow *window;
-
 %hook SBUIController
 
 - (void)_addRemoveSwitcherGesture {
@@ -30,6 +28,7 @@ TBCSWindow *window;
 }
 
 - (void)_handleSwitcherForcePressGesture:(UIGestureRecognizer *)gestureRecognizer {
+	TBCSWindow *window = [TBCSWindow sharedInstance];
 	CGPoint activationPoint = [gestureRecognizer locationInView:[self window]];
 	switch (gestureRecognizer.state) {
 		case UIGestureRecognizerStateBegan:
@@ -58,15 +57,6 @@ TBCSWindow *window;
 	}
 
 	return %orig;
-}
-
-%end
-
-%hook SpringBoard
-
-- (void)applicationDidFinishLaunching:(UIApplication *)arg1 {
-	%orig;
-	window = [[TBCSWindow alloc] init];
 }
 
 %end
