@@ -37,8 +37,11 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 #pragma mark Adding views
 
-- (void)viewDidLoad {
-	[super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+
+	[self updateAppsInSwitcher];
+	[self managePreferences];
 
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 	_blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
@@ -135,16 +138,6 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	_collectionView.layer.mask = gradient;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-
-	[self updateAppsInSwitcher];
-	[self managePreferences];
-
-	_noAppsLabel.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0.6 : 0.0;
-	_slidingIndicatorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
-}
-
 #pragma mark Collection View Delegate
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -186,6 +179,9 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	_appSwitcherIdentifiers = [appIdentifiers copy];
 
 	[_collectionView reloadData];
+
+	_noAppsLabel.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0.6 : 0.0;
+	_slidingIndicatorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
 }
 
 - (void)updateViewToNewPoint:(CGPoint)point {
