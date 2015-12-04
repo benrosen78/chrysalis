@@ -27,12 +27,15 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 @implementation TBCSAppSwitcherViewController {
 	NSMutableArray *_appSwitcherIdentifiers;
-	UIView *_slidingIndicatorView;
+
 	UICollectionView *_collectionView;
+	UIVisualEffectView *_blurEffectView;
+	UIView *_slidingIndicatorView;
 	UIView *_divider;
 	UIImageView *_closeAppsImageView;
-	UIVisualEffectView *_blurEffectView;
 	UILabel *_noAppsLabel;
+
+	CAShapeLayer *_chevronPathMaskLayer;
 }
 
 #pragma mark Adding views
@@ -45,7 +48,8 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 	_blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-	_blurEffectView.frame = self.view.frame;
+	_blurEffectView.frame = self.view.bounds;
+	_blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.view addSubview:_blurEffectView];
 
 	CALayer *containerLayer = [CALayer layer];
@@ -63,17 +67,16 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	[chevronBezierPath applyTransform:CGAffineTransformMakeScale(0.5, 0.5)];
 	[chevronBezierPath fill];
 
-	CAShapeLayer *chevronPathMaskLayer = [[[CAShapeLayer alloc] init] autorelease];
-	chevronPathMaskLayer.frame = CGRectMake(0, self.view.frame.size.height/2-25, 14, 34);
-	chevronPathMaskLayer.path = chevronBezierPath.CGPath;
-	[containerLayer addSublayer:chevronPathMaskLayer];
+	_chevronPathMaskLayer = [[[CAShapeLayer alloc] init] autorelease];
+	_chevronPathMaskLayer.path = chevronBezierPath.CGPath;
+	[containerLayer addSublayer:_chevronPathMaskLayer];
 
 	// rectangle
 
 	UIBezierPath *rectanglePath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(14, 0, self.view.frame.size.width-14, self.view.frame.size.height) byRoundingCorners:( UIRectCornerTopLeft | UIRectCornerBottomLeft) cornerRadii:CGSizeMake(9.0, 9.0)];
 	[rectanglePath fill];
 
-	CAShapeLayer *rectanglePathMaskLayer = [[CAShapeLayer alloc] init];
+	CAShapeLayer *rectanglePathMaskLayer = [[[CAShapeLayer alloc] init] autorelease];
 	rectanglePathMaskLayer.frame = self.view.bounds;
 	rectanglePathMaskLayer.path  = rectanglePath.CGPath;
 	[containerLayer addSublayer:rectanglePathMaskLayer];
@@ -85,19 +88,21 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	_slidingIndicatorView = [[UIView alloc] init];
 	_slidingIndicatorView.frame = CGRectMake(17.5, 0.0, 65.0, 65.0);
 	_slidingIndicatorView.center = CGPointMake(_slidingIndicatorView.center.x, self.view.center.y);
+	_slidingIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 	_slidingIndicatorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
 	_slidingIndicatorView.backgroundColor = [UIColor whiteColor];
 	_slidingIndicatorView.layer.masksToBounds = YES;
 	_slidingIndicatorView.layer.cornerRadius = 18.0;
 	[self.view addSubview:_slidingIndicatorView];
 
-	UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+	UICollectionViewFlowLayout *flowLayout = [[[UICollectionViewFlowLayout alloc] init] autorelease];
 	flowLayout.itemSize = CGSizeMake(70.0, 70.0);
 	flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 	flowLayout.minimumInteritemSpacing = 0;
 	flowLayout.minimumLineSpacing = 0;
 
 	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(15, 0, self.view.frame.size.width-(45+15), self.view.frame.size.height) collectionViewLayout:flowLayout];
+	_collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_collectionView.backgroundColor = [UIColor clearColor];
 	_collectionView.delegate = self;
 	_collectionView.dataSource = self;
@@ -107,6 +112,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	UIColor *selectedColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
 	_noAppsLabel = [[UILabel alloc] initWithFrame:_collectionView.frame];
+	_noAppsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_noAppsLabel.text = @"no apps open";
 	_noAppsLabel.textColor = selectedColor;
 	_noAppsLabel.textAlignment = NSTextAlignmentCenter;
@@ -118,11 +124,13 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	_closeAppsImageView.image = [[UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]] _flatImageWithColor:selectedColor];
 	_closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
 	_closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
+	_closeAppsImageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
 	_closeAppsImageView.alpha = 0.45;
 	[self.view addSubview:_closeAppsImageView];
 
 	_divider = [[UIView alloc] init];
 	_divider.frame = CGRectMake(self.view.frame.size.width-45, 0, 1, self.view.frame.size.height);
+	_divider.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
 	_divider.alpha = 0.45;
 	_divider.backgroundColor = [UIColor whiteColor];
 	[self.view addSubview:_divider];
@@ -136,6 +144,12 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	gradient.locations = @[@0.93, @1.0];
 
 	_collectionView.layer.mask = gradient;
+}
+
+- (void)viewWillLayoutSubviews {
+	[super viewWillLayoutSubviews];
+
+	_chevronPathMaskLayer.frame = CGRectMake(0, self.view.frame.size.height/2-25, 14, 34);
 }
 
 #pragma mark Collection View Delegate
@@ -275,11 +289,15 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 - (void)dealloc {
 	[_appSwitcherIdentifiers release];
-	[_slidingIndicatorView release];
+
 	[_collectionView release];
+	[_blurEffectView release];
+	[_slidingIndicatorView release];
 	[_divider release];
 	[_closeAppsImageView release];
-	[_blurEffectView release];
+	[_noAppsLabel release];
+
+	[_chevronPathMaskLayer release];
 
 	[super dealloc];
 }

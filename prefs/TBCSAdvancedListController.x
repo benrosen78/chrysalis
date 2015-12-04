@@ -28,23 +28,26 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	UIView *viewToAddGradientTo = [[[UIView alloc] initWithFrame:CGRectMake(0, 34, [[UIScreen mainScreen] bounds].size.width, 95)] autorelease];
-	viewToAddGradientTo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	_backgroundGradientView = [[TBCSAdvancedBackgroundGradientView alloc] init];
+	_backgroundGradientView.frame = CGRectMake(0, 0, self.table.frame.size.width, 183);
+	_backgroundGradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
 	_liveAppSwitcherView = [[%c(TBCSAppSwitcherViewController) alloc] init];
 	_liveAppSwitcherView.view.userInteractionEnabled = NO;
-	_liveAppSwitcherView.view.frame = viewToAddGradientTo.bounds;
+	_liveAppSwitcherView.view.frame = CGRectMake(0, 0, _backgroundGradientView.frame.size.width, 95);
+	_liveAppSwitcherView.view.center = CGPointMake(_liveAppSwitcherView.view.center.x, _backgroundGradientView.frame.size.height / 2);
+	_liveAppSwitcherView.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 
-	_backgroundGradientView = [[TBCSAdvancedBackgroundGradientView alloc] init];
-	_backgroundGradientView.frame = CGRectMake(0, 0, self.view.frame.size.width, 183);
-
-	[_backgroundGradientView addSubview:viewToAddGradientTo];
-
-	[viewToAddGradientTo addSubview:_liveAppSwitcherView.view];
+	[_backgroundGradientView addSubview:_liveAppSwitcherView.view];
 	[self addChildViewController:_liveAppSwitcherView];
 	[_liveAppSwitcherView didMoveToParentViewController:self];
 
 	self.table.tableHeaderView = _backgroundGradientView;
+
+	UIView *pullDownView = [[[UIView alloc] initWithFrame:CGRectMake(0, -1000.f, self.table.frame.size.width, 1000.f)] autorelease];
+	pullDownView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	pullDownView.backgroundColor = [UIColor colorWithRed:0.498 green:0.498 blue:0.506 alpha:1.00];
+	[self.table addSubview:pullDownView];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
