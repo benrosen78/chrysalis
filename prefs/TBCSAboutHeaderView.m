@@ -76,7 +76,7 @@
 		[self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:specialThanksLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:thankLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:22]];
 
 		UILabel *supportersLabel = [[[UILabel alloc] init] autorelease];
-		supportersLabel.text = @"Eric, Borsato92, cj81499, winlogon0, mootjeuh, @redzrex, Jason R., CONATH, JimDotR, Boris S, Ziph0n, Andrew, /u/DervishSkater, Corporal, Acidschnee, Josh Gibson, HHumbert, Cody, Connor, @sel2by3, Shadow Games, Pixxaddict, platypusw90, echo000, Jonathan Gautreau, Blink, ShaneSparkyYYZ, kamikasky, MaxD, @tilgut, @Beezure, Matteo Piccina, josh_boothman, Moshe Siegel, Ian L, Torben, MeatyCheetos, @rauseo12, Lei33, K S LEE, @RichResk, wizage, @sekrit_, RushNY, Maortega89, @frkbmb_, Kyle, Robert, @BrianOverly, @thetomcanuck, OhSpazz, Jessyreynosa3, Jessie mejia, Jp_delon, dantesieg";
+		supportersLabel.text = @"@redzrex, Boris S, @twodayslate, Eric, Borsato92, cj81499, mootjeuh, Ziph0n, /u/DervishSkater, Corporal, Pixxaddict, Matteo Piccina, josh_boothman, Moshe Siegel, Ian L, @rauseo12, wizage, RushNY, @BrianOverly, @thetomcanuck, winlogon0, Jason R., CONATH, JimDotR, Andrew, Acidschnee, Cody, Connor, Shadow Games, echo000, Jonathan Gautreau , Blink, ShaneSparkyYYZ, kamikasky, MaxD, @tilgut, Torben, MeatyCheetos, Lei33, K S LEE, @RichResk, @sekrit_, Maortega89, @frkbmb_, Kyle, Robert, @pwned24k, OhSpazz, Jessyreynosa3, Jessie mejia , Jp_delon, dantesieg, @codsane, Alex S., Spencer, HHumbert, Josh Gibson, @sel2by3, platypusw90, @Beezure";
 		supportersLabel.font = [UIFont systemFontOfSize:10];
 		supportersLabel.numberOfLines = 0;
 		supportersLabel.translatesAutoresizingMaskIntoConstraints = NO;
