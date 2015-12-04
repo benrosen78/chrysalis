@@ -3,7 +3,7 @@ Name: Chrysalis
 Depends: mobilesubstrate, ws.hbang.common (>= 1.5)
 Version: 1.0
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: A modern, gesture based app switcher
 Maintainer: Ben & Carlos & Kirb & Veerklempt
 Author: Ben & Carlos & Kirb & Veerklempt
 Section: Tweaks
