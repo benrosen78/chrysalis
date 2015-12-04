@@ -75,3 +75,9 @@
 	}
 }
 %end
+
+%ctor {
+	if (IN_SPRINGBOARD) {
+		%init;
+	}
+}
