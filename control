@@ -1,7 +1,7 @@
 Package: com.tweakbattles.chrysalis
 Name: Chrysalis
 Depends: mobilesubstrate, ws.hbang.common (>= 1.5)
-Version: 0.0.1
+Version: 1.0
 Architecture: iphoneos-arm
 Description: An awesome MobileSubstrate tweak!
 Maintainer: Ben & Carlos & Kirb & Veerklempt
