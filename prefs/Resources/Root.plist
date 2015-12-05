@@ -74,9 +74,7 @@
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>cellClass</key>
-			<string>HBTintedTableCell</string>
+			<string>PSLinkCell</string>
 			<key>label</key>
 			<string>Support</string>
 			<key>icon</key>
