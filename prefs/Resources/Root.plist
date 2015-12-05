@@ -74,13 +74,15 @@
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>detail</key>
-			<string>TBCSSupportListController</string>
-			<key>icon</key>
-			<string>support.png</string>
+			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>HBTintedTableCell</string>
 			<key>label</key>
 			<string>Support</string>
+			<key>icon</key>
+			<string>support.png</string>
+			<key>action</key>
+			<string>showSupportEmailController</string>
 		</dict>
 		<dict>
 			<key>cell</key>
