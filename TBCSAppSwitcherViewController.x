@@ -92,7 +92,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	_noAppsLabel = [[UILabel alloc] initWithFrame:_collectionView.frame];
 	_noAppsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	_noAppsLabel.text = @"no apps open";
+	_noAppsLabel.text = @"no apps";
 	_noAppsLabel.textAlignment = NSTextAlignmentCenter;
 	_noAppsLabel.alpha = 0.6;
 	_noAppsLabel.font = [UIFont systemFontOfSize:30.0];
