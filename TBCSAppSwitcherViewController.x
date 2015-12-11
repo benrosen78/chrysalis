@@ -12,7 +12,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	UIView *_slidingIndicatorView;
 	UICollectionView *_collectionView;
-	UIView *_divider;
+	UIView *_dividerView;
 	UIImageView *_closeAppsImageView;
 	UIVisualEffectView *_blurEffectView;
 	UILabel *_noAppsLabel;
@@ -29,8 +29,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 	_blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-	_blurEffectView.frame = self.view.frame;
-	_blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _blurEffectView.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.view addSubview:_blurEffectView];
 
 	CALayer *containerLayer = [CALayer layer];
@@ -81,8 +80,8 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	flowLayout.minimumInteritemSpacing = 0;
 	flowLayout.minimumLineSpacing = 0;
 
-	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(15, 0, self.view.frame.size.width-(45+15), self.view.frame.size.height) collectionViewLayout:flowLayout];
-	_collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
+    _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
 	_collectionView.backgroundColor = [UIColor clearColor];
 	_collectionView.delegate = self;
 	_collectionView.dataSource = self;
@@ -90,28 +89,26 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	[_collectionView registerClass:[TBCSAppSwitcherCollectionViewCell class] forCellWithReuseIdentifier:kTBCSAppSwitcherCollectionViewCellIdentifier];
 	[self.view addSubview:_collectionView];
 
-	_noAppsLabel = [[UILabel alloc] initWithFrame:_collectionView.frame];
-	_noAppsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	_noAppsLabel = [[UILabel alloc] init];
+    _noAppsLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	_noAppsLabel.text = @"no apps";
 	_noAppsLabel.textAlignment = NSTextAlignmentCenter;
 	_noAppsLabel.alpha = 0.6;
 	_noAppsLabel.font = [UIFont systemFontOfSize:30.0];
-	[self.view addSubview:_noAppsLabel];
+	[_collectionView addSubview:_noAppsLabel];
+
+	_dividerView = [[UIView alloc] init];
+    _dividerView.translatesAutoresizingMaskIntoConstraints = NO;
+	_dividerView.alpha = 0.45;
+	_dividerView.backgroundColor = [UIColor whiteColor];
+	[self.view addSubview:_dividerView];
 
 	_closeAppsImageView = [[UIImageView alloc] init];
+    _closeAppsImageView.translatesAutoresizingMaskIntoConstraints = NO;
 	_closeAppsImageView.image = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
-	_closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
-	_closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
-	_closeAppsImageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
 	_closeAppsImageView.alpha = 0.45;
+	_closeAppsImageView.contentMode = UIViewContentModeCenter;
 	[self.view addSubview:_closeAppsImageView];
-
-	_divider = [[UIView alloc] init];
-	_divider.frame = CGRectMake(self.view.frame.size.width-45, 0, 1, self.view.frame.size.height);
-	_divider.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
-	_divider.alpha = 0.45;
-	_divider.backgroundColor = [UIColor whiteColor];
-	[self.view addSubview:_divider];
 
 	_gradientLayer = [[CAGradientLayer alloc] init];
 	_gradientLayer.startPoint = CGPointMake(0.0, 0.5);
@@ -119,6 +116,30 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	_gradientLayer.colors = @[(id)[UIColor blackColor].CGColor, (id)[UIColor clearColor].CGColor];
 	_gradientLayer.locations = @[@0.93, @1.0];
 	_collectionView.layer.mask = _gradientLayer;
+
+	// auto layout
+
+	NSDictionary *views = @{
+		@"blurEffectView": _blurEffectView,
+	    @"collectionView": _collectionView,
+	    @"dividerView": _dividerView,
+	    @"closeAppsImageView": _closeAppsImageView,
+	    @"noAppsLabel": _noAppsLabel
+	};
+
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[collectionView][dividerView(==0.5)][closeAppsImageView(==45)]|" options:kNilOptions metrics:nil views:views]];
+
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[blurEffectView]|" options:kNilOptions metrics:nil views:views]];
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[blurEffectView]|" options:kNilOptions metrics:nil views:views]];
+
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView]|" options:kNilOptions metrics:nil views:views]];
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[dividerView]|" options:kNilOptions metrics:nil views:views]];
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[closeAppsImageView]|" options:kNilOptions metrics:nil views:views]];
+
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[noAppsLabel]|" options:kNilOptions metrics:nil views:views]];
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[noAppsLabel]|" options:kNilOptions metrics:nil views:views]];
+
+	// prefs
 
 	[self configurePreferences];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(configurePreferences) name:HBPreferencesDidChangeNotification object:[TBCSPreferencesManager sharedInstance].preferences];
@@ -254,16 +275,16 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	[UIView animateWithDuration:1 animations:^{
 		_blurEffectView.effect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 
-		_divider.alpha = 0.0;
+		_dividerView.alpha = 0.0;
 		_closeAppsImageView.alpha = 0.0;
 	}];
 
 	UIColor *selectedColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
-	_divider.backgroundColor = selectedColor;
+	_dividerView.backgroundColor = selectedColor;
 	_closeAppsImageView.image = [_closeAppsImageView.image _flatImageWithColor:selectedColor];
 
 	[UIView animateWithDuration:0.5 animations:^{
-		_divider.alpha = 0.45;
+		_dividerView.alpha = 0.45;
 		_closeAppsImageView.alpha = 0.45;
 	}];
 }
@@ -272,11 +293,17 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 - (void)dealloc {
 	[_appSwitcherIdentifiers release];
+
 	[_slidingIndicatorView release];
 	[_collectionView release];
-	[_divider release];
+	[_dividerView release];
 	[_closeAppsImageView release];
 	[_blurEffectView release];
+	[_noAppsLabel release];
+
+	[_chevronPathMaskLayer release];
+	[_rectanglePathMaskLayer release];
+	[_gradientLayer release];
 
 	[super dealloc];
 }
