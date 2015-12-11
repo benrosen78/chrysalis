@@ -18,6 +18,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
+	<key>HBPackageIdentifier</key>
+	<string>com.tweakbattles.chrysalis</string>
 	<key>NSPrincipalClass</key>
 	<string>TBCSRootListController</string>
 </dict>
