@@ -7,7 +7,7 @@
 
 @implementation TBCSAdvancedListController {
 	TBCSAdvancedBackgroundGradientView *_backgroundGradientView;
-	TBCSAppSwitcherViewController *_liveAppSwitcherView;
+	TBCSAppSwitcherViewController *_appSwitcherViewController;
 }
 
 #pragma mark Cephei - HBListController
@@ -28,21 +28,21 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	UIView *viewToAddGradientTo = [[[UIView alloc] initWithFrame:CGRectMake(0, 34, [[UIScreen mainScreen] bounds].size.width, 95)] autorelease];
-	viewToAddGradientTo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-
-	_liveAppSwitcherView = [[%c(TBCSAppSwitcherViewController) alloc] init];
-	_liveAppSwitcherView.view.userInteractionEnabled = NO;
-	_liveAppSwitcherView.view.frame = viewToAddGradientTo.bounds;
-
 	_backgroundGradientView = [[TBCSAdvancedBackgroundGradientView alloc] init];
 	_backgroundGradientView.frame = CGRectMake(0, 0, self.view.frame.size.width, 183);
 
-	[_backgroundGradientView addSubview:viewToAddGradientTo];
+	UIView *containerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 34, self.table.frame.size.width, 95)] autorelease];
+	containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	[_backgroundGradientView addSubview:containerView];
 
-	[viewToAddGradientTo addSubview:_liveAppSwitcherView.view];
-	[self addChildViewController:_liveAppSwitcherView];
-	[_liveAppSwitcherView didMoveToParentViewController:self];
+	_appSwitcherViewController = [[%c(TBCSAppSwitcherViewController) alloc] init];
+	_appSwitcherViewController.useDemoApps = YES;
+	_appSwitcherViewController.view.userInteractionEnabled = NO;
+	_appSwitcherViewController.view.frame = containerView.bounds;
+
+	[containerView addSubview:_appSwitcherViewController.view];
+	[self addChildViewController:_appSwitcherViewController];
+	[_appSwitcherViewController didMoveToParentViewController:self];
 
 	self.table.tableHeaderView = _backgroundGradientView;
 }
@@ -60,14 +60,14 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	[self.realNavigationController.navigationBar _setHidesShadow:NO];
-	[_liveAppSwitcherView removeFromParentViewController];
+	[_appSwitcherViewController removeFromParentViewController];
 }
 
 #pragma mark - Memory management
 
 - (void)dealloc {
 	[_backgroundGradientView release];
-	[_liveAppSwitcherView release];
+	[_appSwitcherViewController release];
 
 	[super dealloc];
 }
