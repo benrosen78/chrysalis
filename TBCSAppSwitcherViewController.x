@@ -1,51 +1,36 @@
 #import "TBCSAppSwitcherViewController.h"
 #import "TBCSAppSwitcherCollectionViewCell.h"
+#import "TBCSAppSwitcherManager.h"
 #import "TBCSPreferencesManager.h"
 #import <SpringBoard/SpringBoard.h>
-#import <SpringBoard/SBApplication.h>
 #import <UIKit/UIImage+Private.h>
-
-@interface SBDisplayItem : NSObject {
-	NSString *_displayIdentifier;
-}
-
-+ (instancetype)displayItemWithType:(NSString *)type displayIdentifier:(NSString *)identifier;
-
-@end
-
-@interface SBAppSwitcherModel : NSObject
-
-+ (instancetype)sharedInstance;
-
-- (NSArray *)mainSwitcherDisplayItems;
-
-- (void)remove:(SBDisplayItem *)displayItem;
-
-@end
 
 static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisAppSwitcherCell";
 
 @implementation TBCSAppSwitcherViewController {
-	NSMutableArray *_appSwitcherIdentifiers;
+	NSArray *_appSwitcherIdentifiers;
+
 	UIView *_slidingIndicatorView;
 	UICollectionView *_collectionView;
 	UIView *_divider;
 	UIImageView *_closeAppsImageView;
 	UIVisualEffectView *_blurEffectView;
 	UILabel *_noAppsLabel;
+
+	CAShapeLayer *_chevronPathMaskLayer;
+	CAShapeLayer *_rectanglePathMaskLayer;
+	CAGradientLayer *_gradientLayer;
 }
 
-#pragma mark Adding views
+#pragma mark - UIViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-
-	[self updateAppsInSwitcher];
-	[self managePreferences];
+- (void)loadView {
+	[super loadView];
 
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 	_blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
 	_blurEffectView.frame = self.view.frame;
+	_blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.view addSubview:_blurEffectView];
 
 	CALayer *containerLayer = [CALayer layer];
@@ -63,20 +48,18 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	[chevronBezierPath applyTransform:CGAffineTransformMakeScale(0.5, 0.5)];
 	[chevronBezierPath fill];
 
-	CAShapeLayer *chevronPathMaskLayer = [[[CAShapeLayer alloc] init] autorelease];
-	chevronPathMaskLayer.frame = CGRectMake(0, self.view.frame.size.height/2-25, 14, 34);
-	chevronPathMaskLayer.path = chevronBezierPath.CGPath;
-	[containerLayer addSublayer:chevronPathMaskLayer];
+	_chevronPathMaskLayer = [[CAShapeLayer alloc] init];
+	_chevronPathMaskLayer.path = chevronBezierPath.CGPath;
+	[containerLayer addSublayer:_chevronPathMaskLayer];
 
 	// rectangle
 
+	_rectanglePathMaskLayer = [[CAShapeLayer alloc] init];
+
 	UIBezierPath *rectanglePath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(14, 0, self.view.frame.size.width-14, self.view.frame.size.height) byRoundingCorners:( UIRectCornerTopLeft | UIRectCornerBottomLeft) cornerRadii:CGSizeMake(9.0, 9.0)];
 	[rectanglePath fill];
-
-	CAShapeLayer *rectanglePathMaskLayer = [[CAShapeLayer alloc] init];
-	rectanglePathMaskLayer.frame = self.view.bounds;
-	rectanglePathMaskLayer.path  = rectanglePath.CGPath;
-	[containerLayer addSublayer:rectanglePathMaskLayer];
+	_rectanglePathMaskLayer.path  = rectanglePath.CGPath;
+	[containerLayer addSublayer:_rectanglePathMaskLayer];
 
 	_blurEffectView.layer.mask = containerLayer;
 
@@ -84,8 +67,9 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	_slidingIndicatorView = [[UIView alloc] init];
 	_slidingIndicatorView.frame = CGRectMake(17.5, 0.0, 65.0, 65.0);
+	_slidingIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 	_slidingIndicatorView.center = CGPointMake(_slidingIndicatorView.center.x, self.view.center.y);
-	_slidingIndicatorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
+	_slidingIndicatorView.alpha = 0.4;
 	_slidingIndicatorView.backgroundColor = [UIColor whiteColor];
 	_slidingIndicatorView.layer.masksToBounds = YES;
 	_slidingIndicatorView.layer.cornerRadius = 18.0;
@@ -98,6 +82,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	flowLayout.minimumLineSpacing = 0;
 
 	_collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(15, 0, self.view.frame.size.width-(45+15), self.view.frame.size.height) collectionViewLayout:flowLayout];
+	_collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_collectionView.backgroundColor = [UIColor clearColor];
 	_collectionView.delegate = self;
 	_collectionView.dataSource = self;
@@ -105,40 +90,62 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	[_collectionView registerClass:[TBCSAppSwitcherCollectionViewCell class] forCellWithReuseIdentifier:kTBCSAppSwitcherCollectionViewCellIdentifier];
 	[self.view addSubview:_collectionView];
 
-	UIColor *selectedColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
 	_noAppsLabel = [[UILabel alloc] initWithFrame:_collectionView.frame];
+	_noAppsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_noAppsLabel.text = @"no apps open";
-	_noAppsLabel.textColor = selectedColor;
 	_noAppsLabel.textAlignment = NSTextAlignmentCenter;
-	_noAppsLabel.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0.6 : 0.0;
+	_noAppsLabel.alpha = 0.6;
 	_noAppsLabel.font = [UIFont systemFontOfSize:30.0];
 	[self.view addSubview:_noAppsLabel];
 
 	_closeAppsImageView = [[UIImageView alloc] init];
-	_closeAppsImageView.image = [[UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]] _flatImageWithColor:selectedColor];
+	_closeAppsImageView.image = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
 	_closeAppsImageView.frame = CGRectMake(0.0, 0.0, 22.5, 22.5);
 	_closeAppsImageView.center = CGPointMake(self.view.frame.size.width-22.5, self.view.center.y);
+	_closeAppsImageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
 	_closeAppsImageView.alpha = 0.45;
 	[self.view addSubview:_closeAppsImageView];
 
 	_divider = [[UIView alloc] init];
 	_divider.frame = CGRectMake(self.view.frame.size.width-45, 0, 1, self.view.frame.size.height);
+	_divider.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
 	_divider.alpha = 0.45;
 	_divider.backgroundColor = [UIColor whiteColor];
 	[self.view addSubview:_divider];
 
-	CAGradientLayer *gradient = [CAGradientLayer layer];
-	gradient.startPoint = CGPointMake(0.0, 0.5);
-	gradient.endPoint = CGPointMake(1.0, 0.5);
+	_gradientLayer = [[CAGradientLayer alloc] init];
+	_gradientLayer.startPoint = CGPointMake(0.0, 0.5);
+	_gradientLayer.endPoint = CGPointMake(1.0, 0.5);
+	_gradientLayer.colors = @[(id)[UIColor blackColor].CGColor, (id)[UIColor clearColor].CGColor];
+	_gradientLayer.locations = @[@0.93, @1.0];
+	_collectionView.layer.mask = _gradientLayer;
 
-	gradient.frame = self.view.frame;
-	gradient.colors = @[(id)[UIColor blackColor].CGColor, (id)[UIColor clearColor].CGColor];
-	gradient.locations = @[@0.93, @1.0];
-
-	_collectionView.layer.mask = gradient;
+	[self configurePreferences];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(configurePreferences) name:HBPreferencesDidChangeNotification object:[TBCSPreferencesManager sharedInstance].preferences];
 }
 
-#pragma mark Collection View Delegate
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+
+	[self _updateAppsInSwitcher];
+	[self configurePreferences];
+}
+
+- (void)viewWillLayoutSubviews {
+	[super viewWillLayoutSubviews];
+
+	_gradientLayer.frame = self.view.bounds;
+
+	_chevronPathMaskLayer.frame = CGRectMake(0, self.view.frame.size.height/2-25, 14, 34);
+	_rectanglePathMaskLayer.frame = self.view.bounds;
+
+	UIBezierPath *rectanglePath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(14, 0, self.view.frame.size.width-14, self.view.frame.size.height) byRoundingCorners:( UIRectCornerTopLeft | UIRectCornerBottomLeft) cornerRadii:CGSizeMake(9.0, 9.0)];
+	[rectanglePath fill];
+
+	_rectanglePathMaskLayer.path = rectanglePath.CGPath;
+}
+
+#pragma mark - Collection View Delegate
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 	TBCSAppSwitcherCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTBCSAppSwitcherCollectionViewCellIdentifier forIndexPath:indexPath];
@@ -152,63 +159,63 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	return [_appSwitcherIdentifiers count];
 }
 
-#pragma mark View updating
+#pragma mark - Update
 
-- (void)updateAppsInSwitcher {
+- (void)_updateAppsInSwitcher {
 	[_appSwitcherIdentifiers release];
 
-	if (!%c(SBAppSwitcherModel) || !%c(SBDisplayItem) || _useDemoApps) {
-		// this must be the example from settings
-		_appSwitcherIdentifiers = [[NSMutableArray alloc] initWithArray:@[@"com.apple.mobilemail", @"com.apple.AppStore", @"com.apple.Music", @"com.apple.mobilenotes", @"com.apple.mobileslideshow", @"com.apple.mobilesafari", @"com.apple.Preferences"]];
-		return;
+	if (_useDemoApps) {
+		// fill in standard example apps to display in demo situations
+		_appSwitcherIdentifiers = [[NSArray alloc] initWithArray:@[@"com.apple.mobilemail", @"com.apple.AppStore", @"com.apple.Music", @"com.apple.mobilenotes", @"com.apple.mobileslideshow", @"com.apple.mobilesafari", @"com.apple.Preferences"]];
+	} else {
+		// get the list of apps
+		_appSwitcherIdentifiers = [[TBCSAppSwitcherManager switcherAppList] copy];
 	}
 
-	NSArray *displayItems = [[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems];
-	NSMutableArray *appIdentifiers = [NSMutableArray array];
-	for (SBDisplayItem *displayItem in displayItems) {
-		[appIdentifiers addObject:[displayItem valueForKey:@"_displayIdentifier"]];
-	}
-
-	SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
-	NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
-
-	if (currentAppIdentifier) {
-		[appIdentifiers removeObject:currentAppIdentifier];
-	}
-
-	_appSwitcherIdentifiers = [appIdentifiers copy];
-
+	// reload the collection view
 	[_collectionView reloadData];
 
-	_noAppsLabel.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0.6 : 0.0;
-	_slidingIndicatorView.alpha = !_appSwitcherIdentifiers || _appSwitcherIdentifiers.count == 0 ? 0 : 0.4;
+	// do we have any apps open?
+	if (_appSwitcherIdentifiers.count > 0) {
+		// if so, we can hide the label, show the sliding indicator
+		_noAppsLabel.hidden = YES;
+		_slidingIndicatorView.hidden = NO;
+	} else {
+		// otherwise, we want the opposite
+		_noAppsLabel.hidden = NO;
+		_slidingIndicatorView.hidden = YES;
+	}
 }
 
-- (void)updateViewToNewPoint:(CGPoint)point {
-	NSInteger index = roundf((point.x+15)/70.0);
+#pragma mark - Gesture
 
-	if (point.x > self.view.frame.size.width-45.0) {
-		if (_divider.alpha != 0.7) {
+- (void)updateViewToNewPoint:(CGPoint)point {
+	// from the point of the finger, get the index of the icon
+	NSInteger index = roundf((point.x + 15) / 70.0);
+
+	// the last 45pt are reserved for the close apps button
+	if (point.x > self.view.frame.size.width - 45.0) {
+		if (_closeAppsImageView.alpha != 0.7) {
 			[UIView animateWithDuration:0.3 animations:^{
-				_divider.alpha = 0.7;
 				_closeAppsImageView.alpha = 0.7;
 			}];
 		}
 		return;
-	} else if (_divider.alpha != 0.45) {
+	} else if (_closeAppsImageView.alpha != 0.45) {
 		[UIView animateWithDuration:0.3 animations:^{
-			_divider.alpha = 0.45;
 			_closeAppsImageView.alpha = 0.45;
 		}];
 	}
 
 	if (_appSwitcherIdentifiers.count > index) {
+		CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width - 45, 0, 45, _collectionView.frame.size.height);
+		CGRect potentialFrame = CGRectMake((index * 70.0) + 17.5, 0, 65, 65);
+
+		if (CGRectIntersectsRect(closeAppsFrame, potentialFrame)) {
+			potentialFrame = CGRectMake(self.view.frame.size.width - 40, 0, 35, 35);
+		}
+
 		[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-			CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width-45, 0, 45, _collectionView.frame.size.height);
-			CGRect potentialFrame = CGRectMake(index*70.0+17.5, 0, _slidingIndicatorView.frame.size.width, _slidingIndicatorView.frame.size.height);
-			if (CGRectIntersectsRect(closeAppsFrame, potentialFrame)) {
-				return;
-			}
 			_slidingIndicatorView.frame = potentialFrame;
 			_slidingIndicatorView.center = CGPointMake(_slidingIndicatorView.center.x, self.view.center.y);
 		} completion:nil];
@@ -217,6 +224,8 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 - (void)openAppAtPoint:(CGPoint)point {
 	if (point.x > self.view.frame.size.width-45.0) {
+		[TBCSAppSwitcherManager quitAllApps];
+
 		for (UICollectionViewCell *cell in _collectionView.visibleCells) {
 			UIImageView *imageView = [cell valueForKey:@"_appIconImageView"];
 			[UIView animateWithDuration:0.2 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
@@ -227,48 +236,36 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 				imageView.alpha = 1.0;
 			}];
 		}
-		[UIView animateWithDuration:0.2 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-			_slidingIndicatorView.transform = CGAffineTransformMakeScale(0.15, 0.15);
-			_slidingIndicatorView.alpha = 0.0;
-		} completion:^(BOOL completion) {
-			_slidingIndicatorView.transform = CGAffineTransformIdentity;
-			[self updateAppsInSwitcher];
-		}];
-		SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
-		NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
-		for (NSString *identifier in _appSwitcherIdentifiers) {
-			if (![identifier isEqualToString:currentAppIdentifier]) {
-				[[%c(SBAppSwitcherModel) sharedInstance] remove:[%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:identifier]];
-			}
-		}
+
 		return;
 	}
-	NSInteger index = roundf((point.x+15)/70.0);
+
+	NSInteger index = roundf((point.x + 15) / 70.0);
+
 	if (_appSwitcherIdentifiers.count > index) {
 		NSString *appIdentifier = _appSwitcherIdentifiers[index];
 		[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:appIdentifier suspended:NO];
 	}
 }
 
-#pragma mark Preferences
+#pragma mark - Preferences
 
-- (void)managePreferences {
-	[[TBCSPreferencesManager sharedInstance] listenForPreferenceChangeWithCallback:^(NSString *key, NSString *value){
-		[UIView animateWithDuration:1 animations:^{
-			_blurEffectView.effect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
+- (void)configurePreferences {
+	[UIView animateWithDuration:1 animations:^{
+		_blurEffectView.effect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 
-			_divider.alpha = 0.0;
-			_closeAppsImageView.alpha = 0.0;
-		}];
-		UIColor *selectedColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
-		_divider.backgroundColor = selectedColor;
-		_closeAppsImageView.image = [_closeAppsImageView.image _flatImageWithColor:selectedColor];
-		[UIView animateWithDuration:0.5 animations:^{
-			_divider.alpha = 0.45;
-			_closeAppsImageView.alpha = 0.45;
-		}];
+		_divider.alpha = 0.0;
+		_closeAppsImageView.alpha = 0.0;
+	}];
 
-	} forKey:kTBCSPreferencesManagerDarkModeKey];
+	UIColor *selectedColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
+	_divider.backgroundColor = selectedColor;
+	_closeAppsImageView.image = [_closeAppsImageView.image _flatImageWithColor:selectedColor];
+
+	[UIView animateWithDuration:0.5 animations:^{
+		_divider.alpha = 0.45;
+		_closeAppsImageView.alpha = 0.45;
+	}];
 }
 
 #pragma mark - Memory management

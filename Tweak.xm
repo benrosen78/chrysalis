@@ -1,11 +1,10 @@
+#import "TBCSPreferencesManager.h"
 #import "TBCSWindow.h"
-#import "TBCSTutorialView.h"
 #import <SpringBoard/SBIconController.h>
 #import <SpringBoard/SBIconListView.h>
 #import <SpringBoard/SBMainDisplaySystemGestureManager.h>
 #import <SpringBoard/SBScreenEdgePanGestureRecognizer.h>
 #import <SpringBoard/SBUIController.h>
-#import "TBCSPreferencesManager.h"
 
 %hook SBUIController
 
@@ -67,11 +66,7 @@
 
 	if (![[TBCSPreferencesManager sharedInstance] hadFirstRun]) {
 		[[TBCSPreferencesManager sharedInstance] setHadFirstRun:YES];
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
-			UIWindow *window = [[%c(SBUIController) sharedInstance] valueForKey:@"_window"];
-			TBCSTutorialView *tutorialView = [[TBCSTutorialView alloc] initWithFrame:window.frame];
-			[window addSubview:tutorialView];
-		});
+		[[TBCSWindow sharedInstance] showTutorial];
 	}
 }
 %end

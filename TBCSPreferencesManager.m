@@ -3,7 +3,6 @@
 #include <notify.h>
 
 @implementation TBCSPreferencesManager {
-	HBPreferences *_preferences;
 	BOOL _hadFirstRun;
 }
 
@@ -28,22 +27,19 @@
 }
 
 - (BOOL)hadFirstRun {
+#if DEBUG
+	return NO;
+#else
 	return _hadFirstRun;
+#endif
 }
 
 - (void)setHadFirstRun:(BOOL)hadFirstRun {
-	_hadFirstRun = YES;
-
-	[_preferences setBool:YES forKey:kTBCSPreferencesManagerHadFirstRunKey];
-	notify_post("com.tweakbattles.chrysalis/ReloadPrefs"); // urg, i'm sorry
+	[_preferences setBool:hadFirstRun forKey:kTBCSPreferencesManagerHadFirstRunKey];
 }
 
 - (UIBlurEffectStyle)blurEffectStyle {
 	return _darkMode ? UIBlurEffectStyleDark : UIBlurEffectStyleLight;
-}
-
-- (void)listenForPreferenceChangeWithCallback:(HBPreferencesValueChangeCallback)callback forKey:(NSString *)key {
-	[_preferences registerPreferenceChangeBlock:callback forKey:key];
 }
 
 #pragma mark - Memory management

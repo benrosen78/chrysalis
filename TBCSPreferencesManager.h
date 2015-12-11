@@ -5,14 +5,12 @@ static NSString *const kTBCSPreferencesManagerDarkModeKey = @"DarkMode";
 
 @interface TBCSPreferencesManager : NSObject
 
-@property BOOL hadFirstRun;
+@property (nonatomic, retain, readonly) HBPreferences *preferences;
 
-@property (readonly) BOOL darkMode;
-
-@property (readonly) UIBlurEffectStyle blurEffectStyle;
+@property (nonatomic) BOOL hadFirstRun;
+@property (nonatomic, readonly) BOOL darkMode;
+@property (nonatomic, readonly) UIBlurEffectStyle blurEffectStyle;
 
 + (instancetype)sharedInstance;
-
-- (void)listenForPreferenceChangeWithCallback:(HBPreferencesValueChangeCallback)callback forKey:(NSString *)key;
 
 @end
