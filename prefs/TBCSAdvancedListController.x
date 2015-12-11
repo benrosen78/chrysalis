@@ -29,7 +29,8 @@
 	[super viewDidLoad];
 
 	_backgroundGradientView = [[TBCSAdvancedBackgroundGradientView alloc] init];
-	_backgroundGradientView.frame = CGRectMake(0, 0, self.view.frame.size.width, 183);
+	_backgroundGradientView.frame = CGRectMake(0, 0, self.table.frame.size.width, 183);
+	_backgroundGradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
 	UIView *containerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 34, self.table.frame.size.width, 95)] autorelease];
 	containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
