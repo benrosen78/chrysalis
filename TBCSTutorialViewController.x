@@ -1,5 +1,6 @@
 #import "TBCSTutorialViewController.h"
 #import "TBCSAppSwitcherViewController.h"
+#import <Cephei/CompactConstraint.h>
 #import <SpringBoard/SBDockIconListView.h>
 #import <SpringBoard/SBDockView.h>
 #import <SpringBoard/SBIconController.h>
@@ -58,10 +59,10 @@
     detailLabel.font = [UIFont fontWithName:@"billy" size:36];
     detailLabel.text =
         [NSString stringWithFormat:@"%@\n\n%@\n\n%@", [UIDevice currentDevice]._supportsForceTouch
-            ? @"force touch/hold on the left side of the screen to reveal the app icons."
-            : @"swipe from the left side of the screen to reveal the app icons.",
-            @"continuing to slide on the app switcher zone without releasing to select an app",
-            @"slide to the × button to close all apps"];
+            ? @"- force touch/hold on the left side of the screen to reveal the app icons."
+            : @"- swipe from the left side of the screen to reveal the app icons.",
+            @"- continuing to slide on the app switcher zone without releasing to select an app",
+            @"- slide to the × button to close all apps"];
     detailLabel.textColor = [UIColor whiteColor];
     detailLabel.textAlignment = NSTextAlignmentLeft;
     detailLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -80,34 +81,47 @@
     [switcherViewController didMoveToParentViewController:self];
     [switcherViewController viewWillAppear:NO];
 
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:containerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
-
-    [containerView addConstraint:[NSLayoutConstraint constraintWithItem:headerLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:containerView attribute:NSLayoutAttributeLeading multiplier:1 constant:15]];
-    [containerView addConstraint:[NSLayoutConstraint constraintWithItem:headerLabel attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:containerView attribute:NSLayoutAttributeTrailing multiplier:1 constant:-15]];
-
-    [containerView addConstraint:[NSLayoutConstraint constraintWithItem:pronunciationLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:headerLabel attribute:NSLayoutAttributeLeading multiplier:1 constant:0]];
-    [containerView addConstraint:[NSLayoutConstraint constraintWithItem:pronunciationLabel attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:headerLabel attribute:NSLayoutAttributeTrailing multiplier:1 constant:0]];
-
-    [containerView addConstraint:[NSLayoutConstraint constraintWithItem:shortDescriptionLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:headerLabel attribute:NSLayoutAttributeLeading multiplier:1 constant:0]];
-    [containerView addConstraint:[NSLayoutConstraint constraintWithItem:shortDescriptionLabel attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:headerLabel attribute:NSLayoutAttributeTrailing multiplier:1 constant:0]];
-
-    [containerView addConstraint:[NSLayoutConstraint constraintWithItem:detailLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:headerLabel attribute:NSLayoutAttributeLeading multiplier:1 constant:10]];
-    [containerView addConstraint:[NSLayoutConstraint constraintWithItem:detailLabel attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:headerLabel attribute:NSLayoutAttributeTrailing multiplier:1 constant:-10]];
-
-    [containerView addConstraint:[NSLayoutConstraint constraintWithItem:switcherContainerView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:containerView attribute:NSLayoutAttributeLeading multiplier:1 constant:0]];
-    [containerView addConstraint:[NSLayoutConstraint constraintWithItem:switcherContainerView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:containerView attribute:NSLayoutAttributeTrailing multiplier:1 constant:0]];
-
-    [switcherContainerView addConstraint:[NSLayoutConstraint constraintWithItem:switcherViewController.view attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:switcherContainerView attribute:NSLayoutAttributeLeading multiplier:1 constant:0]];
-    [switcherContainerView addConstraint:[NSLayoutConstraint constraintWithItem:switcherViewController.view attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:switcherContainerView attribute:NSLayoutAttributeTrailing multiplier:1 constant:0]];
-    [switcherContainerView addConstraint:[NSLayoutConstraint constraintWithItem:switcherViewController.view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:switcherContainerView attribute:NSLayoutAttributeHeight multiplier:1 constant:95]];
-
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-55-[headerLabel][pronunciationLabel]-4-[shortDescriptionLabel]-35-[detailLabel]-35-[switcherContainerView(==95)]|" options:kNilOptions metrics:nil views:@{
+    NSDictionary <NSString *, UIView *> *views = @{
+        @"self": self.view,
+        @"containerView": containerView,
         @"headerLabel": headerLabel,
         @"pronunciationLabel": pronunciationLabel,
         @"shortDescriptionLabel": shortDescriptionLabel,
         @"detailLabel": detailLabel,
-        @"switcherContainerView": switcherContainerView
-    }]];
+        @"switcherContainerView": switcherContainerView,
+        @"switcherView": switcherViewController.view
+    };
+
+    [self.view hb_addCompactConstraints:@[
+        @"containerView.left = self.left",
+        @"containerView.right = self.right"
+    ] metrics:nil views:views];
+
+    [containerView hb_addCompactConstraints:@[
+        @"headerLabel.left = containerView.left",
+        @"headerLabel.right = containerView.right",
+
+        @"pronunciationLabel.left = containerView.left",
+        @"pronunciationLabel.right = containerView.right",
+
+        @"shortDescriptionLabel.left = containerView.left",
+        @"shortDescriptionLabel.right = containerView.right",
+
+        @"detailLabel.left = containerView.left + 20",
+        @"detailLabel.right = containerView.right - 20",
+
+        @"switcherContainerView.left = containerView.left",
+        @"switcherContainerView.right = containerView.right",
+    ] metrics:nil views:views];
+
+    [switcherContainerView hb_addCompactConstraints:@[
+        @"switcherView.left = switcherContainerView.left",
+        @"switcherView.right = switcherContainerView.right",
+        @"switcherView.top = switcherContainerView.top",
+        @"switcherView.bottom = switcherContainerView.bottom",
+    ] metrics:nil views:views];
+
+    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-55-[headerLabel][pronunciationLabel]-4-[shortDescriptionLabel]-35-[detailLabel]-35-[switcherContainerView(==95)]|" options:kNilOptions metrics:nil views:views]];
 }
 
 #pragma mark - Show/Hide

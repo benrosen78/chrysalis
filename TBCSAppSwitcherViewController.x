@@ -2,6 +2,7 @@
 #import "TBCSAppSwitcherCollectionViewCell.h"
 #import "TBCSAppSwitcherManager.h"
 #import "TBCSPreferencesManager.h"
+#import <Cephei/CompactConstraint.h>
 #import <SpringBoard/SpringBoard.h>
 #import <UIKit/UIImage+Private.h>
 
@@ -119,7 +120,8 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	// auto layout
 
-	NSDictionary *views = @{
+    NSDictionary <NSString *, UIView *> *views = @{
+    	@"self": self.view,
 		@"blurEffectView": _blurEffectView,
 	    @"collectionView": _collectionView,
 	    @"dividerView": _dividerView,
@@ -127,17 +129,28 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	    @"noAppsLabel": _noAppsLabel
 	};
 
+	[self.view hb_addCompactConstraints:@[
+		@"blurEffectView.left = self.left",
+		@"blurEffectView.right = self.right",
+		@"blurEffectView.top = self.top",
+		@"blurEffectView.bottom = self.bottom",
+
+		@"collectionView.top = self.top",
+		@"collectionView.bottom = self.bottom",
+
+		@"dividerView.top = self.top",
+		@"dividerView.bottom = self.bottom",
+
+		@"closeAppsImageView.top = self.top",
+		@"closeAppsImageView.bottom = self.bottom",
+
+		@"noAppsLabel.left = collectionView.left",
+		@"noAppsLabel.right = collectionView.right",
+		@"noAppsLabel.top = collectionView.top",
+		@"noAppsLabel.bottom = collectionView.bottom",
+	] metrics:nil views:views];
+
 	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[collectionView][dividerView(==0.5)][closeAppsImageView(==45)]|" options:kNilOptions metrics:nil views:views]];
-
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[blurEffectView]|" options:kNilOptions metrics:nil views:views]];
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[blurEffectView]|" options:kNilOptions metrics:nil views:views]];
-
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView]|" options:kNilOptions metrics:nil views:views]];
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[dividerView]|" options:kNilOptions metrics:nil views:views]];
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[closeAppsImageView]|" options:kNilOptions metrics:nil views:views]];
-
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[noAppsLabel]|" options:kNilOptions metrics:nil views:views]];
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[noAppsLabel]|" options:kNilOptions metrics:nil views:views]];
 
 	// prefs
 
@@ -244,7 +257,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 }
 
 - (void)openAppAtPoint:(CGPoint)point {
-	if (point.x > self.view.frame.size.width-45.0) {
+	if (point.x > self.view.frame.size.width - 45.0) {
 		[TBCSAppSwitcherManager quitAllApps];
 
 		for (UICollectionViewCell *cell in _collectionView.visibleCells) {
