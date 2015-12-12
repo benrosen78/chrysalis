@@ -1,6 +1,7 @@
 #import "TBCSWindow.h"
 #import "TBCSAppSwitcherViewController.h"
 #import "TBCSTutorialViewController.h"
+#import <UIKit/UIWindow+Private.h>
 
 static CGFloat const kTBCSAppSwitcherHeight = 95.f;
 
@@ -10,7 +11,7 @@ static CGFloat const kTBCSAppSwitcherHeight = 95.f;
 	static TBCSWindow *sharedInstance;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		sharedInstance = [[self alloc] initWithFrame:[UIScreen mainScreen].bounds];
+		sharedInstance = [[self alloc] init];
 	});
 
 	return sharedInstance;
@@ -18,7 +19,8 @@ static CGFloat const kTBCSAppSwitcherHeight = 95.f;
 
 - (instancetype)init {
 	if (self = [super init]) {
-		self.windowLevel = UIWindowLevelAlert+2;
+		self.frame = [UIScreen mainScreen].bounds;
+		self.windowLevel = UIWindowLevelAlertReal+2;
 		self.backgroundColor = [UIColor clearColor];
 	}
 	return self;
@@ -38,7 +40,7 @@ static CGFloat const kTBCSAppSwitcherHeight = 95.f;
 		self.layer.anchorPoint = CGPointMake(0, 0.5f);
 	}
 
-	// i'm self centered hahaHAHAHA GET IT
+	// i’m self centered hahaHAHAHA GET IT
 	self.center = CGPointMake(self.center.x, point.y);
 	self.hidden = NO;
 	self.alpha = 0;
