@@ -40,6 +40,8 @@ static CGFloat const kTBCSAppSwitcherHeight = 95.f;
 		self.layer.anchorPoint = CGPointMake(0, 0.5f);
 	}
 
+	[self.rootViewController viewWillAppear:YES];
+
 	// i’m self centered hahaHAHAHA GET IT
 	self.center = CGPointMake(self.center.x, point.y);
 	self.hidden = NO;
@@ -72,9 +74,7 @@ static CGFloat const kTBCSAppSwitcherHeight = 95.f;
 #pragma mark - Touches
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-	if ([self.rootViewController isKindOfClass:TBCSTutorialViewController.class]) {
-		[self.rootViewController viewWillDisappear:YES];
-	}
+	[self.rootViewController viewWillDisappear:YES];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(NSEC_PER_SEC * 0.4)), dispatch_get_main_queue(), ^{
         self.rootViewController.view.hidden = YES;
