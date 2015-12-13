@@ -1,8 +1,10 @@
 #import "TBCSAppSwitcherCollectionViewCell.h"
+#import "TBCSDisplayItem.h"
+#import "TBCSPreferencesManager.h"
 #import <UIKit/UIImage+Private.h>
 
 @implementation TBCSAppSwitcherCollectionViewCell {
-	NSString *_appIdentifier;
+	TBCSDisplayItem *_displayItem;
 	UIImageView *_appIconImageView;
 }
 
@@ -22,13 +24,19 @@
 	return self;
 }
 
-- (void)setAppIdentifier:(NSString *)appIdentifier {
-	_appIdentifier = appIdentifier;
-	_appIconImageView.image = [UIImage _applicationIconImageForBundleIdentifier:_appIdentifier format:MIIconVariantDefault scale:[[UIScreen mainScreen] scale]];
+- (TBCSDisplayItem *)displayItem {
+	return _displayItem;
 }
 
-- (NSString *)appIdentifier {
-	return _appIdentifier;
+- (void)setDisplayItem:(TBCSDisplayItem *)displayItem {
+	if ([displayItem.type isEqualToString:@"Homescreen"]) {
+		// if it‘s the home screen icon, we have our own icon for that
+		BOOL darkMode = [TBCSPreferencesManager sharedInstance].darkMode;
+		_appIconImageView.image = [[UIImage imageNamed:darkMode ? @"home-dark" : @"home-light" inBundle:bundle] _applicationIconImageForFormat:MIIconVariantDefault precomposed:YES scale:[[UIScreen mainScreen] scale]];
+	} else {
+		// get the app’s icon
+		_appIconImageView.image = [UIImage _applicationIconImageForBundleIdentifier:displayItem.displayIdentifier format:MIIconVariantDefault scale:[[UIScreen mainScreen] scale]];
+	}
 }
 
 #pragma mark - Memory management

@@ -1,7 +1,9 @@
+@class TBCSDisplayItem;
+
 @interface TBCSAppSwitcherManager : NSObject
 
-+ (NSArray *)switcherAppList;
-
++ (NSMutableArray <TBCSDisplayItem *> *)displayItems;
 + (void)quitAllApps;
++ (void)suspend;
 
 @end

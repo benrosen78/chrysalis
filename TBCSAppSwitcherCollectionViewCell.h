@@ -1,7 +1,7 @@
+@class TBCSDisplayItem;
+
 @interface TBCSAppSwitcherCollectionViewCell : UICollectionViewCell
 
-- (NSString *)appIdentifier;
-
-- (void)setAppIdentifier:(NSString *)appIdentifier;
+@property (nonatomic, retain) TBCSDisplayItem *displayItem;
 
 @end

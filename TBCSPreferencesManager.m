@@ -22,16 +22,15 @@
 
 		[_preferences registerBool:&_hadFirstRun default:NO forKey:kTBCSPreferencesManagerHadFirstRunKey];
 		[_preferences registerBool:&_darkMode default:NO forKey:kTBCSPreferencesManagerDarkModeKey];
+
+		[_preferences registerBool:&_showQuitAppsButton default:YES forKey:kTBCSPreferencesManagerQuitAppsButtonKey];
+		[_preferences registerBool:&_showHomeScreenButton default:NO forKey:kTBCSPreferencesManagerHomeScreenButtonKey];
 	}
 	return self;
 }
 
 - (BOOL)hadFirstRun {
-#if DEBUG
-	return NO;
-#else
 	return _hadFirstRun;
-#endif
 }
 
 - (void)setHadFirstRun:(BOOL)hadFirstRun {

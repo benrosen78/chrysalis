@@ -1,6 +1,8 @@
 #import "TBCSAppSwitcherManager.h"
+#import "TBCSDisplayItem.h"
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBApplication.h>
+#import <SpringBoard/SBApplicationController.h>
 
 @interface SBDisplayItem : NSObject {
 	NSString *_displayIdentifier;
@@ -21,34 +23,37 @@
 
 @implementation TBCSAppSwitcherManager
 
-+ (void)quitAllApps {
-	SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
-	NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
++ (NSMutableArray <TBCSDisplayItem *> *)displayItems {
+	NSArray <SBDisplayItem *> *sbDisplayItems = ((SBAppSwitcherModel *)[%c(SBAppSwitcherModel) sharedInstance]).mainSwitcherDisplayItems;
+	NSMutableArray <TBCSDisplayItem *> *displayItems = [NSMutableArray array];
 
-	for (NSString *identifier in self.switcherAppList) {
-		if (![identifier isEqualToString:currentAppIdentifier]) {
-			[[%c(SBAppSwitcherModel) sharedInstance] remove:[%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:identifier]];
-		}
+	for (SBDisplayItem *displayItem in sbDisplayItems) {
+		[displayItems addObject:[TBCSDisplayItem displayItemWithSBDisplayItem:displayItem]];
 	}
 
-	return;
+	SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
+
+	// if we’re in an app, it’ll be at position 0. remove it
+	if (app._accessibilityFrontMostApplication) {
+		[displayItems removeObjectAtIndex:0];
+	}
+
+	return displayItems;
 }
 
-+ (NSArray *)switcherAppList {
-	NSArray *displayItems = [[%c(SBAppSwitcherModel) sharedInstance] mainSwitcherDisplayItems];
-	NSMutableArray *appIdentifiers = [NSMutableArray array];
-	for (SBDisplayItem *displayItem in displayItems) {
-		[appIdentifiers addObject:[displayItem valueForKey:@"_displayIdentifier"]];
++ (void)quitAllApps {
+	for (TBCSDisplayItem *displayItem in self.displayItems) {
+		[[%c(SBAppSwitcherModel) sharedInstance] remove:displayItem.sbDisplayItem];
 	}
+}
 
++ (void)suspend {
 	SpringBoard *app = (SpringBoard *)[UIApplication sharedApplication];
-	NSString *currentAppIdentifier = app._accessibilityFrontMostApplication.bundleIdentifier;
+	SBApplication *frontmostApp = app._accessibilityFrontMostApplication;
 
-	if (currentAppIdentifier) {
-		[appIdentifiers removeObject:currentAppIdentifier];
+	if (frontmostApp) {
+		[[%c(SBApplicationController) sharedInstance] applicationService:nil suspendApplicationWithBundleIdentifier:frontmostApp.bundleIdentifier];
 	}
-
-	return appIdentifiers;
 }
 
 @end

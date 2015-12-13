@@ -1,6 +1,7 @@
 #import "TBCSAppSwitcherViewController.h"
 #import "TBCSAppSwitcherCollectionViewCell.h"
 #import "TBCSAppSwitcherManager.h"
+#import "TBCSDisplayItem.h"
 #import "TBCSPreferencesManager.h"
 #import <Cephei/CompactConstraint.h>
 #import <SpringBoard/SpringBoard.h>
@@ -9,7 +10,7 @@
 static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"ChrysalisAppSwitcherCell";
 
 @implementation TBCSAppSwitcherViewController {
-	NSArray *_appSwitcherIdentifiers;
+	NSArray <TBCSDisplayItem *> *_displayItems;
 
 	UIView *_slidingIndicatorView;
 	UICollectionView *_collectionView;
@@ -21,6 +22,8 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	CAShapeLayer *_chevronPathMaskLayer;
 	CAShapeLayer *_rectanglePathMaskLayer;
 	CAGradientLayer *_gradientLayer;
+
+	BOOL _showHomeScreenButton;
 }
 
 #pragma mark - UIViewController
@@ -183,34 +186,42 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 	TBCSAppSwitcherCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTBCSAppSwitcherCollectionViewCellIdentifier forIndexPath:indexPath];
-
-	NSString *identifier = _appSwitcherIdentifiers[indexPath.row];
-	[cell setAppIdentifier:identifier];
+	cell.displayItem = _displayItems[indexPath.row];
 	return cell;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-	return [_appSwitcherIdentifiers count];
+	return [_displayItems count];
 }
 
 #pragma mark - Update
 
 - (void)_updateAppsInSwitcher {
-	[_appSwitcherIdentifiers release];
+	[_displayItems release];
+
+	NSMutableArray <TBCSDisplayItem *> *displayItems = [NSMutableArray array];
 
 	if (_useDemoApps) {
 		// fill in standard example apps to display in demo situations
-		_appSwitcherIdentifiers = [[NSArray alloc] initWithArray:@[@"com.apple.mobilemail", @"com.apple.AppStore", @"com.apple.Music", @"com.apple.mobilenotes", @"com.apple.mobileslideshow", @"com.apple.mobilesafari", @"com.apple.Preferences"]];
+		for (NSString *identifier in @[ @"com.apple.mobilemail", @"com.apple.AppStore", @"com.apple.Music", @"com.apple.mobilenotes", @"com.apple.mobileslideshow", @"com.apple.mobilesafari", @"com.apple.Preferences" ]) {
+			[displayItems addObject:[TBCSDisplayItem displayItemWithType:@"App" displayIdentifier:identifier]];
+		}
 	} else {
 		// get the list of apps
-		_appSwitcherIdentifiers = [[TBCSAppSwitcherManager switcherAppList] copy];
+		displayItems = [TBCSAppSwitcherManager displayItems];
 	}
+
+	if (_showHomeScreenButton && ((SpringBoard *)[UIApplication sharedApplication])._accessibilityFrontMostApplication) {
+		[displayItems insertObject:[TBCSDisplayItem homeScreenDisplayItem] atIndex:0];
+	}
+
+	_displayItems = [displayItems copy];
 
 	// reload the collection view
 	[_collectionView reloadData];
 
 	// do we have any apps open?
-	if (_appSwitcherIdentifiers.count > 0) {
+	if (_displayItems.count > 0) {
 		// if so, we can hide the label, show the sliding indicator
 		_noAppsLabel.hidden = YES;
 		_slidingIndicatorView.hidden = NO;
@@ -241,7 +252,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		}];
 	}
 
-	if (_appSwitcherIdentifiers.count > index) {
+	if (_displayItems.count > index) {
 		CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width - 45, 0, 45, _collectionView.frame.size.height);
 		CGRect potentialFrame = CGRectMake((index * 70.0) + 17.5, 0, 65, 65);
 
@@ -276,15 +287,23 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	NSInteger index = roundf((point.x + 15) / 70.0);
 
-	if (_appSwitcherIdentifiers.count > index) {
-		NSString *appIdentifier = _appSwitcherIdentifiers[index];
-		[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:appIdentifier suspended:NO];
+	HBLogDebug(@"_displayItems.count = %lu, index = %li", (unsigned long)_displayItems.count, (long)index);
+
+	if (index == 0 && _showHomeScreenButton) {
+		[TBCSAppSwitcherManager suspend];
+	} else if (_displayItems.count > index) {
+		TBCSDisplayItem *displayItem = _displayItems[index];
+		[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:displayItem.displayIdentifier suspended:NO];
 	}
 }
 
 #pragma mark - Preferences
 
 - (void)configurePreferences {
+	TBCSPreferencesManager *preferences = [TBCSPreferencesManager sharedInstance];
+
+	_showHomeScreenButton = preferences.showHomeScreenButton;
+
 	[UIView animateWithDuration:1 animations:^{
 		_blurEffectView.effect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
 
@@ -292,7 +311,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		_closeAppsImageView.alpha = 0.0;
 	}];
 
-	UIColor *selectedColor = [TBCSPreferencesManager sharedInstance].darkMode ? [UIColor whiteColor] : [UIColor blackColor];
+	UIColor *selectedColor = preferences.darkMode ? [UIColor whiteColor] : [UIColor blackColor];
 	_dividerView.backgroundColor = selectedColor;
 	_closeAppsImageView.image = [_closeAppsImageView.image _flatImageWithColor:selectedColor];
 
@@ -300,12 +319,14 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		_dividerView.alpha = 0.45;
 		_closeAppsImageView.alpha = 0.45;
 	}];
+
+	[self _updateAppsInSwitcher];
 }
 
 #pragma mark - Memory management
 
 - (void)dealloc {
-	[_appSwitcherIdentifiers release];
+	[_displayItems release];
 
 	[_slidingIndicatorView release];
 	[_collectionView release];

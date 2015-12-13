@@ -6,6 +6,10 @@
 	<array>
 		<dict>
 			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>
@@ -20,7 +24,10 @@
 			<key>PostNotification</key>
 			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
 		</dict>
-		<!--
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
@@ -29,9 +36,9 @@
 			<key>defaults</key>
 			<string>com.tweakbattles.chrysalis</string>
 			<key>key</key>
-			<string>ShowKillAllButton</string>
+			<string>QuitAppsButton</string>
 			<key>label</key>
-			<string>Show Kill All Button</string>
+			<string>Quit Apps Button</string>
 			<key>icon</key>
 			<string>kill.png</string>
 			<key>PostNotification</key>
@@ -41,19 +48,18 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.tweakbattles.chrysalis</string>
 			<key>key</key>
-			<string>SwitchToHomescreen</string>
+			<string>HomeScreenButton</string>
 			<key>label</key>
-			<string>Switch to Homescreen</string>
+			<string>Home Screen Button</string>
 			<key>icon</key>
 			<string>home.png</string>
 			<key>PostNotification</key>
 			<string>com.tweakbattles.chrysalis/ReloadPrefs</string>
 		</dict>
-		-->
 	</array>
 	<key>title</key>
 	<string>Advanced</string>
