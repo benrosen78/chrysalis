@@ -4,6 +4,7 @@ Depends: mobilesubstrate, ws.hbang.common (>= 1.7)
 Version: 1.1
 Architecture: iphoneos-arm
 Description: A modern, gesture based app switcher
-Maintainer: Ben & Carlos & Kirb & Veerklempt
-Author: Ben & Carlos & Kirb & Veerklempt
+Maintainer: Ben & Carlos & Kirb & Veerklempt <support@hbang.ws>
+Author: Ben & Carlos & Kirb & Veerklempt <support@hbang.ws>
+Support: https://www.hbang.ws/faq/
 Section: Tweaks
