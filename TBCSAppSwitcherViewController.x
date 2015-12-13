@@ -272,7 +272,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		[TBCSAppSwitcherManager quitAllApps];
 
 		for (UICollectionViewCell *cell in _collectionView.visibleCells) {
-			UIImageView *imageView = [cell valueForKey:@"_appIconImageView"];
+			UIImageView *imageView = cell.contentView;
 			[UIView animateWithDuration:0.2 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
 				imageView.transform = CGAffineTransformMakeScale(0.15, 0.15);
 				imageView.alpha = 0.0;
@@ -286,8 +286,6 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	}
 
 	NSInteger index = roundf((point.x + 15) / 70.0);
-
-	HBLogDebug(@"_displayItems.count = %lu, index = %li", (unsigned long)_displayItems.count, (long)index);
 
 	if (index == 0 && _showHomeScreenButton) {
 		[TBCSAppSwitcherManager suspend];
