@@ -265,7 +265,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	if (point.x > self.view.frame.size.width - 45.0 && !_closeButtonContainerView.hidden) {
 		return NSUIntegerMax;
 	} else {
-		return roundf((point.x - 17.5) / 70.0);
+		return roundf((point.x - 50.0) / 70.0);
 	}
 }
 
