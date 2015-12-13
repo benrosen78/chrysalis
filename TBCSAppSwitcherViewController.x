@@ -211,7 +211,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		displayItems = [TBCSAppSwitcherManager displayItems];
 	}
 
-	if (_showHomeScreenButton && ((SpringBoard *)[UIApplication sharedApplication])._accessibilityFrontMostApplication) {
+	if (_showHomeScreenButton && (_useDemoApps || ((SpringBoard *)[UIApplication sharedApplication])._accessibilityFrontMostApplication)) {
 		[displayItems insertObject:[TBCSDisplayItem homeScreenDisplayItem] atIndex:0];
 	}
 
