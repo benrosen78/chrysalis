@@ -12,16 +12,19 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 @implementation TBCSAppSwitcherViewController {
 	NSArray <TBCSDisplayItem *> *_displayItems;
 
-	UIView *_slidingIndicatorView;
+	UIVisualEffectView *_blurEffectView;
 	UICollectionView *_collectionView;
+	UIView *_slidingIndicatorView;
+	UILabel *_noAppsLabel;
+
+	UIView *_closeButtonContainerView;
 	UIView *_dividerView;
 	UIImageView *_closeAppsImageView;
-	UIVisualEffectView *_blurEffectView;
-	UILabel *_noAppsLabel;
 
 	CAShapeLayer *_chevronPathMaskLayer;
 	CAShapeLayer *_rectanglePathMaskLayer;
 	CAGradientLayer *_gradientLayer;
+	NSLayoutConstraint *_closeButtonConstraint;
 
 	BOOL _showHomeScreenButton;
 }
@@ -93,6 +96,13 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	[_collectionView registerClass:[TBCSAppSwitcherCollectionViewCell class] forCellWithReuseIdentifier:kTBCSAppSwitcherCollectionViewCellIdentifier];
 	[self.view addSubview:_collectionView];
 
+	_gradientLayer = [[CAGradientLayer alloc] init];
+	_gradientLayer.startPoint = CGPointMake(0.0, 0.5);
+	_gradientLayer.endPoint = CGPointMake(1.0, 0.5);
+	_gradientLayer.colors = @[(id)[UIColor blackColor].CGColor, (id)[UIColor clearColor].CGColor];
+	_gradientLayer.locations = @[@0.93, @1.0];
+	_collectionView.layer.mask = _gradientLayer;
+
 	_noAppsLabel = [[UILabel alloc] init];
     _noAppsLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	_noAppsLabel.text = @"no apps";
@@ -101,25 +111,22 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	_noAppsLabel.font = [UIFont systemFontOfSize:30.0];
 	[_collectionView addSubview:_noAppsLabel];
 
+	_closeButtonContainerView = [[UIView alloc] init];
+    _closeButtonContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.view addSubview:_closeButtonContainerView];
+
 	_dividerView = [[UIView alloc] init];
     _dividerView.translatesAutoresizingMaskIntoConstraints = NO;
 	_dividerView.alpha = 0.45;
 	_dividerView.backgroundColor = [UIColor whiteColor];
-	[self.view addSubview:_dividerView];
+	[_closeButtonContainerView addSubview:_dividerView];
 
 	_closeAppsImageView = [[UIImageView alloc] init];
     _closeAppsImageView.translatesAutoresizingMaskIntoConstraints = NO;
 	_closeAppsImageView.image = [UIImage imageNamed:@"x" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/ChrysalisPrefs.bundle"]];
 	_closeAppsImageView.alpha = 0.45;
 	_closeAppsImageView.contentMode = UIViewContentModeCenter;
-	[self.view addSubview:_closeAppsImageView];
-
-	_gradientLayer = [[CAGradientLayer alloc] init];
-	_gradientLayer.startPoint = CGPointMake(0.0, 0.5);
-	_gradientLayer.endPoint = CGPointMake(1.0, 0.5);
-	_gradientLayer.colors = @[(id)[UIColor blackColor].CGColor, (id)[UIColor clearColor].CGColor];
-	_gradientLayer.locations = @[@0.93, @1.0];
-	_collectionView.layer.mask = _gradientLayer;
+	[_closeButtonContainerView addSubview:_closeAppsImageView];
 
 	// auto layout
 
@@ -129,6 +136,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	    @"collectionView": _collectionView,
 	    @"dividerView": _dividerView,
 	    @"closeAppsImageView": _closeAppsImageView,
+	    @"closeButtonContainerView": _closeButtonContainerView,
 	    @"noAppsLabel": _noAppsLabel
 	};
 
@@ -141,19 +149,26 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		@"collectionView.top = self.top",
 		@"collectionView.bottom = self.bottom",
 
-		@"dividerView.top = self.top",
-		@"dividerView.bottom = self.bottom",
-
-		@"closeAppsImageView.top = self.top",
-		@"closeAppsImageView.bottom = self.bottom",
-
 		@"noAppsLabel.left = collectionView.left",
 		@"noAppsLabel.right = collectionView.right",
 		@"noAppsLabel.top = collectionView.top",
 		@"noAppsLabel.bottom = collectionView.bottom",
+
+		@"closeButtonContainerView.top = self.top",
+		@"closeButtonContainerView.bottom = self.bottom",
 	] metrics:nil views:views];
 
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[collectionView][dividerView(==0.5)][closeAppsImageView(==45)]|" options:kNilOptions metrics:nil views:views]];
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[collectionView][closeButtonContainerView]|" options:kNilOptions metrics:nil views:views]];
+
+	[_closeButtonContainerView hb_addCompactConstraints:@[
+		@"dividerView.top = closeButtonContainerView.top",
+		@"dividerView.bottom = closeButtonContainerView.bottom",
+
+		@"closeAppsImageView.top = closeButtonContainerView.top",
+		@"closeAppsImageView.bottom = closeButtonContainerView.bottom",
+	] metrics:nil views:views];
+
+	[_closeButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[dividerView(==0.5)][closeAppsImageView(==45)]|" options:kNilOptions metrics:nil views:views]];
 
 	// prefs
 
@@ -256,7 +271,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width - 45, 0, 45, _collectionView.frame.size.height);
 		CGRect potentialFrame = CGRectMake((index * 70.0) + 17.5, 0, 65, 65);
 
-		if (CGRectIntersectsRect(closeAppsFrame, potentialFrame)) {
+		if (CGRectIntersectsRect(closeAppsFrame, potentialFrame) && !_closeButtonContainerView.hidden) {
 			potentialFrame = CGRectMake(self.view.frame.size.width - 40, 0, 35, 35);
 		}
 
@@ -268,17 +283,17 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 }
 
 - (void)openAppAtPoint:(CGPoint)point {
-	if (point.x > self.view.frame.size.width - 45.0) {
+	if (point.x > self.view.frame.size.width - 45.0 && !_closeButtonContainerView.hidden) {
 		[TBCSAppSwitcherManager quitAllApps];
 
 		for (UICollectionViewCell *cell in _collectionView.visibleCells) {
-			UIImageView *imageView = cell.contentView;
+			UIView *view = cell.contentView;
 			[UIView animateWithDuration:0.2 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-				imageView.transform = CGAffineTransformMakeScale(0.15, 0.15);
-				imageView.alpha = 0.0;
+				view.transform = CGAffineTransformMakeScale(0.15, 0.15);
+				view.alpha = 0.0;
 			} completion:^(BOOL completion) {
-				imageView.transform = CGAffineTransformIdentity;
-				imageView.alpha = 1.0;
+				view.transform = CGAffineTransformIdentity;
+				view.alpha = 1.0;
 			}];
 		}
 
@@ -301,6 +316,17 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	TBCSPreferencesManager *preferences = [TBCSPreferencesManager sharedInstance];
 
 	_showHomeScreenButton = preferences.showHomeScreenButton;
+
+	_closeButtonContainerView.hidden = preferences.showQuitAppsButton;
+
+	if (_closeButtonContainerView.hidden) {
+		_closeButtonConstraint = [NSLayoutConstraint hb_compactConstraint:@"self.width = 0" metrics:nil views:nil self:_closeButtonContainerView];
+		[_closeButtonContainerView addConstraint:_closeButtonConstraint];
+	} else if (_closeButtonConstraint) {
+		[_closeButtonContainerView removeConstraint:_closeButtonConstraint];
+		[_closeButtonConstraint release];
+		_closeButtonConstraint = nil;
+	}
 
 	[UIView animateWithDuration:1 animations:^{
 		_blurEffectView.effect = [UIBlurEffect effectWithStyle:[TBCSPreferencesManager sharedInstance].blurEffectStyle];
@@ -326,16 +352,19 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 - (void)dealloc {
 	[_displayItems release];
 
-	[_slidingIndicatorView release];
+	[_blurEffectView release];
 	[_collectionView release];
+	[_slidingIndicatorView release];
+	[_noAppsLabel release];
+
+	[_closeButtonContainerView release];
 	[_dividerView release];
 	[_closeAppsImageView release];
-	[_blurEffectView release];
-	[_noAppsLabel release];
 
 	[_chevronPathMaskLayer release];
 	[_rectanglePathMaskLayer release];
 	[_gradientLayer release];
+	[_closeButtonConstraint release];
 
 	[super dealloc];
 }
