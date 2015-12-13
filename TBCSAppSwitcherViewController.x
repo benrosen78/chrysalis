@@ -252,7 +252,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		}];
 	}
 
-	if (_displayItems.count > index) {
+	if (index < _displayItems.count) {
 		CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width - 45, 0, 45, _collectionView.frame.size.height);
 		CGRect potentialFrame = CGRectMake((index * 70.0) + 17.5, 0, 65, 65);
 
