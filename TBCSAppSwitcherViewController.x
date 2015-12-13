@@ -258,30 +258,36 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 	return point.y < top - 150.f || point.y > bottom + 200.f;
 }
 
-- (void)updateViewToNewPoint:(CGPoint)point {
+- (NSUInteger)_indexForPoint:(CGPoint)point contentOffset:(CGPoint)contentOffset {
 	// from the point of the finger, get the index of the icon
-	NSInteger index = roundf((point.x + 15) / 70.0);
-
-	if (index < _displayItems.count) {
-		// the last 45pt are reserved for the close apps button
-		CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width - 45, 0, 45, _collectionView.frame.size.height);
-		CGRect potentialFrame = CGRectMake((index * 70.0) + 17.5, 0, 65, 65);
-
-		if ([self _isPointOutOfBounds:point]) {
-			potentialFrame = _slidingIndicatorView.frame;
-			potentialFrame.origin.x += potentialFrame.size.width / 2;
-			potentialFrame.origin.y += potentialFrame.size.height / 2;
-			potentialFrame.size.width = 0;
-			potentialFrame.size.height = 0;
-		} else if (CGRectIntersectsRect(closeAppsFrame, potentialFrame) && !_closeButtonContainerView.hidden) {
-			potentialFrame = CGRectMake(self.view.frame.size.width - 40, 0, 35, 35);
-		}
-
-		[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-			_slidingIndicatorView.frame = potentialFrame;
-			_slidingIndicatorView.center = CGPointMake(_slidingIndicatorView.center.x, self.view.center.y);
-		} completion:nil];
+	// the last 45pt are reserved for the close apps button
+	// TODO: support contentOffset
+	if (point.x > self.view.frame.size.width - 45.0 && !_closeButtonContainerView.hidden) {
+		return NSUIntegerMax;
+	} else {
+		return roundf((point.x - 17.5) / 70.0);
 	}
+}
+
+- (void)updateViewToNewPoint:(CGPoint)point {
+	NSUInteger index = [self _indexForPoint:point contentOffset:CGPointZero];
+	CGRect potentialFrame = _slidingIndicatorView.frame;
+
+	if ([self _isPointOutOfBounds:point]) {
+		potentialFrame.origin.x += potentialFrame.size.width / 2;
+		potentialFrame.origin.y += potentialFrame.size.height / 2;
+		potentialFrame.size.width = 0;
+		potentialFrame.size.height = 0;
+	} else if (index == NSUIntegerMax) {
+		potentialFrame = CGRectMake(self.view.frame.size.width - 40, 0, 35, 35);
+	} else if (index < _displayItems.count) {
+		potentialFrame = CGRectMake((index * 70.0) + 17.5, 0, 65, 65);
+	}
+
+	[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:15.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+		_slidingIndicatorView.frame = potentialFrame;
+		_slidingIndicatorView.center = CGPointMake(_slidingIndicatorView.center.x, self.view.center.y);
+	} completion:nil];
 }
 
 - (void)openAppAtPoint:(CGPoint)point {
@@ -289,7 +295,9 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		return;
 	}
 
-	if (point.x > self.view.frame.size.width - 45.0 && !_closeButtonContainerView.hidden) {
+	NSUInteger index = [self _indexForPoint:point contentOffset:CGPointZero];
+
+	if (index == NSUIntegerMax) {
 		[TBCSAppSwitcherManager quitAllApps];
 
 		for (UICollectionViewCell *cell in _collectionView.visibleCells) {
@@ -304,11 +312,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 		}
 
 		return;
-	}
-
-	NSInteger index = roundf((point.x + 15) / 70.0);
-
-	if (index == 0 && _showHomeScreenButton) {
+	} else if (index == 0 && _showHomeScreenButton) {
 		[TBCSAppSwitcherManager suspend];
 	} else if (_displayItems.count > index) {
 		TBCSDisplayItem *displayItem = _displayItems[index];
