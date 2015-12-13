@@ -1,6 +1,6 @@
 Package: com.tweakbattles.chrysalis
 Name: Chrysalis
-Depends: mobilesubstrate, ws.hbang.common (>= 1.6)
+Depends: mobilesubstrate, ws.hbang.common (>= 1.7)
 Version: 1.1
 Architecture: iphoneos-arm
 Description: A modern, gesture based app switcher
