@@ -249,29 +249,31 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 #pragma mark - Gesture
 
+- (BOOL)_isPointOutOfBounds:(CGPoint)point {
+	UIView *superview = self.view.superview;
+
+	CGFloat top = superview.frame.origin.y;
+	CGFloat bottom = top + superview.frame.size.height;
+
+	return point.y < top - 150.f || point.y > bottom + 200.f;
+}
+
 - (void)updateViewToNewPoint:(CGPoint)point {
 	// from the point of the finger, get the index of the icon
 	NSInteger index = roundf((point.x + 15) / 70.0);
 
-	// the last 45pt are reserved for the close apps button
-	if (point.x > self.view.frame.size.width - 45.0) {
-		if (_closeAppsImageView.alpha != 0.7) {
-			[UIView animateWithDuration:0.3 animations:^{
-				_closeAppsImageView.alpha = 0.7;
-			}];
-		}
-		return;
-	} else if (_closeAppsImageView.alpha != 0.45) {
-		[UIView animateWithDuration:0.3 animations:^{
-			_closeAppsImageView.alpha = 0.45;
-		}];
-	}
-
 	if (index < _displayItems.count) {
+		// the last 45pt are reserved for the close apps button
 		CGRect closeAppsFrame = CGRectMake(self.view.frame.size.width - 45, 0, 45, _collectionView.frame.size.height);
 		CGRect potentialFrame = CGRectMake((index * 70.0) + 17.5, 0, 65, 65);
 
-		if (CGRectIntersectsRect(closeAppsFrame, potentialFrame) && !_closeButtonContainerView.hidden) {
+		if ([self _isPointOutOfBounds:point]) {
+			potentialFrame = _slidingIndicatorView.frame;
+			potentialFrame.origin.x += potentialFrame.size.width / 2;
+			potentialFrame.origin.y += potentialFrame.size.height / 2;
+			potentialFrame.size.width = 0;
+			potentialFrame.size.height = 0;
+		} else if (CGRectIntersectsRect(closeAppsFrame, potentialFrame) && !_closeButtonContainerView.hidden) {
 			potentialFrame = CGRectMake(self.view.frame.size.width - 40, 0, 35, 35);
 		}
 
@@ -283,6 +285,10 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 }
 
 - (void)openAppAtPoint:(CGPoint)point {
+	if ([self _isPointOutOfBounds:point]) {
+		return;
+	}
+
 	if (point.x > self.view.frame.size.width - 45.0 && !_closeButtonContainerView.hidden) {
 		[TBCSAppSwitcherManager quitAllApps];
 
