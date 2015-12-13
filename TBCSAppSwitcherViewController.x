@@ -327,7 +327,7 @@ static NSString *const kTBCSAppSwitcherCollectionViewCellIdentifier = @"Chrysali
 
 	_showHomeScreenButton = preferences.showHomeScreenButton;
 
-	_closeButtonContainerView.hidden = preferences.showQuitAppsButton;
+	_closeButtonContainerView.hidden = !preferences.showQuitAppsButton;
 
 	if (_closeButtonContainerView.hidden) {
 		_closeButtonConstraint = [NSLayoutConstraint hb_compactConstraint:@"self.width = 0" metrics:nil views:nil self:_closeButtonContainerView];
