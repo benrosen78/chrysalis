@@ -1,7 +1,6 @@
-#include "TBCSRootListController.h"
+#import "TBCSRootListController.h"
 #import <CepheiPrefs/HBSupportController.h>
 #import <UIKit/UIImage+Private.h>
-#import <MobileGestalt/MobileGestalt.h>
 
 @implementation TBCSRootListController
 
@@ -47,7 +46,7 @@
 
 - (void)showSupportEmailController {
 	UIViewController *viewController = (UIViewController *)[HBSupportController supportViewControllerForBundle:[NSBundle bundleForClass:self.class] preferencesIdentifier:@"com.tweakbattles.chrysalis"];
-	[self.navigationController pushViewController:navigationController animated:YES];
+	[self.navigationController pushViewController:viewController animated:YES];
 }
 
 @end
